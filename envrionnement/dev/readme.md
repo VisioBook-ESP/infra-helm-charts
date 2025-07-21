@@ -30,6 +30,15 @@ Ajouter un alias pour minikub:
 ```
 alias kubectl="minikube kubectl --"
 ```
+Verifier que tout fonctionne
+```
+kubectl get po -A
+```
+
+Supprimer le cluster 
+```
+minikube delete --all
+```
 ## Installer Argocd
 
 ## Installer Helm
