@@ -5,13 +5,45 @@ on:
   pull_request:
 
 jobs:
-  org-runner-test:
+  lint:
+    name: 🧪 Helm Lint
     runs-on: ubuntu-latest
+
     steps:
-      - run: echo "✅ Running on organization-level self-hosted runner!"
-  test:
-    name: Run helm-unittest on all charts
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Helm
+        uses: azure/setup-helm@v3
+        with:
+          version: v3.14.0
+
+      - name: Lint all charts
+        run: |
+          helm lint environnement/dev/charts/* --strict
+
+  validate:
+    name: 📄 Helm Template Validation
     runs-on: ubuntu-latest
+    needs: lint
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Helm
+        uses: azure/setup-helm@v3
+        with:
+          version: v3.14.0
+
+      - name: Validate Helm templates
+        run: |
+	  environnement/dev/charts/*
+
+  unittest:
+    name: ✅ Helm Unit Tests
+    runs-on: ubuntu-latest
+    needs: validate
 
     steps:
       - name: Checkout code
@@ -25,14 +57,7 @@ jobs:
       - name: Install helm-unittest plugin
         run: helm plugin install https://github.com/helm-unittest/helm-unittest
 
-      - name: Lint all charts
+      - name: Run helm-unittest on all charts
         run: |
-          helm lint environnement/dev/charts/* --strict
-
-      - name: Validate templates
-        run: |
-          helm template environnement/dev/charts/*
-        
-      - name: Run unit tests on all charts
-        run: |
+          cd environnement/dev
           helm unittest charts/*
