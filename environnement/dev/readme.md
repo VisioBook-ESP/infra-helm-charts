@@ -1,9 +1,10 @@
 # Deployer l'envrionnement de Dev
 
-Prerequis: 
+Prerequis:
 Le repo doit etre stocker chez un user non-root
 Les commandes doivent etre lancées avec un user non-root
 Avoir docker installé
+Le user utilisé doit avoir le groupe docker
 
 Pour lancer/installer kubernetes,minikube,helm,argocd et k9s:
 
@@ -29,7 +30,7 @@ Verifier que tout fonctionne
 kubectl get po -A
 ```
 
-Supprimer le cluster 
+Supprimer le cluster
 ```
 minikube delete --all
 ```
