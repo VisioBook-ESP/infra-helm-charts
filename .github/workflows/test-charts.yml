@@ -11,6 +11,10 @@ on:
       - '.github/workflows/helm-unittest.yml'
 
 jobs:
+  org-runner-test:
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo "✅ Running on organization-level self-hosted runner!"
   test:
     name: Run helm-unittest on all charts
     runs-on: ubuntu-latest
