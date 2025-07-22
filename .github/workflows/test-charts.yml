@@ -27,6 +27,4 @@ jobs:
 
       - name: Run unit tests on all charts
         run: |
-          for chart in charts/*; do
-            [ -f "$chart/Chart.yaml" ] && echo "📦 Testing chart: $chart" && helm unittest "$chart" || exit 1
-          done
+          cd environnement/dev/charts/ && helm unittest charts/*
