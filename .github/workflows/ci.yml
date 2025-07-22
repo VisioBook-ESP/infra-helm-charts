@@ -38,7 +38,7 @@ jobs:
 
       - name: Validate Helm templates
         run: |
-	  environnement/dev/charts/*
+          helm template environnement/dev/charts/*
 
   unittest:
     name: ✅ Helm Unit Tests
