@@ -28,6 +28,5 @@ echo "Utilisateur : admin"
 echo "|||||||||||||||||||||||||||||"
 echo "Argo CD installé avec succès."
 echo "|||||||||||||||||||||||||||||"
-echo "Utiliser cette commande pour accéder à l'interface Web :"
-echo "kubectl port-forward svc/argocd-server -n argocd 8080:443"
+kubectl port-forward svc/argocd-server -n argocd 8080:443
 echo "localhost:8080"

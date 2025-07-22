@@ -27,7 +27,7 @@ minikube start
 
 Verifier que tout fonctionne
 ```
-kubectl get po -A
+kubectl get pods -A
 ```
 
 Supprimer le cluster
