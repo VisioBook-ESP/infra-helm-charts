@@ -25,6 +25,14 @@ jobs:
       - name: Install helm-unittest plugin
         run: helm plugin install https://github.com/helm-unittest/helm-unittest
 
+      - name: Lint all charts
+        run: |
+          helm lint environnement/dev/charts/* --strict
+
+      - name: Validate templates
+        run: |
+          helm template environnement/dev/charts/*
+        
       - name: Run unit tests on all charts
         run: |
-          cd environnement/dev/ && helm unittest charts/*
+          helm unittest charts/*
