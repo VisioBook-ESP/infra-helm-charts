@@ -2,8 +2,8 @@ setup:
 	@echo "Configuration de l'environnement de développement..."
 	@$(MAKE) setup-minikube
 	@$(MAKE) setup-helm
-	@$(MAKE) setup-argocd
 	@$(MAKE) setup-k9s
+	@$(MAKE) setup-argocd
 
 setup-minikube:
 	./scripts/install_minikube.sh && echo "Minikube a été configuré."
