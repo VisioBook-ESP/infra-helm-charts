@@ -2,13 +2,7 @@ name: Helm Unit Tests
 
 on:
   push:
-    paths:
-      - 'charts/**'
-      - '.github/workflows/helm-unittest.yml'
   pull_request:
-    paths:
-      - 'charts/**'
-      - '.github/workflows/helm-unittest.yml'
 
 jobs:
   org-runner-test:
