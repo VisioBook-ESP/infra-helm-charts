@@ -111,6 +111,7 @@ jobs:
       - name: Start Minikube
         run: |
           minikube start --driver=docker
+          echo "Minikube started successfully"
 
       - name: Deploy Helm charts to Minikube
         run: |
