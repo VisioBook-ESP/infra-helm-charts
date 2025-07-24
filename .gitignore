@@ -2,3 +2,4 @@ get_helm.sh
 helm-v3*
 .idea
 environnement/dev/minikube-linux-amd64/
+.env
