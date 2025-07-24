@@ -109,9 +109,25 @@ jobs:
 
       - name: Wait for nginx-test pod to be ready
         run: |
-          echo "⏳ Waiting for pod to be ready..."
-          kubectl get pods -A
-          kubectl wait --for=condition=ready pod -l app.kubernetes.io/name=nginx-test -n test-ns --timeout=120s
+          echo "⏳ Waiting for pod to be ready (polling every 20s)..."
+          timeout=180  # total timeout in seconds
+          interval=20
+          elapsed=0
+          while true; do
+            kubectl get pods -n test-ns
+            ready=$(kubectl get pods -l app.kubernetes.io/name=nginx-test -n test-ns -o jsonpath="{.items[*].status.containerStatuses[*].ready}")
+            if [[ "$ready" == "true" ]]; then
+              echo "✅ Pod is ready!"
+              break
+            fi
+            if [[ $elapsed -ge $timeout ]]; then
+              echo "❌ Timeout reached waiting for pod to be ready."
+              exit 1
+            fi
+            echo "⏳ Pod not ready yet. Sleeping for $interval seconds..."
+            sleep $interval
+            elapsed=$((elapsed + interval))
+          done
 
       - name: Get NodePort and curl the app
         run: |
