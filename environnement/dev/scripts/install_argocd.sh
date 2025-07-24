@@ -24,6 +24,8 @@ echo "5. Récupération du mot de passe admin initial..."
 PASSWORD=$(kubectl get secret -n argocd argocd-initial-admin-secret -o jsonpath="{.data.password}" | base64 -d)
 
 echo "Mot de passe admin : $PASSWORD"
+echo admin | sudo tee argocd_password.txt > /dev/null
+echo "$PASSWORD" | sudo tee -a argocd_password.txt > /dev/null
 
 echo "6. Pour accéder à l'interface Web Argo CD :"
 NODE_PORT=$(kubectl get svc argocd-server -n argocd -o jsonpath='{.spec.ports[0].nodePort}')
