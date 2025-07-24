@@ -112,9 +112,11 @@ jobs:
           echo "⏳ Waiting for pod to be ready..."
           kubectl wait --for=condition=ready pod -l app.kubernetes.io/name=nginx-test -n test-ns --timeout=120s
 
-      - name: Get Service URL and curl it
+      - name: Get NodePort and curl the app
         run: |
-          echo "🌐 Getting service URL..."
-          url=$(minikube service nginx-test --url -n test-ns)
-          echo "Curling: $url"
-          curl -v "$url"
+          echo "🌐 Getting NodePort URL..."
+          export NODE_PORT=$(kubectl get svc nginx-test -n test-ns -o jsonpath="{.spec.ports[0].nodePort}")
+          export NODE_IP=$(kubectl get nodes -o jsonpath="{.items[0].status.addresses[0].address}")
+          echo "URL: http://$NODE_IP:$NODE_PORT"
+          curl -v --retry 5 --retry-delay 5 http://$NODE_IP:$NODE_PORT
+      
