@@ -6,10 +6,6 @@ setup:
 	@$(MAKE) setup-k9s
 	@$(MAKE) setup-argocd
 
-clean:
-	@echo "Nettoyage de l'environnement de développement..."
-	@$(MAKE) clean-minikube
-
 
 clean-minikube:
 	@echo "Nettoyage de Minikube..."
