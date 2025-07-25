@@ -4,22 +4,30 @@ metadata:
   name: nginx-test
   namespace: argocd
   annotations:
-    argocd-image-updater.argoproj.io/image-list: ghcr.io/visiobook-esp/core-api-gateway
-    argocd-image-updater.argoproj.io/core-api-gateway.update-strategy: latest
-    argocd-image-updater.argoproj.io/write-back-method: git
+    # Correct digest strategy configuration - must specify the exact tag
+    argocd-image-updater.argoproj.io/image-list: myapp=ghcr.io/visiobook-esp/core-api-gateway:latest
+    argocd-image-updater.argoproj.io/myapp.update-strategy: digest
+    argocd-image-updater.argoproj.io/write-back-method: argocd
+    argocd-image-updater.argoproj.io/myapp.force-update: "true"
+    argocd-image-updater.argoproj.io/log.level: debug
+
 spec:
   project: default
   source:
     repoURL: https://github.com/VisioBook-ESP/infra-helm-charts.git
-    targetRevision: main  # or your actual branch
+    targetRevision: main
     path: environnement/dev/charts/nginx-test
     helm:
       valueFiles:
         - values.yaml
+
   destination:
     server: https://kubernetes.default.svc
     namespace: argocd
+
   syncPolicy:
     automated:
       prune: true
       selfHeal: true
+    syncOptions:
+    - CreateNamespace=true
