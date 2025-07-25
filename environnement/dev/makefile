@@ -5,6 +5,7 @@ setup:
 	@$(MAKE) setup-helm
 	@$(MAKE) setup-k9s
 	@$(MAKE) setup-argocd
+	@$(MAKE) setup-argocd-image-updater
 
 
 clean-minikube:
@@ -24,4 +25,5 @@ setup-argocd:
 setup-k9s:
 	./scripts/install_k9s.sh && echo "K9s a été installé."
 
-
+setup-argocd-image-updater:
+	./scripts/install_argo_image_updater.sh && echo "Argocd Image Updater a été installé."

@@ -44,3 +44,9 @@ minikube delete --all
 ```
 k9s
 ```
+# Commandes utiles argocd-image-updater
+
+voir les logs 
+```
+kubectl logs -n argocd deployment/argocd-image-updater
+```
