@@ -3,4 +3,4 @@ helm-v3*
 .idea
 environnement/dev/minikube-linux-amd64/
 .env
-environnement/scripts/argocd_password.txt
+environnement/dev/scripts/argocd_password.txt
