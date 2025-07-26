@@ -6,6 +6,7 @@ setup:
 	@$(MAKE) setup-k9s
 	@$(MAKE) setup-argocd
 	@$(MAKE) setup-argocd-image-updater
+	@$(MAKE) deploy-applications
 
 
 clean-and-start-minikube:
