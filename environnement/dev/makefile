@@ -1,14 +1,14 @@
 setup:
 	@echo "Configuration de l'environnement de développement..."
 	@$(MAKE) setup-minikube
-	@$(MAKE) clean-minikube
+	@$(MAKE) clean-and-start-minikube
 	@$(MAKE) setup-helm
 	@$(MAKE) setup-k9s
 	@$(MAKE) setup-argocd
 	@$(MAKE) setup-argocd-image-updater
 
 
-clean-minikube:
+clean-and-start-minikube:
 	@echo "Nettoyage de Minikube..."
 	minikube delete --all && echo "Minikube a été nettoyé."
 	minikube start && echo "Minikube a été démarré."
