@@ -113,7 +113,7 @@ jobs:
               release=$(basename $chart)
               echo "🚀 Deploying chart: $release"
           
-              # Installation du chart
+            
               helm upgrade --install $release $chart --wait --timeout 180s || {
                 echo "❌ Helm install failed for $release"
                 exit 1
@@ -121,12 +121,11 @@ jobs:
           
               echo "✅ Chart $release deployed"
           
-              # Récupérer le service associé (si existe)
               svc=$(kubectl get svc -l "app.kubernetes.io/instance=$release" -o jsonpath='{.items[0].metadata.name}' 2>/dev/null || true)
           
               if [ -n "$svc" ]; then
                 echo "🔍 Service found for $release: $svc"
-                # Port-forward dans le background
+               
                 nohup kubectl port-forward svc/$svc 8080:80 >/dev/null 2>&1 &
                 sleep 5
                 echo "🌐 Testing service for $release"
