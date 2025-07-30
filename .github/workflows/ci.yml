@@ -110,34 +110,25 @@ jobs:
         with:
           version: v3.14.0
 
-      - name: Add NGINX Helm repo
+      - name: Add Bitnami repo
         run: |
-          helm repo add ingress-nginx https://kubernetes.github.io/ingress-nginx
           helm repo add bitnami https://charts.bitnami.com/bitnami
           helm repo update
 
-      - name: Deploy simple NGINX with Helm
+      - name: Deploy NGINX via Helm
         run: |
-          # Option 1: utiliser le chart Bitnami NGINX
-          helm install my-nginx bitnami/nginx --set service.type=NodePort --wait --timeout 120s
-
-          # Option 2 (alternatif) : utiliser ingress-nginx controller
-          #helm install my-ingress ingress-nginx/ingress-nginx --wait --timeout 120s
+          helm upgrade --install my-nginx bitnami/nginx \
+            --set service.type=ClusterIP \
+            --wait --timeout 120s
 
       - name: Check pods status
         run: kubectl get pods -A
 
-      - name: Expose service (if needed)
+      - name: Port-forward NGINX
         run: |
-          kubectl expose deployment my-nginx --type=NodePort --name=my-nginx-service
-
-      - name: Get Minikube IP
-        id: get_ip
-        run: echo "MINIKUBE_IP=$(minikube ip)" >> $GITHUB_ENV
+          nohup kubectl port-forward svc/my-nginx 8080:80 &
+          sleep 5
 
       - name: Test NGINX with curl
         run: |
-          NODE_PORT=$(kubectl get svc my-nginx-service -o=jsonpath='{.spec.ports[0].nodePort}')
-          echo "Testing NGINX on http://$MINIKUBE_IP:$NODE_PORT"
-          curl --retry 5 --retry-delay 5 http://$MINIKUBE_IP:$NODE_PORT
-
+          curl --retry 5 --retry-delay 5 http://127.0.0.1:8080
