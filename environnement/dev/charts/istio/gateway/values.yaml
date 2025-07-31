@@ -7,10 +7,7 @@ defaults:
   # Controls the spec.replicas setting for the Gateway deployment if set.
   # Otherwise defaults to Kubernetes Deployment default (1).
   replicaCount:
-  image:
-    repository: istio/proxyv2
-    tag: 1.22.0
-    pullPolicy: IfNotPresent
+
   kind: Deployment
 
   rbac:
