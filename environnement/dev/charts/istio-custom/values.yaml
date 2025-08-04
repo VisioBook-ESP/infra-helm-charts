@@ -8,3 +8,6 @@ istiod:
 istio-ingress:
   service:
     type: LoadBalancer
+    
+service:
+  port: 80
