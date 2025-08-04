@@ -1,0 +1,10 @@
+istio-base:
+  defaultRevision: default
+
+istiod:
+  meshConfig:
+    accessLogFile: /dev/stdout
+
+istio-ingress:
+  service:
+    type: LoadBalancer
