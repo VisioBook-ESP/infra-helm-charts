@@ -11,3 +11,6 @@ istio-ingress:
     
 service:
   port: 80
+serviceAccount:
+  create: true
+  automount: true
