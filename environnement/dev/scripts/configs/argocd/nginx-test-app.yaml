@@ -5,7 +5,7 @@ metadata:
   namespace: argocd
   annotations:
     # Correct digest strategy configuration - must specify the exact tag
-    argocd-image-updater.argoproj.io/image-list: myapp=ghcr.io/visiobook-esp/core-api-gateway:latest
+    argocd-image-updater.argoproj.io/image-list: myapp=ghcr.io/visiobook-esp/repo-test-infra-dev:latest
     argocd-image-updater.argoproj.io/myapp.update-strategy: digest
     argocd-image-updater.argoproj.io/write-back-method: argocd
     argocd-image-updater.argoproj.io/myapp.force-update: "true"
