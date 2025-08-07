@@ -14,3 +14,6 @@ service:
 serviceAccount:
   create: true
   automount: true
+
+ingress:
+  enabled: false
