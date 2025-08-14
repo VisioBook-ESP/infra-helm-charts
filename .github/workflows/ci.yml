@@ -112,7 +112,6 @@ jobs:
             if [ -f "$chart/Chart.yaml" ]; then
               release=$(basename $chart)
               echo "🚀 Deploying chart: $release"
-          
             
               helm upgrade --install $release $chart --wait --timeout 180s || {
                 echo "❌ Helm install failed for $release"
