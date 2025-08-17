@@ -34,9 +34,18 @@ jobs:
         with:
           version: v3.14.0
 
-      - name: Validate Helm templates
+      - name: Validate Helm templates (per chart, valid release name)
+        shell: bash
         run: |
-          helm template environnement/dev/charts/*
+          shopt -s nullglob
+          for chart in environnement/dev/charts/*; do
+            if [ -f "$chart/Chart.yaml" ]; then
+              name=$(basename "$chart" | tr '[:upper:]' '[:lower:]' | sed 's/[^a-z0-9-]/-/g' | cut -c1-53 | sed 's/^-//; s/-$//')
+              echo "📄 Rendering: $chart (release=$name)"
+              helm template "$name" "$chart" >/dev/null
+            fi
+          done
+  
 
   unittest:
     name: ✅ Helm Unit Tests
@@ -72,12 +81,15 @@ jobs:
           curl -sL https://github.com/instrumenta/kubeval/releases/latest/download/kubeval-linux-amd64.tar.gz | tar xz
           sudo mv kubeval /usr/local/bin/
 
-      - name: Run kubeval on Helm templates
+      - name: Run kubeval on Helm templates (per chart, valid release name)
+        shell: bash
         run: |
+          shopt -s nullglob
           for chart in environnement/dev/charts/*; do
             if [ -f "$chart/Chart.yaml" ]; then
-              echo "🔍 Validating with kubeval: $chart"
-              helm template "$chart" | kubeval --ignore-missing-schemas --strict
+              name=$(basename "$chart" | tr '[:upper:]' '[:lower:]' | sed 's/[^a-z0-9-]/-/g' | cut -c1-53 | sed 's/^-//; s/-$//')
+              echo "🔍 Validating with kubeval: $chart (release=$name)"
+              helm template "$name" "$chart" | kubeval --ignore-missing-schemas --strict
             fi
           done
 
@@ -105,33 +117,68 @@ jobs:
         with:
           version: v3.14.0
 
-      - name: Deploy & test all charts
+      - name: Deploy & test all charts (with per-chart port-forward)
+        shell: bash
         run: |
-          set -e
+          set -euo pipefail
+          shopt -s nullglob
+  
+          declare -A REMOTE_PORTS=(
+            [nginx]=80
+            [nuxt]=3000
+          )
+   
+          declare -A LOCAL_PORTS=(
+            [nginx]=8080
+            [nuxt]=8080
+          )
+  
+          cleanup_pf() { jobs -p | xargs -r kill || true; }
+          trap cleanup_pf EXIT
+  
           for chart in environnement/dev/charts/*; do
             if [ -f "$chart/Chart.yaml" ]; then
-              release=$(basename $chart)
+              release="$(basename "$chart")"
               echo "🚀 Deploying chart: $release"
-            
-              helm upgrade --install $release $chart --wait --timeout 180s || {
+  
+              helm upgrade --install "$release" "$chart" --wait --timeout 180s || {
                 echo "❌ Helm install failed for $release"
                 exit 1
               }
-          
               echo "✅ Chart $release deployed"
-          
-              svc=$(kubectl get svc -l "app.kubernetes.io/instance=$release" -o jsonpath='{.items[0].metadata.name}' 2>/dev/null || true)
-          
-              if [ -n "$svc" ]; then
-                echo "🔍 Service found for $release: $svc"
-               
-                nohup kubectl port-forward svc/$svc 8080:80 >/dev/null 2>&1 &
-                sleep 5
-                echo "🌐 Testing service for $release"
-                curl --max-time 10 --retry 5 --retry-delay 5 http://127.0.0.1:8080 || echo "⚠️ Curl failed for $release"
-                kill $(jobs -p) || true
-              else
-                echo "⚠️ No service found for $release, skipping curl test"
+  
+              svc="$(kubectl get svc -l "app.kubernetes.io/instance=$release" -o jsonpath='{.items[0].metadata.name}' 2>/dev/null || true)"
+  
+              if [ -z "$svc" ]; then
+                echo "⚠️  No service found for $release, skipping curl test"
+                continue
               fi
+              echo "🔍 Service found for $release: $svc"
+  
+              remote_port="${REMOTE_PORTS[$release]:-}"
+              if [ -z "${remote_port}" ]; then
+                remote_port="$(kubectl get svc "$svc" -o jsonpath='{.spec.ports[0].port}' 2>/dev/null || true)"
+              fi
+  
+              if [ -z "${remote_port}" ]; then
+                echo "⚠️  Could not determine remote port for $release, skipping curl test"
+                continue
+              fi
+  
+              local_port="${LOCAL_PORTS[$release]:-8080}"
+  
+              echo "🔌 Port-forward $svc : ${local_port}:${remote_port}"
+              nohup kubectl port-forward "svc/${svc}" "${local_port}:${remote_port}" >/dev/null 2>&1 &
+              for i in {1..10}; do
+                sleep 1
+                (curl -sSf "http://127.0.0.1:${local_port}" >/dev/null && break) || true
+              done
+  
+              echo "🌐 Testing service for $release on http://127.0.0.1:${local_port}"
+              if ! curl --fail --max-time 10 "http://127.0.0.1:${local_port}"; then
+                echo "⚠️  Curl failed for $release"
+              fi
+  
+              cleanup_pf
             fi
           done
