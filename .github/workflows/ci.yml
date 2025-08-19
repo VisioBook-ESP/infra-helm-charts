@@ -45,7 +45,6 @@ jobs:
               helm template "$name" "$chart" >/dev/null
             fi
           done
-  
 
   unittest:
     name: ✅ Helm Unit Tests
