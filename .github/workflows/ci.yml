@@ -126,11 +126,13 @@ jobs:
           declare -A REMOTE_PORTS=(
             [nginx]=80
             [nuxt]=3000
+            [express]=3000
           )
    
           declare -A LOCAL_PORTS=(
             [nginx]=8080
             [nuxt]=8080
+            [express]=3000
           )
   
           cleanup_pf() { jobs -p | xargs -r kill || true; }

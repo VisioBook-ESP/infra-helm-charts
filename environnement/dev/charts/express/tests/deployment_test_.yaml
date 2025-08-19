@@ -1,0 +1,20 @@
+suite: Test du Deployment
+templates:
+  - templates/deployment.yaml
+tests:
+  - it: Devrait avoir le bon nom
+    set:
+      name: testapp
+    asserts:
+      - equal:
+          path: metadata.name
+          value: testapp
+
+  - it: Devrait contenir la bonne image
+    set:
+      image.repository: ghcr.io/visiobook-esp/repo-test-infra-express
+      image.tag: "latest"
+    asserts:
+      - equal:
+          path: spec.template.spec.containers[0].image
+          value: ghcr.io/visiobook-esp/repo-test-infra-express:latest
