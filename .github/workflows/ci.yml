@@ -21,6 +21,7 @@ jobs:
         run: |
           helm lint environnement/dev/charts/* --strict
 
+
   validate:
     name: 📄 Helm Template Validation
     runs-on: ubuntu-latest
