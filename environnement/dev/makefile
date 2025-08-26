@@ -6,6 +6,7 @@ setup:
 	@$(MAKE) setup-k9s
 	@$(MAKE) setup-argocd
 	@$(MAKE) setup-argocd-image-updater
+	@$(MAKE) setup-istioctl
 	@$(MAKE) deploy-applications
 
 
@@ -28,6 +29,9 @@ setup-k9s:
 
 setup-argocd-image-updater:
 	./scripts/install_argo_image_updater.sh && echo "Argocd Image Updater a été installé."
+
+setup-istioctl:
+	./scripts/installIstioCtl.sh && echo "Istioctl a été installé."
 
 deploy-applications:
 	./scripts/deploy_applications.sh && echo "L'application a été déployée."
