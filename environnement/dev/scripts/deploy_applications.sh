@@ -1,12 +1,24 @@
 #!/bin/bash
 
-kubectl apply -f scripts/configs/argocd/nginx-test-app.yaml -n argocd
+#kubectl apply -f scripts/configs/argocd/nginx-test-app.yaml -n argocd
 
 
 #Istio
 kubectl create namespace istio-system
-kubectl apply --server-side -f https://raw.githubusercontent.com/prometheus-operator/prometheus-operator/v0.85.0/bundle.yaml
 
-kubectl apply -f scripts/configs/argocd/istio-app.yaml -n argocd
-# kubectl apply -f scripts/configs/argocd/kiali-app.yaml -n argocd
-# kubectl apply -f scripts/configs/argocd/prometheus-app.yaml -n argocd
+pwd
+ls
+cd app/configs/istio
+
+pwd
+
+kubectl apply -f istio-base.yaml -n istio-system
+kubectl apply -f istiod.yaml --validate=false -n istio-system --wait
+kubectl apply -f istio-ingress.yaml -n istio-system
+
+sleep 60
+
+kubectl apply -f istio-addons/prometheus.yaml -n istio-system
+kubectl apply -f istio-addons/grafana.yaml -n istio-system
+kubectl apply -f istio-addons/kiali.yaml -n istio-system
+kubectl apply -f istio-addons/jaeger.yaml -n istio-system
