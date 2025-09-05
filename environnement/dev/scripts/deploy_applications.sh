@@ -22,3 +22,7 @@ kubectl apply -f istio-addons/prometheus.yaml -n istio-system
 kubectl apply -f istio-addons/grafana.yaml -n istio-system
 kubectl apply -f istio-addons/kiali.yaml -n istio-system
 kubectl apply -f istio-addons/jaeger.yaml -n istio-system
+
+kubectl create namespace database
+
+kubectl apply -f istio-gateway/ecommerce-gateway.yaml

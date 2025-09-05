@@ -1,0 +1,40 @@
+1. Get the application URL by running these commands:
+{{- if .Values.ingress.enabled }}
+{{- range $host := .Values.ingress.hosts }}
+  {{- range .paths }}
+  http{{ if $.Values.ingress.tls }}s{{ end }}://{{ $host.host }}{{ .path }}
+  {{- end }}
+{{- end }}
+{{- else if contains "NodePort" .Values.service.type }}
+  export NODE_PORT=$(kubectl get --namespace {{ .Release.Namespace }} -o jsonpath="{.spec.ports[0].nodePort}" services {{ include "postgres.fullname" . }})
+  export NODE_IP=$(kubectl get nodes --namespace {{ .Release.Namespace }} -o jsonpath="{.items[0].status.addresses[0].address}")
+  echo "PostgreSQL available at $NODE_IP:$NODE_PORT"
+{{- else if contains "LoadBalancer" .Values.service.type }}
+     NOTE: It may take a few minutes for the LoadBalancer IP to be available.
+           You can watch the status of by running 'kubectl get --namespace {{ .Release.Namespace }} svc -w {{ include "postgres.fullname" . }}'
+  export SERVICE_IP=$(kubectl get svc --namespace {{ .Release.Namespace }} {{ include "postgres.fullname" . }} --template "{{"{{ range (index .status.loadBalancer.ingress 0) }}{{.}}{{ end }}"}}")
+  echo "PostgreSQL available at $SERVICE_IP:{{ .Values.service.port }}"
+{{- else if contains "ClusterIP" .Values.service.type }}
+  echo "PostgreSQL is available within the cluster at:"
+  echo "  {{ include "postgres.fullname" . }}.{{ .Release.Namespace }}.svc.cluster.local:{{ .Values.service.port }}"
+  echo ""
+  echo "To connect from outside the cluster, run:"
+  echo "  kubectl port-forward --namespace {{ .Release.Namespace }} svc/{{ include "postgres.fullname" . }} {{ .Values.service.port }}:{{ .Values.service.port }}"
+{{- end }}
+
+2. Connect to PostgreSQL:
+
+  # Get the password
+  export POSTGRES_PASSWORD=$(kubectl get secret --namespace {{ .Release.Namespace }} {{ include "postgres.fullname" . }}-secret -o jsonpath="{.data.postgres-password}" | base64 --decode)
+
+  # Connect using psql
+  kubectl run {{ include "postgres.fullname" . }}-client --rm --tty -i --restart='Never' \
+    --namespace {{ .Release.Namespace }} \
+    --image postgres:{{ .Values.image.tag | default .Chart.AppVersion }} \
+    --env="PGPASSWORD=$POSTGRES_PASSWORD" \
+    --command -- psql --host {{ include "postgres.fullname" . }} -U {{ .Values.postgresql.auth.username }} -d {{ .Values.postgresql.auth.database }} -p {{ .Values.service.port }}
+
+3. Database details:
+  - Database: {{ .Values.postgresql.auth.database }}
+  - Username: {{ .Values.postgresql.auth.username }}
+  - Service: {{ include "postgres.fullname" . }}.{{ .Release.Namespace }}.svc.cluster.local:{{ .Values.service.port }}

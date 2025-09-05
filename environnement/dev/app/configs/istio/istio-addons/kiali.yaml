@@ -113,9 +113,11 @@ data:
       version_label: v2.5.0
       view_only_mode: false
     external_services:
-      #Ajout de l'url de Graphana
+      #Ajout des l'urls de Graphana et de prometheus pour le lien dans Kiali
       grafana:
-        url: http://grafana.istio-system:3000
+        external_url: http://grafana.istio-system:3000
+      prometheus:
+        internal_url: http://prometheus.istio-system:9090
       custom_dashboards:
         enabled: true
       istio:
