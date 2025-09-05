@@ -13,5 +13,3 @@ kubectl apply -n argocd -f https://raw.githubusercontent.com/argoproj-labs/argoc
 #  --docker-username="$GHCR_USER" \
 #  --docker-password="$GHCR_TOKEN" \
 #  --docker-email="$GHCR_EMAIL" || echo "Secret GHCR existe déjà"
-
-kubectl apply -f scripts/configs/argocd/nginx-test-app.yaml -n argocd
