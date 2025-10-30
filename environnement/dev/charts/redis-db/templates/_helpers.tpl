@@ -1,8 +1,10 @@
 {{/*
 Expand the name of the chart.
 */}}
-{{- define "redis-db.name" -}}
-{{- default .Chart.Name .Values.nameOverride | trunc 63 | trimSuffix "-" }}
+{{- define "redis.name" -}}
+{{- /* order: name > nameOverride > Chart.Name */ -}}
+{{- $base := coalesce .Values.name .Values.nameOverride .Chart.Name -}}
+{{- $base | trunc 63 | trimSuffix "-" }}
 {{- end }}
 
 {{/*
@@ -10,9 +12,12 @@ Create a default fully qualified app name.
 We truncate at 63 chars because some Kubernetes name fields are limited to this (by the DNS naming spec).
 If release name contains chart name it will be used as a full name.
 */}}
-{{- define "redis-db.fullname" -}}
+{{- define "redis.fullname" -}}
 {{- if .Values.fullnameOverride }}
 {{- .Values.fullnameOverride | trunc 63 | trimSuffix "-" }}
+{{- else if .Values.name }}
+{{- /* if 'name' is provided, use it as the full name (no release prefix) */ -}}
+{{- .Values.name | trunc 63 | trimSuffix "-" }}
 {{- else }}
 {{- $name := default .Chart.Name .Values.nameOverride }}
 {{- if contains $name .Release.Name }}
@@ -26,16 +31,16 @@ If release name contains chart name it will be used as a full name.
 {{/*
 Create chart name and version as used by the chart label.
 */}}
-{{- define "redis-db.chart" -}}
+{{- define "redis.chart" -}}
 {{- printf "%s-%s" .Chart.Name .Chart.Version | replace "+" "_" | trunc 63 | trimSuffix "-" }}
 {{- end }}
 
 {{/*
 Common labels
 */}}
-{{- define "redis-db.labels" -}}
-helm.sh/chart: {{ include "redis-db.chart" . }}
-{{ include "redis-db.selectorLabels" . }}
+{{- define "redis.labels" -}}
+helm.sh/chart: {{ include "redis.chart" . }}
+{{ include "redis.selectorLabels" . }}
 {{- if .Chart.AppVersion }}
 app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
 {{- end }}
@@ -45,17 +50,17 @@ app.kubernetes.io/managed-by: {{ .Release.Service }}
 {{/*
 Selector labels
 */}}
-{{- define "redis-db.selectorLabels" -}}
-app.kubernetes.io/name: {{ include "redis-db.name" . }}
+{{- define "redis.selectorLabels" -}}
+app.kubernetes.io/name: {{ include "redis.name" . }}
 app.kubernetes.io/instance: {{ .Release.Name }}
 {{- end }}
 
 {{/*
 Create the name of the service account to use
 */}}
-{{- define "redis-db.serviceAccountName" -}}
+{{- define "redis.serviceAccountName" -}}
 {{- if .Values.serviceAccount.create }}
-{{- default (include "redis-db.fullname" .) .Values.serviceAccount.name }}
+{{- default (include "redis.fullname" .) .Values.serviceAccount.name }}
 {{- else }}
 {{- default "default" .Values.serviceAccount.name }}
 {{- end }}
