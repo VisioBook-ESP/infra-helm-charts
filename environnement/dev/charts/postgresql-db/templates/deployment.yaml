@@ -13,10 +13,11 @@ spec:
       {{- include "postgres.selectorLabels" . | nindent 6 }}
   template:
     metadata:
-      {{- with .Values.podAnnotations }}
       annotations:
+        sidecar.istio.io/inject: "true"
+        {{- with .Values.podAnnotations }}
         {{- toYaml . | nindent 8 }}
-      {{- end }}
+        {{- end }}
       labels:
         {{- include "postgres.labels" . | nindent 8 }}
         {{- with .Values.podLabels }}

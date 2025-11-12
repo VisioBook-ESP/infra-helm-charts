@@ -1,0 +1,20 @@
+{{- if .Values.istio.enabled }}
+apiVersion: networking.istio.io/v1beta1
+kind: VirtualService
+metadata:
+  name: {{ include "postgres.fullname" . }}
+  labels:
+    {{- include "postgres.labels" . | nindent 4 }}
+spec:
+  hosts:
+    - {{ include "postgres.fullname" . }}
+    - {{ include "postgres.fullname" . }}.{{ .Release.Namespace }}.svc.cluster.local
+  tcp:
+    - match:
+        - port: 5432
+      route:
+        - destination:
+            host: {{ include "postgres.fullname" . }}
+            port:
+              number: 5432
+{{- end }}
