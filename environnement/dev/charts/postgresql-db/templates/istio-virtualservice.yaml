@@ -7,7 +7,6 @@ metadata:
     {{- include "postgres.labels" . | nindent 4 }}
 spec:
   hosts:
-    - {{ include "postgres.fullname" . }}
     - {{ include "postgres.fullname" . }}.{{ .Release.Namespace }}.svc.cluster.local
   tcp:
     - match:
