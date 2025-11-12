@@ -86,3 +86,6 @@ istio:
   mtls:
     enabled: true
     mode: ISTIO_MUTUAL
+  gateway:
+    enabled: true
+    host: "postgres.local"
