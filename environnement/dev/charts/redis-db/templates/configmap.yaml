@@ -1,0 +1,32 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "redis-db.fullname" . }}-config
+  labels:
+    {{- include "redis-db.labels" . | nindent 4 }}
+data:
+  redis.conf: |
+
+    bind 0.0.0.0
+    protected-mode no
+    port 6379
+
+
+    maxmemory {{ .Values.redis.config.maxmemory }}
+    maxmemorypolicy {{ .Values.redis.config.maxmemorypolicy }}
+
+    save {{ .Values.redis.config.save }}
+    dbfilename dump.rdb
+    dir /data
+
+
+    appendonly {{ .Values.redis.config.appendonly }}
+    appendfilename "appendonly.aof"
+    appendfsync {{ .Values.redis.config.appendfsync }}
+
+    loglevel notice
+    logfile ""
+
+    {{- if .Values.redis.auth.enabled }}
+    requirepass {{ .Values.redis.auth.password }}
+    {{- end }}
