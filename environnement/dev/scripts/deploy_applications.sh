@@ -22,6 +22,8 @@ kubectl apply -f istio-addons/jaeger.yaml -n istio-system
 #
 kubectl create namespace database
 kubectl label namespace database istio-injection=enabled
+kubectl create namespace backend
+kubectl label namespace backend istio-injection=enabled
 
 cd ..
 
