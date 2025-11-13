@@ -7,7 +7,7 @@ metadata:
     {{- include "core-user-service.labels" . | nindent 4 }}
 spec:
   hosts:
-  {{- range .Values.istio.virtualService.hosts }}
+    - {{ include "core-user-service.fullname" . }}.{{ .Release.Namespace }}.svc.cluster.local
   http:
     - match:
         - uri:
