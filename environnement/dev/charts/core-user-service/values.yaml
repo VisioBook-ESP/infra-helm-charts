@@ -1,11 +1,148 @@
+replicaCount: 1
+
 image:
   repository: ghcr.io/visiobook-esp/core-user-service-dev
   tag: latest
   pullPolicy: IfNotPresent
 
-service:
-  type: NodePort
-  port: 80
-  nodePort: 30081
+imagePullSecrets: []
+nameOverride: ""
+fullnameOverride: ""
 
-resources: {}
+serviceAccount:
+  create: true
+  automount: true
+  annotations: {}
+  name: ""
+
+# Annotations pour Istio
+podAnnotations:
+  sidecar.istio.io/inject: "true"
+  sidecar.istio.io/proxyCPU: "100m"
+  sidecar.istio.io/proxyMemory: "128Mi"
+
+podLabels:
+  version: v1
+  app: core-user-service
+
+podSecurityContext:
+  runAsNonRoot: true
+  runAsUser: 1000
+  fsGroup: 1000
+
+securityContext:
+  allowPrivilegeEscalation: false
+  capabilities:
+    drop:
+      - ALL
+  readOnlyRootFilesystem: false
+
+# Service Configuration
+service:
+  type: ClusterIP  # Utilise ClusterIP avec Istio
+  port: 80
+  targetPort: 8080
+  
+  # NodePort (pour debug uniquement)
+  nodePort:
+    enabled: false
+    port: 30081
+
+# Application Configuration
+app:
+  serviceName: "core-user-service"
+  serviceVersion: "1.0.0"
+  env: "dev"
+  port: 8080
+  logLevel: "info"
+
+# Database Configuration
+database:
+  host: "postgresql-db.database.svc.cluster.local"
+  port: 5432
+  name: "visiobook_dev"
+  username: "postgres"
+  password: "password"
+  echo: false
+
+security:
+  secretKey: "UlwxtuiY8d5P2sEzxrynYwaojalbtakY"
+  algorithm: "HS256"
+  accessTokenExpireMinutes: 30
+
+cors:
+  origins:
+    - "http://localhost:3000"
+    - "http://localhost:8080"
+
+# Python Configuration
+python:
+  path: "/app"
+  unbuffered: "1"
+
+# Resources
+resources:
+  limits:
+    cpu: 500m
+    memory: 512Mi
+  requests:
+    cpu: 100m
+    memory: 128Mi
+
+# Probes
+livenessProbe:
+  enabled: true
+  httpGet:
+    path: /health
+    port: 8080
+  initialDelaySeconds: 30
+  periodSeconds: 10
+  timeoutSeconds: 5
+  failureThreshold: 3
+
+readinessProbe:
+  enabled: true
+  httpGet:
+    path: /health
+    port: 8080
+  initialDelaySeconds: 10
+  periodSeconds: 5
+  timeoutSeconds: 3
+  failureThreshold: 3
+
+# Istio Configuration
+istio:
+  enabled: true
+  injection: true
+  
+  virtualService:
+    enabled: true
+    hosts:
+      - "core-user-service"
+      - "user-api.visiobook.dev"
+    gateways:
+      - mesh
+  destinationRule:
+    enabled: true
+    trafficPolicy:
+      connectionPool:
+        tcp:
+          maxConnections: 100
+        http:
+          http1MaxPendingRequests: 100
+          http2MaxRequests: 100
+          maxRequestsPerConnection: 2
+      loadBalancer:
+        simple: ROUND_ROBIN
+      outlierDetection:
+        consecutiveErrors: 5
+        interval: 30s
+        baseEjectionTime: 30s
+  
+  mtls:
+    enabled: true
+    mode: ISTIO_MUTUAL
+
+nodeSelector: {}
+tolerations: []
+affinity: {}
