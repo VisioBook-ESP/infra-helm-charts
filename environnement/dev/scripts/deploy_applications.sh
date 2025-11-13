@@ -26,6 +26,7 @@ kubectl label namespace database istio-injection=enabled
 cd ..
 
 kubectl apply -f argocd/postgresql-app.yaml
+kubectl apply -f argocd/redis-app.yaml
 
 
 

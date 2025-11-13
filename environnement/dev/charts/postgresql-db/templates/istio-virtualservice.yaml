@@ -7,13 +7,7 @@ metadata:
     {{- include "postgres.labels" . | nindent 4 }}
 spec:
   hosts:
-    - {{ include "postgres.fullname" . }}
     - {{ include "postgres.fullname" . }}.{{ .Release.Namespace }}.svc.cluster.local
-  {{- if .Values.istio.gateway.enabled }}
-    - "{{ .Values.istio.gateway.host }}"
-  gateways:
-    - {{ include "postgres.fullname" . }}-gateway
-  {{- end }}
   tcp:
     - match:
         - port: 5432
