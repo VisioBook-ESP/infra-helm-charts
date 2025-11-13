@@ -1,0 +1,26 @@
+{{- if .Values.istio.enabled }}
+apiVersion: networking.istio.io/v1beta1
+kind: VirtualService
+metadata:
+  name: {{ include "redis-db.fullname" . }}
+  namespace: {{ .Release.Namespace }}
+  labels:
+    {{- include "redis-db.labels" . | nindent 4 }}
+spec:
+  hosts:
+    - {{ include "redis-db.fullname" . }}
+    - {{ include "redis-db.fullname" . }}.{{ .Release.Namespace }}.svc.cluster.local
+  {{- if .Values.istio.gateway.enabled }}
+    - "{{ .Values.istio.gateway.host }}"
+  gateways:
+    - {{ include "redis-db.fullname" . }}-gateway
+  {{- end }}
+  tcp:
+    - match:
+        - port: 6379
+      route:
+        - destination:
+            host: {{ include "redis-db.fullname" . }}.{{ .Release.Namespace }}.svc.cluster.local
+            port:
+              number: 6379
+{{- end }}
