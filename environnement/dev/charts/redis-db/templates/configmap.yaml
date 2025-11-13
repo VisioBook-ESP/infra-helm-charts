@@ -6,27 +6,17 @@ metadata:
     {{- include "redis-db.labels" . | nindent 4 }}
 data:
   redis.conf: |
-
     bind 0.0.0.0
     protected-mode no
     port 6379
-
-
-    maxmemory {{ .Values.redis.config.maxmemory }}
-    maxmemorypolicy {{ .Values.redis.config.maxmemorypolicy }}
-
-    save {{ .Values.redis.config.save }}
+    maxmemory 256mb
+    maxmemory-policy allkeys-lru
+    save 900 1
+    save 300 10
+    save 60 10000
     dbfilename dump.rdb
     dir /data
-
-
-    appendonly {{ .Values.redis.config.appendonly }}
+    appendonly yes
     appendfilename "appendonly.aof"
-    appendfsync {{ .Values.redis.config.appendfsync }}
-
+    appendfsync everysec
     loglevel notice
-    logfile ""
-
-    {{- if .Values.redis.auth.enabled }}
-    requirepass {{ .Values.redis.auth.password }}
-    {{- end }}
