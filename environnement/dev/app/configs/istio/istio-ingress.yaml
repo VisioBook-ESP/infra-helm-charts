@@ -179,7 +179,6 @@ spec:
               memory: 128Mi
       terminationGracePeriodSeconds: 30
 ---
-# Source: gateway/templates/hpa.yaml
 apiVersion: autoscaling/v2
 kind: HorizontalPodAutoscaler
 metadata:

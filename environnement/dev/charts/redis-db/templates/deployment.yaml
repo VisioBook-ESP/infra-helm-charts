@@ -1,16 +1,16 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ include "redis.fullname" . }}
+  name: {{ include "redis-db.fullname" . }}
   labels:
-    {{- include "redis.labels" . | nindent 4 }}
+    {{- include "redis-db.labels" . | nindent 4 }}
 spec:
   replicas: {{ .Values.replicaCount }}
   strategy:
     type: Recreate
   selector:
     matchLabels:
-      {{- include "redis.selectorLabels" . | nindent 6 }}
+      {{- include "redis-db.selectorLabels" . | nindent 6 }}
   template:
     metadata:
       annotations:
@@ -19,7 +19,7 @@ spec:
         {{- toYaml . | nindent 8 }}
         {{- end }}
       labels:
-        {{- include "redis.labels" . | nindent 8 }}
+        {{- include "redis-db.labels" . | nindent 8 }}
         version: v1
         {{- with .Values.podLabels }}
         {{- toYaml . | nindent 8 }}
@@ -29,7 +29,7 @@ spec:
       imagePullSecrets:
         {{- toYaml . | nindent 8 }}
       {{- end }}
-      serviceAccountName: {{ include "redis.serviceAccountName" . }}
+      serviceAccountName: {{ include "redis-db.serviceAccountName" . }}
       securityContext:
         {{- toYaml .Values.podSecurityContext | nindent 8 }}
       containers:
@@ -57,7 +57,7 @@ spec:
             - name: REDIS_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: {{ include "redis.fullname" . }}-secret
+                  name: {{ include "redis-db.fullname" . }}-secret
                   key: redis-password
           {{- end }}
           {{- if .Values.livenessProbe.enabled }}
@@ -107,13 +107,13 @@ spec:
         - name: data
           {{- if .Values.redis.persistence.enabled }}
           persistentVolumeClaim:
-            claimName: {{ include "redis.fullname" . }}-pvc
+            claimName: {{ include "redis-db.fullname" . }}-pvc
           {{- else }}
           emptyDir: {}
           {{- end }}
         - name: redis-config
           configMap:
-            name: {{ include "redis.fullname" . }}-config
+            name: {{ include "redis-db.fullname" . }}-config
         {{- with .Values.volumes }}
         {{- toYaml . | nindent 8 }}
         {{- end }}
