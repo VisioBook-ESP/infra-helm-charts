@@ -7,21 +7,20 @@ metadata:
 spec:
   replicas: {{ .Values.replicaCount }}
   strategy:
-    type: RollingUpdate
-    rollingUpdate:
-      maxSurge: 1
-      maxUnavailable: 0
+    type: Recreate
   selector:
     matchLabels:
       {{- include "redis.selectorLabels" . | nindent 6 }}
   template:
     metadata:
-      {{- with .Values.podAnnotations }}
       annotations:
+        sidecar.istio.io/inject: "true"
+        {{- with .Values.podAnnotations }}
         {{- toYaml . | nindent 8 }}
-      {{- end }}
+        {{- end }}
       labels:
         {{- include "redis.labels" . | nindent 8 }}
+        version: v1
         {{- with .Values.podLabels }}
         {{- toYaml . | nindent 8 }}
         {{- end }}
@@ -37,8 +36,18 @@ spec:
         - name: redis
           securityContext:
             {{- toYaml .Values.securityContext | nindent 12 }}
-          image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
+          command:
+            - redis-server
+            - /usr/local/etc/redis/redis.conf
+            {{- if .Values.redis.auth.enabled }}
+            - --requirepass
+            - $(REDIS_PASSWORD)
+            {{- else }}
+            - --protected-mode
+            - "no"
+            {{- end }}
           ports:
             - name: redis
               containerPort: 6379
@@ -50,36 +59,47 @@ spec:
                 secretKeyRef:
                   name: {{ include "redis.fullname" . }}-secret
                   key: redis-password
-          command:
-            - redis-server
-            - --requirepass
-            - $(REDIS_PASSWORD)
           {{- end }}
+          {{- if .Values.livenessProbe.enabled }}
           livenessProbe:
-            tcpSocket:
-              port: redis
-            initialDelaySeconds: 30
-            periodSeconds: 10
-            timeoutSeconds: 5
-            failureThreshold: 3
+            exec:
+              command:
+                - sh
+                - -c
+                {{- if .Values.redis.auth.enabled }}
+                - redis-cli -a $REDIS_PASSWORD ping | grep PONG
+                {{- else }}
+                - redis-cli ping | grep PONG
+                {{- end }}
+            initialDelaySeconds: {{ .Values.livenessProbe.initialDelaySeconds }}
+            periodSeconds: {{ .Values.livenessProbe.periodSeconds }}
+            timeoutSeconds: {{ .Values.livenessProbe.timeoutSeconds }}
+            failureThreshold: {{ .Values.livenessProbe.failureThreshold }}
+          {{- end }}
+          {{- if .Values.readinessProbe.enabled }}
           readinessProbe:
             exec:
               command:
-                - redis-cli
+                - sh
+                - -c
                 {{- if .Values.redis.auth.enabled }}
-                - -a
-                - $(REDIS_PASSWORD)
+                - redis-cli -a $REDIS_PASSWORD ping | grep PONG
+                {{- else }}
+                - redis-cli ping | grep PONG
                 {{- end }}
-                - ping
-            initialDelaySeconds: 5
-            periodSeconds: 10
-            timeoutSeconds: 5
-            failureThreshold: 3
+            initialDelaySeconds: {{ .Values.readinessProbe.initialDelaySeconds }}
+            periodSeconds: {{ .Values.readinessProbe.periodSeconds }}
+            timeoutSeconds: {{ .Values.readinessProbe.timeoutSeconds }}
+            failureThreshold: {{ .Values.readinessProbe.failureThreshold }}
+          {{- end }}
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
           volumeMounts:
             - name: data
               mountPath: /data
+            - name: redis-config
+              mountPath: /usr/local/etc/redis/redis.conf
+              subPath: redis.conf
             {{- with .Values.volumeMounts }}
             {{- toYaml . | nindent 12 }}
             {{- end }}
@@ -91,6 +111,9 @@ spec:
           {{- else }}
           emptyDir: {}
           {{- end }}
+        - name: redis-config
+          configMap:
+            name: {{ include "redis.fullname" . }}-config
         {{- with .Values.volumes }}
         {{- toYaml . | nindent 8 }}
         {{- end }}

@@ -23,6 +23,9 @@ kubectl apply -f istio-addons/jaeger.yaml -n istio-system
 kubectl create namespace database
 kubectl label namespace database istio-injection=enabled
 
+cd ..
+
+kubectl apply -f argocd/postgresql-app.yaml
 
 
-#kubectl apply -f istio-gateway/ecommerce-gateway.yaml
+

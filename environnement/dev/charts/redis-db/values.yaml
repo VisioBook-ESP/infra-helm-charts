@@ -1,9 +1,10 @@
 replicaCount: 1
 name: redis
+
 image:
   repository: redis
   pullPolicy: IfNotPresent
-  tag: "7"
+  tag: "7.2-alpine"
 
 imagePullSecrets: []
 nameOverride: ""
@@ -15,12 +16,27 @@ serviceAccount:
   annotations: {}
   name: ""
 
-podAnnotations: {}
-podLabels: {}
+# Annotations pour Istio
+podAnnotations:
+  sidecar.istio.io/inject: "true"
+  sidecar.istio.io/proxyCPU: "100m"
+  sidecar.istio.io/proxyMemory: "128Mi"
 
-podSecurityContext: {}
+podLabels:
+  version: v1
+  app: redis
 
-securityContext: {}
+podSecurityContext:
+  fsGroup: 999
+  runAsUser: 999
+  runAsNonRoot: true
+
+securityContext:
+  allowPrivilegeEscalation: false
+  capabilities:
+    drop:
+      - ALL
+  readOnlyRootFilesystem: false
 
 service:
   type: ClusterIP
@@ -31,19 +47,6 @@ service:
     enabled: false
     port: 30379
 
-ingress:
-  enabled: false
-  className: ""
-  annotations: {}
-
-  hosts:
-    - host: chart-example.local
-      paths:
-        - path: /
-          pathType: ImplementationSpecific
-  tls: []
-
-
 resources:
   limits:
     cpu: 500m
@@ -52,48 +55,51 @@ resources:
     cpu: 100m
     memory: 128Mi
 
-
 livenessProbe:
-  exec:
-    command:
-      - redis-cli
-      - ping
-    initialDelaySeconds: 30
-    periodSeconds: 10
-readinessProbe:
-  exec:
-    command:
-      - redis-cli
-      - ping
-    initialDelaySeconds: 5
-    periodSeconds: 10
+  enabled: true
+  initialDelaySeconds: 30
+  periodSeconds: 10
+  timeoutSeconds: 5
+  failureThreshold: 3
 
-autoscaling:
-  enabled: false
-  minReplicas: 1
-  maxReplicas: 100
-  targetCPUUtilizationPercentage: 80
+readinessProbe:
+  enabled: true
+  initialDelaySeconds: 5
+  periodSeconds: 10
+  timeoutSeconds: 5
+  failureThreshold: 3
 
 volumes: []
-
-
 volumeMounts: []
 
 nodeSelector: {}
-
 tolerations: []
-
 affinity: {}
 
+# Configuration Redis
 redis:
+  # Authentication DÉSACTIVÉE
+  auth:
+    enabled: false
+    password: ""
+
+  # Redis configuration
+  config:
+    maxmemory: "256mb"
+    maxmemory-policy: "allkeys-lru"
+    save: "900 1 300 10 60 10000"
+    appendonly: "yes"
+    appendfsync: "everysec"
+
+  # Persistence
   persistence:
     enabled: true
-    storageClass: ""
-    size: "8Gi"
-    accessModes:
-      - ReadWriteOnce
+    storageClass: "standard"
+    accessMode: ReadWriteOnce
+    size: 8Gi
 
-isito:
+# Configuration Istio
+istio:
   enabled: true
   injection: true
 
@@ -101,11 +107,19 @@ isito:
     enabled: true
     host: "redis.local"
 
+  connectionPool:
+    maxConnections: 100
+
   mtls:
     enabled: true
     mode: ISTIO_MUTUAL
 
   peerAuthentication:
-    enabled: true
-    mtlsMode: DISABLE
+    mode: STRICT
 
+  authorizationPolicy:
+    enabled: true
+    allowedNamespaces:
+      - backend
+      - api
+      - database
