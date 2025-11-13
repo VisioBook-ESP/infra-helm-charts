@@ -92,8 +92,8 @@ redis:
 
   persistence:
     enabled: true
-    storageClass: "standard"  # ou "" pour utiliser le storageClass par défaut
-    accessMode: ReadWriteOnce  # Garde accessMode (singulier)
+    storageClass: "standard"
+    accessMode: ReadWriteOnce
     size: 8Gi
 
 # Configuration Istio
