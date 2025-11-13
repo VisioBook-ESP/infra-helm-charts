@@ -1,0 +1,22 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "support-storage-service.fullname" . }}
+  labels:
+    app: {{ include "support-storage-service.name" . }}
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: {{ include "support-storage-service.name" . }}
+  template:
+    metadata:
+      labels:
+        app: {{ include "support-storage-service.name" . }}
+    spec:
+      containers:
+        - name: {{ .Chart.Name }}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          ports:
+            - containerPort: 8080   # ⚠️ correspond au port où Uvicorn écoute
