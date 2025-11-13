@@ -78,12 +78,10 @@ affinity: {}
 
 # Configuration Redis
 redis:
-  # Authentication DÉSACTIVÉE
   auth:
     enabled: false
     password: ""
 
-  # Redis configuration
   config:
     maxmemory: "256mb"
     maxmemory-policy: "allkeys-lru"
@@ -91,11 +89,11 @@ redis:
     appendonly: "yes"
     appendfsync: "everysec"
 
-  # Persistence
+
   persistence:
     enabled: true
-    storageClass: "standard"
-    accessMode: ReadWriteOnce
+    storageClass: "standard"  # ou "" pour utiliser le storageClass par défaut
+    accessMode: ReadWriteOnce  # Garde accessMode (singulier)
     size: 8Gi
 
 # Configuration Istio

@@ -7,17 +7,15 @@ metadata:
     {{- include "redis-db.labels" . | nindent 4 }}
 spec:
   accessModes:
-    {{- range .Values.redis.persistence.accessModes }}
-    - {{ . | quote }}
-    {{- end }}
-  resources:
-    requests:
-      storage: {{ .Values.redis.persistence.size | quote }}
+    - {{ .Values.redis.persistence.accessMode }}
   {{- if .Values.redis.persistence.storageClass }}
   {{- if (eq "-" .Values.redis.persistence.storageClass) }}
   storageClassName: ""
   {{- else }}
-  storageClassName: {{ .Values.redis.persistence.storageClass | quote }}
+  storageClassName: {{ .Values.redis.persistence.storageClass }}
   {{- end }}
   {{- end }}
+  resources:
+    requests:
+      storage: {{ .Values.redis.persistence.size }}
 {{- end }}
