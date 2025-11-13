@@ -36,7 +36,35 @@ Ajouter un alias pour utiliser kubectl via Minikube :
 ```
 ---
 ## ⛵ Helm – Commandes utiles 
-➡️ (À compléter selon les besoins spécifiques : ajout de repo, installation de charts, etc.)
+### Installer les charts Helm :
+```bash
+  helm install <nom-release> <chart>
+```
+### Mettre à jour une release Helm existante :
+```bash
+  helm upgrade <nom-release> <chart>
+```
+### Désinstaller une release Helm :
+```bash
+  helm uninstall <nom-release>
+```
+### Lister les releases Helm installées :
+```bash
+    helm list
+```
+### Afficher les valeurs configurées d'une release Helm :
+```bash
+  helm get values <nom-release>
+```
+### Travailler avec un fichier `values.yaml` personnalisé :
+```bash
+  helm install <nom-release> <chart> -f <chemin-vers-values.yaml>
+```
+### Générer les templates Kubernetes sans déployer :
+Cette commande permet de visualiser dans un terminal, les ressources Kubernetes qui seraient créées par le chart Helm, sans réellement les déployer dans le cluster.
+```bash
+  helm template <chart> -f myvalues.yaml
+```
 
 ---
 ## 🖥️ K9s – Commandes utiles
