@@ -1,0 +1,22 @@
+{{- if .Values.istio.enabled }}
+apiVersion: networking.istio.io/v1beta1
+kind: DestinationRule
+metadata:
+  name: {{ include "redis-db.fullname" . }}
+  namespace: {{ .Release.Namespace }}
+  labels:
+    {{- include "redis-db.labels" . | nindent 4 }}
+spec:
+  host: {{ include "redis-db.fullname" . }}.{{ .Release.Namespace }}.svc.cluster.local
+  trafficPolicy:
+    connectionPool:
+      tcp:
+        maxConnections: {{ .Values.istio.connectionPool.maxConnections }}
+        connectTimeout: 30s
+    loadBalancer:
+      simple: ROUND_ROBIN
+    {{- if .Values.istio.mtls.enabled }}
+    tls:
+      mode: {{ .Values.istio.mtls.mode }}
+    {{- end }}
+{{- end }}

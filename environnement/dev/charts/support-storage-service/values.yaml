@@ -1,10 +1,11 @@
 image:
-  repository: ghcr.io/visiobook-esp/repo-test-infra-dev
+  repository: ghcr.io/visiobook-esp/support-storage-service-dev
   tag: latest
   pullPolicy: IfNotPresent
 
 service:
-  type: ClusterIP
+  type: NodePort
   port: 80
+  nodePort: 30080
 
 resources: {}

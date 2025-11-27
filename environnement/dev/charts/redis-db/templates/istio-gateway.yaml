@@ -1,0 +1,19 @@
+{{- if .Values.istio.gateway.enabled }}
+apiVersion: networking.istio.io/v1beta1
+kind: Gateway
+metadata:
+  name: {{ include "redis-db.fullname" . }}-gateway
+  namespace: {{ .Release.Namespace }}
+  labels:
+    {{- include "redis-db.labels" . | nindent 4 }}
+spec:
+  selector:
+    istio: ingress
+  servers:
+    - port:
+        number: 6379
+        name: tcp-redis
+        protocol: TCP
+      hosts:
+        - "{{ .Values.istio.gateway.host }}"
+{{- end }}
