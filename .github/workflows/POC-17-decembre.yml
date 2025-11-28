@@ -22,7 +22,9 @@ jobs:
           cd environnement/dev
           make setup-ci
       - name: Check connectivity log
-        run: ls -l /tmp/test-connectivity
+        run: |
+          kubectl get pods -A
+          ls -l /tmp/test-connectivity
       - name: Upload connectivity log
         uses: actions/upload-artifact@v4
         with:
