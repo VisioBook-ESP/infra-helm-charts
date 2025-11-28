@@ -19,7 +19,7 @@ setup-ci:
 	@$(MAKE) setup-argocd-image-updater
 	@$(MAKE) setup-istioctl
 	@$(MAKE) deploy-applications
-	@$(MAKE) wait
+	@$(MAKE) test-connectivity
 
 clean-minikube:
 	@echo "Nettoyage de Minikube..."
