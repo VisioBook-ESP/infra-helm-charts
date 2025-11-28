@@ -11,14 +11,14 @@ permissions:
 
 jobs:
   minikube:
-      name: 🏗️ Deploy & Test ALL Charts on Minikube
+      name: Run le script de setup-ci
       runs-on: ubuntu-latest
       steps:
         - uses: actions/checkout@v4
-        - name: Install kubectl
-          run: cd environnement/dev
-        - name: Install kubectl
-          run: make setup
+        - name: Install Stack
+          run: |
+            cd environnement/dev
+            make setup
 
 
         # - name: Install kubectl
