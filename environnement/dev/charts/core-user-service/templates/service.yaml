@@ -3,32 +3,12 @@ kind: Service
 metadata:
   name: {{ include "core-user-service.fullname" . }}
   labels:
-    {{- include "core-user-service.labels" . | nindent 4 }}
+    app: {{ include "core-user-service.name" . }}
 spec:
   type: {{ .Values.service.type }}
+  selector:
+    app: {{ include "core-user-service.name" . }}
   ports:
     - port: {{ .Values.service.port }}
-      targetPort: {{ .Values.service.targetPort }}
-      protocol: TCP
-      name: http
-  selector:
-    {{- include "core-user-service.selectorLabels" . | nindent 4 }}
----
-{{- if .Values.service.nodePort.enabled }}
-apiVersion: v1
-kind: Service
-metadata:
-  name: {{ include "core-user-service.fullname" . }}-nodeport
-  labels:
-    {{- include "core-user-service.labels" . | nindent 4 }}
-spec:
-  type: NodePort
-  ports:
-    - port: {{ .Values.service.port }}
-      targetPort: {{ .Values.service.targetPort }}
-      nodePort: {{ .Values.service.nodePort.port }}
-      protocol: TCP
-      name: http
-  selector:
-    {{- include "core-user-service.selectorLabels" . | nindent 4 }}
-{{- end }}
+      targetPort: 8080
+      nodePort: {{ .Values.service.nodePort }}

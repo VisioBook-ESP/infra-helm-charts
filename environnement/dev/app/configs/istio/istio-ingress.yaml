@@ -65,7 +65,7 @@ subjects:
 - kind: ServiceAccount
   name: istio-ingress
 ---
-# Source: gateway/templates/service.yaml
+
 apiVersion: v1
 kind: Service
 metadata:

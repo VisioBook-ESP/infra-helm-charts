@@ -3,159 +3,25 @@ kind: Deployment
 metadata:
   name: {{ include "core-user-service.fullname" . }}
   labels:
-    {{- include "core-user-service.labels" . | nindent 4 }}
+    app: {{ include "core-user-service.name" . }}
 spec:
-  replicas: {{ .Values.replicaCount }}
+  replicas: 1
   selector:
     matchLabels:
-      {{- include "core-user-service.selectorLabels" . | nindent 6 }}
+      app: {{ include "core-user-service.name" . }}
   template:
     metadata:
-      annotations:
-        sidecar.istio.io/inject: "true"
-        {{- with .Values.podAnnotations }}
-        {{- toYaml . | nindent 8 }}
-        {{- end }}
       labels:
-        {{- include "core-user-service.labels" . | nindent 8 }}
-        version: v1
-        {{- with .Values.podLabels }}
-        {{- toYaml . | nindent 8 }}
-        {{- end }}
+        app: {{ include "core-user-service.name" . }}
     spec:
-      {{- with .Values.imagePullSecrets }}
-      imagePullSecrets:
-        {{- toYaml . | nindent 8 }}
-      {{- end }}
-      serviceAccountName: {{ include "core-user-service.serviceAccountName" . }}
-      securityContext:
-        {{- toYaml .Values.podSecurityContext | nindent 8 }}
       containers:
-        - name: core-user-service
-          securityContext:
-            {{- toYaml .Values.securityContext | nindent 12 }}
+        - name: {{ .Chart.Name }}
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           ports:
-            - name: http
-              containerPort: {{ .Values.app.port }}
-              protocol: TCP
+            - containerPort: 8080
           env:
-            # From ConfigMap
-            - name: SERVICE_NAME
-              valueFrom:
-                configMapKeyRef:
-                  name: {{ include "core-user-service.fullname" . }}-config
-                  key: SERVICE_NAME
-            - name: SERVICE_VERSION
-              valueFrom:
-                configMapKeyRef:
-                  name: {{ include "core-user-service.fullname" . }}-config
-                  key: SERVICE_VERSION
-            - name: ENV
-              valueFrom:
-                configMapKeyRef:
-                  name: {{ include "core-user-service.fullname" . }}-config
-                  key: ENV
-            - name: PORT
-              valueFrom:
-                configMapKeyRef:
-                  name: {{ include "core-user-service.fullname" . }}-config
-                  key: PORT
-            - name: LOG_LEVEL
-              valueFrom:
-                configMapKeyRef:
-                  name: {{ include "core-user-service.fullname" . }}-config
-                  key: LOG_LEVEL
-
-            - name: DATABASE_URL
-              value: "postgresql://$(DATABASE_USERNAME):$(DATABASE_PASSWORD)@$(DATABASE_HOST):$(DATABASE_PORT)/$(DATABASE_NAME)"
-            - name: DATABASE_HOST
-              valueFrom:
-                configMapKeyRef:
-                  name: {{ include "core-user-service.fullname" . }}-config
-                  key: DATABASE_HOST
-            - name: DATABASE_PORT
-              valueFrom:
-                configMapKeyRef:
-                  name: {{ include "core-user-service.fullname" . }}-config
-                  key: DATABASE_PORT
-            - name: DATABASE_NAME
-              valueFrom:
-                configMapKeyRef:
-                  name: {{ include "core-user-service.fullname" . }}-config
-                  key: DATABASE_NAME
-            - name: DATABASE_USERNAME
-              valueFrom:
-                configMapKeyRef:
-                  name: {{ include "core-user-service.fullname" . }}-config
-                  key: DATABASE_USERNAME
-            - name: DATABASE_PASSWORD
-              valueFrom:
-                secretKeyRef:
-                  name: {{ include "core-user-service.fullname" . }}-secret
-                  key: DATABASE_PASSWORD
-            - name: DATABASE_ECHO
-              valueFrom:
-                configMapKeyRef:
-                  name: {{ include "core-user-service.fullname" . }}-config
-                  key: DATABASE_ECHO
-
-            # Security (from Secret)
-            - name: SECRET_KEY
-              valueFrom:
-                secretKeyRef:
-                  name: {{ include "core-user-service.fullname" . }}-secret
-                  key: SECRET_KEY
-            - name: ALGORITHM
-              valueFrom:
-                configMapKeyRef:
-                  name: {{ include "core-user-service.fullname" . }}-config
-                  key: ALGORITHM
-            - name: ACCESS_TOKEN_EXPIRE_MINUTES
-              valueFrom:
-                configMapKeyRef:
-                  name: {{ include "core-user-service.fullname" . }}-config
-                  key: ACCESS_TOKEN_EXPIRE_MINUTES
-
-            # CORS
-            - name: CORS_ORIGINS
-              valueFrom:
-                configMapKeyRef:
-                  name: {{ include "core-user-service.fullname" . }}-config
-                  key: CORS_ORIGINS
-
-            # Python
-            - name: PYTHONPATH
-              valueFrom:
-                configMapKeyRef:
-                  name: {{ include "core-user-service.fullname" . }}-config
-                  key: PYTHONPATH
-            - name: PYTHONUNBUFFERED
-              valueFrom:
-                configMapKeyRef:
-                  name: {{ include "core-user-service.fullname" . }}-config
-                  key: PYTHONUNBUFFERED
-
-          {{- if .Values.livenessProbe.enabled }}
-          livenessProbe:
-            {{- toYaml .Values.livenessProbe | nindent 12 }}
-          {{- end }}
-          {{- if .Values.readinessProbe.enabled }}
-          readinessProbe:
-            {{- toYaml .Values.readinessProbe | nindent 12 }}
-          {{- end }}
-          resources:
-            {{- toYaml .Values.resources | nindent 12 }}
-      {{- with .Values.nodeSelector }}
-      nodeSelector:
-        {{- toYaml . | nindent 8 }}
-      {{- end }}
-      {{- with .Values.affinity }}
-      affinity:
-        {{- toYaml . | nindent 8 }}
-      {{- end }}
-      {{- with .Values.tolerations }}
-      tolerations:
-        {{- toYaml . | nindent 8 }}
-      {{- end }}
+            {{- range $key, $value := .Values.env }}
+            - name: {{ $key }}
+              value: "{{ $value }}"
+            {{- end }}
