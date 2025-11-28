@@ -45,6 +45,13 @@ tolerations: []
 affinity: {}
 
 
+podLabels:
+  app: core-user-service
+  version: "latest"
+  app.kubernetes.io/name: core-user-service
+  app.kubernetes.io/version: "latest"
+  app.kubernetes.io/component: backend
+
 resources: {}
 env:
   SERVICE_NAME: core-user-service

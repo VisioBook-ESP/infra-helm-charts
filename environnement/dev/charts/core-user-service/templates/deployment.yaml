@@ -12,7 +12,9 @@ spec:
   template:
     metadata:
       labels:
+        {{- include "core-user-service.selectorLabels" . | nindent 8 }}
         app: {{ include "core-user-service.name" . }}
+        version: {{ .Chart.AppVersion | default "v1" }}
     spec:
       containers:
         - name: {{ .Chart.Name }}
