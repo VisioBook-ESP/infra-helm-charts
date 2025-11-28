@@ -10,7 +10,7 @@ service:
 
 resources: {}
 env:
-  APP_NAME=ai-analysis-service
-  APP_VERSION=0.1.0
-  APP_PORT=8083
-  SUMMARIZER_MODEL=facebook/bart-large-cnn
+  APP_NAME: ai-analysis-service
+  APP_VERSION: 0.1.0
+  APP_PORT: 8083
+  SUMMARIZER_MODEL: facebook/bart-large-cnn
