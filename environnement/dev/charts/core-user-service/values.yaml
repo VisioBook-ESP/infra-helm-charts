@@ -7,7 +7,7 @@ image:
 
 imagePullSecrets: []
 nameOverride: "core-user-service"
-#fullnameOverride: ""
+fullnameOverride: "core-user-service"
 
 serviceAccount:
   create: true
