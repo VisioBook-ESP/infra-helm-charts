@@ -1,18 +1,18 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ include "support-storage-service.fullname" . }}
+  name: {{ include "core-user-service.fullname" . }}
   labels:
-    app: {{ include "support-storage-service.name" . }}
+    app: {{ include "core-user-service.name" . }}
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: {{ include "support-storage-service.name" . }}
+      app: {{ include "core-user-service.name" . }}
   template:
     metadata:
       labels:
-        app: {{ include "support-storage-service.name" . }}
+        app: {{ include "core-user-service.name" . }}
     spec:
       containers:
         - name: {{ .Chart.Name }}
@@ -20,8 +20,3 @@ spec:
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           ports:
             - containerPort: 8080
-          env:
-            {{- range $key, $value := .Values.env }}
-            - name: {{ $key }}
-              value: "{{ $value }}"
-            {{- end }}
