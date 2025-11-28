@@ -1,20 +1,18 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ include "core-user-service.fullname" . }}
+  name: {{ include "support-storage-service.fullname" . }}
   labels:
-    app: {{ include "core-user-service.name" . }}
+    app: {{ include "support-storage-service.name" . }}
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: {{ include "core-user-service.name" . }}
+      app: {{ include "support-storage-service.name" . }}
   template:
     metadata:
       labels:
-        {{- include "core-user-service.selectorLabels" . | nindent 8 }}
-        app: {{ include "core-user-service.name" . }}
-        version: {{ .Chart.AppVersion | default "v1" }}
+        app: {{ include "support-storage-service.name" . }}
     spec:
       containers:
         - name: {{ .Chart.Name }}
