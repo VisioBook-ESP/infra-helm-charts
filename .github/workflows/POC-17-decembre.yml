@@ -1,5 +1,4 @@
-name: Helm Unit Tests
-
+name: POC
 on:
   push:
     branches: ["**"]     # triggers on ALL branches
