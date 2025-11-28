@@ -52,7 +52,7 @@ env:
   ENV: prod
   PORT: 8080
   LOG_LEVEL: info
-  DATABASE_URL: postgresql://postgres:password@postgresql-db:5432/visiobook_dev
+  DATABASE_URL: postgresql://postgres:password@postgresql-db.database.svc.cluster.local:5432/visiobook_dev
   DATABASE_ECHO: false
   SECRET_KEY: blablablablalblalbla
   ALGORITHM: HS256
