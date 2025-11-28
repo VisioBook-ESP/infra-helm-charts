@@ -9,6 +9,17 @@ setup:
 	@$(MAKE) setup-istioctl
 	@$(MAKE) deploy-applications
 
+setup-ci:
+	@echo "Configuration de l'environnement de développement..."
+	@$(MAKE) setup-minikube
+	@$(MAKE) clean-minikube
+	@$(MAKE) setup-helm
+	@$(MAKE) setup-k9s
+	@$(MAKE) setup-argocd
+	@$(MAKE) setup-argocd-image-updater
+	@$(MAKE) setup-istioctl
+	@$(MAKE) deploy-applications
+	@$(MAKE) wait
 
 clean-minikube:
 	@echo "Nettoyage de Minikube..."
@@ -35,3 +46,6 @@ setup-istioctl:
 
 deploy-applications:
 	./scripts/deploy_applications.sh && echo "L'application a été déployée."
+
+wait:
+	sleep 400
