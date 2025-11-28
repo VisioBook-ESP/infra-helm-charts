@@ -24,7 +24,7 @@ jobs:
       - name: Check connectivity log
         run: ls -l /tmp/test-connectivity
       - name: Upload connectivity log
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: connectivity-log
           path: /tmp/test-connectivity/connectivity.log
