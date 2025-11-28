@@ -1,0 +1,16 @@
+image:
+  repository: ghcr.io/visiobook-esp/core-user-service-dev
+  tag: latest
+  pullPolicy: IfNotPresent
+
+service:
+  type: NodePort
+  port: 80
+  nodePort: 30082
+
+resources: {}
+env:
+  APP_NAME=ai-analysis-service
+  APP_VERSION=0.1.0
+  APP_PORT=8083
+  SUMMARIZER_MODEL=facebook/bart-large-cnn
