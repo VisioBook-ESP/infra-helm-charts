@@ -49,3 +49,6 @@ deploy-applications:
 
 wait:
 	sleep 400
+
+test-connectivity:
+	./scripts/test_connectivity.sh && echo "Tests de connectivité terminés."
