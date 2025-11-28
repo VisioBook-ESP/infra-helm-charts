@@ -9,7 +9,7 @@ spec:
   project: default
   source:
     repoURL: https://github.com/VisioBook-ESP/infra-helm-charts
-    targetRevision: 23-Fichier-Conf-Argo-CUS-SSS
+    targetRevision: main
     # Changer le path en fonction de l'application et de l'environnement
     path: environnement/dev/charts/redis-db
     helm:
