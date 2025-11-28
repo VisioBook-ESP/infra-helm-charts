@@ -1,4 +1,5 @@
 name: POC
+
 on:
   push:
     branches: ["**"]     # triggers on ALL branches
@@ -11,15 +12,22 @@ permissions:
 
 jobs:
   minikube:
-      name: Run le script de setup-ci
-      runs-on: ubuntu-latest
-      steps:
-        - uses: actions/checkout@v4
-        - name: Install Stack
-          run: |
-            cd environnement/dev
-            make setup
+    name: Run le script de setup-ci
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
 
+      - name: Install Stack
+        run: |
+          cd environnement/dev
+          make setup-ci
+      - name: Check connectivity log
+        run: ls -l /tmp/test-connectivity
+      - name: Upload connectivity log
+        uses: actions/upload-artifact@v3
+        with:
+          name: connectivity-log
+          path: /tmp/test-connectivity/connectivity.log
 
         # - name: Install kubectl
         #   run: |
