@@ -3,7 +3,7 @@ name: redis
 
 image:
   repository: ghcr.io/visiobook-esp/redis
-  tag: latest
+  tag: 7
   pullPolicy: IfNotPresent
 
 imagePullSecrets: []
