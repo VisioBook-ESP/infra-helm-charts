@@ -2,9 +2,9 @@ replicaCount: 1
 name: redis
 
 image:
-  repository: redis
+  repository: ghcr.io/visiobook-esp/redis
+  tag: latest
   pullPolicy: IfNotPresent
-  tag: "7.2-alpine"
 
 imagePullSecrets: []
 nameOverride: ""

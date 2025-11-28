@@ -2,9 +2,9 @@
 replicaCount: 1
 name: postgresql-db
 image:
-  repository: postgres
+  repository: ghcr.io/visiobook-esp/postgres
+  tag: latest
   pullPolicy: IfNotPresent
-  tag: "16"
 
 imagePullSecrets: []
 nameOverride: ""
