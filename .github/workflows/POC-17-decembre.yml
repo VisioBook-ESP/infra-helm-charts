@@ -28,7 +28,7 @@ jobs:
           
                    
       - name: Check connectivity log
-        run:  kubectl get pods -A
+        run:  sleep 30 ; kubectl get pods -A
       - name: Upload connectivity log
         uses: actions/upload-artifact@v4
         with:
