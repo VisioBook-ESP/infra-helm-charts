@@ -5,9 +5,12 @@ Expand the name of the chart.
 {{ .Chart.Name }}
 {{- end }}
 
-{{/*
-Create a default fully qualified app name.
-*/}}
 {{- define "support-storage-service.fullname" -}}
-{{- printf "%s-%s" .Release.Name (include "support-storage-service.name" .) | trunc 63 | trimSuffix "-" -}}
+{{- if .Values.fullnameOverride }}
+{{- .Values.fullnameOverride | trunc 63 | trimSuffix "-" }}
+{{- else }}
+{{- $name := default .Chart.Name .Values.nameOverride }}
+{{- printf "%s" $name | trunc 63 | trimSuffix "-" }}
 {{- end }}
+{{- end }}
+

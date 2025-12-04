@@ -8,4 +8,8 @@ service:
   port: 80
   nodePort: 30080
 
+nameOverride: ""
+fullnameOverride: "support-storage-service"
+
+
 resources: {}

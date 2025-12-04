@@ -1,5 +1,5 @@
 replicaCount: 1
-name: postgresql
+name: postgresql-test
 image:
   repository: ghcr.io/visiobook-esp/postgres
   tag: 16
@@ -18,11 +18,11 @@ serviceAccount:
 podAnnotations:
   sidecar.istio.io/inject: "true"
 
-
+# Ajout des labels recommandés par Istio
 podLabels:
-  app: postgresql
+  app: postgresql-test
   version: "16"
-  app.kubernetes.io/name: postgresql
+  app.kubernetes.io/name: postgresql-test
   app.kubernetes.io/version: "16"
   app.kubernetes.io/component: database
 
@@ -94,4 +94,4 @@ istio:
     mode: ISTIO_MUTUAL
   gateway:
     enabled: true
-    host: "postgres.local"
+    host: "postgres-test.local"
