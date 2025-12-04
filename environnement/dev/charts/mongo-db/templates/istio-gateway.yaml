@@ -2,10 +2,10 @@
 apiVersion: networking.istio.io/v1beta1
 kind: Gateway
 metadata:
-  name: {{ include "monogo-db.fullname" . }}-gateway
+  name: {{ include "mongo-db.fullname" . }}-gateway
   namespace: {{ .Release.Namespace }}
   labels:
-    {{- include "monogo-db.labels" . | nindent 4 }}
+    {{- include "mongo-db.labels" . | nindent 4 }}
 spec:
   selector:
     istio: ingress  # Utilise le ingress gateway d'Istio

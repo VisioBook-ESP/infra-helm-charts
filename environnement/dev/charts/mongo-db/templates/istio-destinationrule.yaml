@@ -2,11 +2,11 @@
 apiVersion: networking.istio.io/v1beta1
 kind: DestinationRule
 metadata:
-  name: {{ include "monogo-db.fullname" . }}
+  name: {{ include "mongo-db.fullname" . }}
   labels:
-    {{- include "monogo-db.labels" . | nindent 4 }}
+    {{- include "mongo-db.labels" . | nindent 4 }}
 spec:
-  host: {{ include "monogo-db.fullname" . }}
+  host: {{ include "mongo-db.fullname" . }}
   trafficPolicy:
     connectionPool:
       tcp:
