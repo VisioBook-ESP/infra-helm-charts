@@ -11,8 +11,8 @@ spec:
     istio: ingress  # Utilise le ingress gateway d'Istio
   servers:
     - port:
-        number: 5432
-        name: tcp-postgres
+        number: 27017
+        name: tcp-mongo
         protocol: TCP
       hosts:
         - "{{ .Values.istio.gateway.host }}"
