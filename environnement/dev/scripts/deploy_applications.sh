@@ -31,7 +31,7 @@ kubectl apply -f argocd/postgresql-app.yaml
 kubectl apply -f argocd/postgresql-app-test.yaml
 kubectl apply -f argocd/redis-app.yaml
 kubectl apply -f argocd/core-user-service.yaml
-kubectl apply -f argocd/ai-analysis-service.yaml
+#kubectl apply -f argocd/ai-analysis-service.yaml
 kubectl apply -f argocd/support-storage-service.yaml
 
 
