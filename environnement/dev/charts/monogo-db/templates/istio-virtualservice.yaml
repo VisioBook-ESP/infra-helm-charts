@@ -1,0 +1,19 @@
+{{- if .Values.istio.enabled }}
+apiVersion: networking.istio.io/v1beta1
+kind: VirtualService
+metadata:
+  name: {{ include "monogo-db.fullname" . }}
+  labels:
+    {{- include "monogo-db.labels" . | nindent 4 }}
+spec:
+  hosts:
+    - {{ include "monogo-db.fullname" . }}.{{ .Release.Namespace }}.svc.cluster.local
+  tcp:
+    - match:
+        - port: 5432
+      route:
+        - destination:
+            host: {{ include "monogo-db.fullname" . }}
+            port:
+              number: 5432
+{{- end }}
