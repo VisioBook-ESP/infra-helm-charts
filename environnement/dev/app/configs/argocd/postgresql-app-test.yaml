@@ -1,7 +1,7 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: service-db
+  name: postgresql-test
   namespace: argocd
   finalizers:
     - resources-finalizer.argocd.argoproj.io
@@ -11,10 +11,10 @@ spec:
     repoURL: https://github.com/VisioBook-ESP/infra-helm-charts
     targetRevision: main
     # Changer le path en fonction de l'application et de l'environnement
-    path: environnement/dev/charts/service-db
+    path: environnement/dev/charts/postgresql-db
     helm:
       valueFiles:
-        - values.yaml
+        - valuesTest.yaml
   destination:
     server: https://kubernetes.default.svc
     namespace: database
