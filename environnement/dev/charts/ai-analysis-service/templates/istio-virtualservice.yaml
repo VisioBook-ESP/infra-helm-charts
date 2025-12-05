@@ -2,19 +2,19 @@
 apiVersion: networking.istio.io/v1beta1
 kind: VirtualService
 metadata:
-  name: {{ include "support-storage-service.fullname" . }}
+  name: {{ include "ai-analysis-service.fullname" . }}
   labels:
-    {{- include "support-storage-service.labels" . | nindent 4 }}
+    {{- include "ai-analysis-service.labels" . | nindent 4 }}
 spec:
   hosts:
-    - {{ include "support-storage-service.fullname" . }}.{{ .Release.Namespace }}.svc.cluster.local
+    - {{ include "ai-analysis-service.fullname" . }}.{{ .Release.Namespace }}.svc.cluster.local
   http:
     - match:
         - uri:
             prefix: /
       route:
         - destination:
-            host: {{ include "support-storage-service.fullname" . }}
+            host: {{ include "ai-analysis-service.fullname" . }}
             port:
               number: {{ .Values.service.port }}
 {{- end }}

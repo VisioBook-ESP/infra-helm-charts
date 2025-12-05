@@ -6,7 +6,7 @@ image:
 service:
   type: NodePort
   port: 80
-  nodePort: 30082
+  nodePort: 30083
 
 istio:
   enabled: true

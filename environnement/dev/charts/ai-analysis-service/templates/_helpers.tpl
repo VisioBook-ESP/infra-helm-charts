@@ -1,13 +1,13 @@
 {{/*
 Expand the name of the chart.
 */}}
-{{- define "support-storage-service.name" -}}
+{{- define "ai-analysis-service.name" -}}
 {{ .Chart.Name }}
 {{- end }}
 
 {{/*
 Create a default fully qualified app name.
 */}}
-{{- define "support-storage-service.fullname" -}}
-{{- printf "%s-%s" .Release.Name (include "support-storage-service.name" .) | trunc 63 | trimSuffix "-" -}}
+{{- define "ai-analysis-service.fullname" -}}
+{{- printf "%s-%s" .Release.Name (include "ai-analysis-service.name" .) | trunc 63 | trimSuffix "-" -}}
 {{- end }}

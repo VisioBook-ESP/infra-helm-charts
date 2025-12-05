@@ -2,11 +2,11 @@
 apiVersion: networking.istio.io/v1beta1
 kind: DestinationRule
 metadata:
-  name: {{ include "support-storage-service.fullname" . }}
+  name: {{ include "ai-analysis-service.fullname" . }}
   labels:
-    {{- include "support-storage-service.labels" . | nindent 4 }}
+    {{- include "ai-analysis-service.labels" . | nindent 4 }}
 spec:
-  host: {{ include "support-storage-service.fullname" . }}
+  host: {{ include "ai-analysis-service.fullname" . }}
   trafficPolicy:
     {{- toYaml .Values.istio.destinationRule.trafficPolicy | nindent 4 }}
     {{- if .Values.istio.mtls.enabled }}
