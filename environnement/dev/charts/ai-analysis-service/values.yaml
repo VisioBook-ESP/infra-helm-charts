@@ -8,6 +8,50 @@ service:
   port: 80
   nodePort: 30082
 
+istio:
+  enabled: true
+  injection: true
+
+  virtualService:
+    enabled: true
+    hosts:
+      - "ai-analysis-service"
+      - "ai-analysis-service.visiobook.dev"
+    gateways:
+      - mesh
+  destinationRule:
+    enabled: true
+    trafficPolicy:
+      connectionPool:
+        tcp:
+          maxConnections: 100
+        http:
+          http1MaxPendingRequests: 100
+          http2MaxRequests: 100
+          maxRequestsPerConnection: 2
+      loadBalancer:
+        simple: ROUND_ROBIN
+      outlierDetection:
+        consecutiveErrors: 5
+        interval: 30s
+        baseEjectionTime: 30s
+
+  mtls:
+    enabled: true
+    mode: ISTIO_MUTUAL
+
+nodeSelector: {}
+tolerations: []
+affinity: {}
+
+podLabels:
+  app: ai-analysis-service
+  version: "latest"
+  app.kubernetes.io/name: ai-analysis-service
+  app.kubernetes.io/version: "latest"
+  app.kubernetes.io/component: backend
+
+
 resources: {}
 env:
   APP_NAME: ai-analysis-service
