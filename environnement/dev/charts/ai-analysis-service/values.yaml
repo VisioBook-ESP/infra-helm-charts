@@ -54,7 +54,13 @@ podLabels:
   app.kubernetes.io/component: backend
 
 
-resources: {}
+resources:
+  limits:
+    memory: "8Gi"
+    cpu: "2"
+  requests:
+    memory: "4Gi"
+    cpu: "1"
 env:
   APP_NAME: ai-analysis-service
   APP_VERSION: 0.1.0
