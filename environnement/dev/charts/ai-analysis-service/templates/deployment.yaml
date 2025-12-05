@@ -19,9 +19,9 @@ spec:
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           ports:
-            - containerPort: 8083   # ⚠️ correspond au port où Uvicorn écoute
+            - containerPort: 8083
           env:
             {{- range $key, $value := .Values.env }}
-            support-storage-service- name: {{ $key }}
+            - name: {{ $key }}
               value: "{{ $value }}"
             {{- end }}
