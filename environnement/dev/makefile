@@ -11,7 +11,7 @@ setup:
 
 setup-k8s:
 	@echo "Configuration de l'environnement de développement..."
-    @$(MAKE) setup-storage
+	@$(MAKE) setup-storage
 	@$(MAKE) setup-k9s
 	@$(MAKE) setup-argocd
 	@$(MAKE) setup-argocd-image-updater
@@ -91,5 +91,6 @@ clean-all-k8s:
 	@echo "Cluster complètement réinitialisé. Relancez l'installation avec kubeadm init."
 
 setup-storage:
-    @echo "Configuration du stockage pour Minikube..."
-    ./scripts/setup_storage.sh && echo "Le stockage a été configuré."
+	@echo "Configuration du stockage persistant..."
+	./scripts/setup-storage.sh
+	@echo "✓ Stockage configuré"
