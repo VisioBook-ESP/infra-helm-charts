@@ -52,3 +52,25 @@ wait:
 
 test-connectivity:
 	./scripts/test_connectivity.sh && echo "Tests de connectivité terminés."
+
+clean-k8s:
+	@echo "Nettoyage du cluster Kubernetes..."
+	@echo "Suppression du namespace argocd..."
+	kubectl delete namespace argocd --ignore-not-found=true
+	@echo "Suppression des autres namespaces applicatifs (si existants)..."
+	kubectl delete namespace istio-system --ignore-not-found=true
+	kubectl delete namespace database --ignore-not-found=true
+	kubectl delete namespace backend --ignore-not-found=true
+	kubectl delete namespace frontend --ignore-not-found=true
+	@echo "Attente de la suppression complète..."
+	@sleep 10
+	@echo "Cluster nettoyé. Les namespaces système (kube-system, kube-flannel) sont préservés."
+	kubectl get namespaces
+
+clean-all-k8s:
+	@echo "⚠️  ATTENTION: Réinitialisation complète du cluster K8s..."
+	@read -p "Êtes-vous sûr? Cela va TOUT supprimer [y/N]: " confirm && [ "$$confirm" = "y" ]
+	sudo kubeadm reset -f
+	sudo rm -rf /etc/cni /etc/kubernetes /var/lib/kubelet /var/lib/etcd ~/.kube
+	sudo iptables -F && sudo iptables -t nat -F && sudo iptables -t mangle -F && sudo iptables -X
+	@echo "Cluster complètement réinitialisé. Relancez l'installation avec kubeadm init."
