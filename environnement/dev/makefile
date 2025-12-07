@@ -9,6 +9,15 @@ setup:
 	@$(MAKE) setup-istioctl
 	@$(MAKE) deploy-applications
 
+setup-k8s:
+	@echo "Configuration de l'environnement de développement..."
+    @$(MAKE) setup-storage
+	@$(MAKE) setup-k9s
+	@$(MAKE) setup-argocd
+	@$(MAKE) setup-argocd-image-updater
+	@$(MAKE) setup-istioctl
+	@$(MAKE) deploy-applications
+
 setup-ci:
 	@echo "Configuration de l'environnement de développement..."
 	@$(MAKE) setup-minikube
@@ -56,16 +65,22 @@ test-connectivity:
 clean-k8s:
 	@echo "Nettoyage du cluster Kubernetes..."
 	@echo "Suppression du namespace argocd..."
-	kubectl delete namespace argocd --ignore-not-found=true
-	@echo "Suppression des autres namespaces applicatifs (si existants)..."
-	kubectl delete namespace istio-system --ignore-not-found=true
-	kubectl delete namespace database --ignore-not-found=true
-	kubectl delete namespace backend --ignore-not-found=true
-	kubectl delete namespace frontend --ignore-not-found=true
-	@echo "Attente de la suppression complète..."
-	@sleep 10
-	@echo "Cluster nettoyé. Les namespaces système (kube-system, kube-flannel) sont préservés."
-	kubectl get namespaces
+	kubectl delete namespace argocd --ignore-not-found=true --wait=false
+	kubectl delete namespace database --ignore-not-found=true --wait=false
+	kubectl delete namespace backend --ignore-not-found=true --wait=false
+	kubectl delete namespace istio-system --ignore-not-found=true --wait=false
+	@echo "Forçage de la suppression des finalizers..."
+	@kubectl get namespace argocd -o json 2>/dev/null | sed 's/"finalizers": \[[^]]*\]/"finalizers": []/' | kubectl replace --raw /api/v1/namespaces/argocd/finalize -f - 2>/dev/null || true
+	@kubectl get namespace database -o json 2>/dev/null | sed 's/"finalizers": \[[^]]*\]/"finalizers": []/' | kubectl replace --raw /api/v1/namespaces/database/finalize -f - 2>/dev/null || true
+	@kubectl get namespace backend -o json 2>/dev/null | sed 's/"finalizers": \[[^]]*\]/"finalizers": []/' | kubectl replace --raw /api/v1/namespaces/backend/finalize -f - 2>/dev/null || true
+	@kubectl get namespace istio-system -o json 2>/dev/null | sed 's/"finalizers": \[[^]]*\]/"finalizers": []/' | kubectl replace --raw /api/v1/namespaces/istio-system/finalize -f - 2>/dev/null || true
+	@echo "Attente de la suppression (max 30s)..."
+	@sleep 5
+	@kubectl wait --for=delete namespace/argocd --timeout=30s 2>/dev/null || echo "argocd supprimé"
+	@kubectl wait --for=delete namespace/database --timeout=30s 2>/dev/null || echo "database supprimé"
+	@kubectl wait --for=delete namespace/backend --timeout=30s 2>/dev/null || echo "backend supprimé"
+	@kubectl wait --for=delete namespace/istio-system --timeout=30s 2>/dev/null || echo "istio-system supprimé"
+	@echo "✓ Cluster nettoyé"
 
 clean-all-k8s:
 	@echo "⚠️  ATTENTION: Réinitialisation complète du cluster K8s..."
@@ -74,3 +89,7 @@ clean-all-k8s:
 	sudo rm -rf /etc/cni /etc/kubernetes /var/lib/kubelet /var/lib/etcd ~/.kube
 	sudo iptables -F && sudo iptables -t nat -F && sudo iptables -t mangle -F && sudo iptables -X
 	@echo "Cluster complètement réinitialisé. Relancez l'installation avec kubeadm init."
+
+setup-storage:
+    @echo "Configuration du stockage pour Minikube..."
+    ./scripts/setup_storage.sh && echo "Le stockage a été configuré."
