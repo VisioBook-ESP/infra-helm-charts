@@ -68,3 +68,21 @@ podLabels:
   app.kubernetes.io/component: database
 
 resources: {}
+env:
+  DATABASE_URL: postgresql://postgres:password@postgres-core-database.database.svc.cluster.local:6432/visiobook_dev
+  DB_MAX_CONNECTIONS: 10
+  DB_CONNECTION_TIMEOUT: 30000
+  REDIS_HOST: redis.database.svc.cluster.local
+  REDIS_PORT: 6379
+  REDIS_PASSWORD:
+  REDIS_DB: 0
+  NODE_ENV: development
+  PORT: 3000
+  CORS_ORIGINS: *
+  LOG_LEVEL: debug
+  API_VERSION: v1
+  API_PREFIX: api
+  JWT_SECRET: blablablablalblalbla
+  JWT_EXPIRES_IN: 24h
+  ENABLE_METRICS: true
+  METRICS_PORT: 9090
