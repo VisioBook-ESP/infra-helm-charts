@@ -14,7 +14,7 @@ spec:
     path: environnement/dev/charts/postgresql-db
     helm:
       valueFiles:
-        - values_Core_database.yaml
+        - values_core_database.yaml
   destination:
     server: https://kubernetes.default.svc
     namespace: database
