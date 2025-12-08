@@ -1,0 +1,20 @@
+{{- if and .Values.istio .Values.istio.enabled }}
+apiVersion: networking.istio.io/v1beta1
+kind: VirtualService
+metadata:
+  name: {{ include "core-database-service.fullname" . }}
+  labels:
+    {{- include "core-database-service.labels" . | nindent 4 }}
+spec:
+  hosts:
+    - {{ include "core-database-service.fullname" . }}.{{ .Release.Namespace }}.svc.cluster.local
+  http:
+    - match:
+        - uri:
+            prefix: /
+      route:
+        - destination:
+            host: {{ include "core-database-service.fullname" . }}
+            port:
+              number: {{ .Values.service.port }}
+{{- end }}
