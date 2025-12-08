@@ -22,9 +22,6 @@ podAnnotations:
 podLabels:
   app: mongo
   version: "8"
-  app.kubernetes.io/name: mongo
-  app.kubernetes.io/version: "8"
-  app.kubernetes.io/component: database
 
 podSecurityContext: {}
 
