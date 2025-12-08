@@ -1,5 +1,5 @@
 replicaCount: 1
-name: postgresql-test
+name: postgresql-core-database
 image:
   repository: ghcr.io/visiobook-esp/postgres
   tag: 16
@@ -20,9 +20,9 @@ podAnnotations:
 
 # Ajout des labels recommandés par Istio
 podLabels:
-  app: postgresql-Core-database
+  app: postgresql-core-database
   version: "16"
-  app.kubernetes.io/name: postgresql-Core-database
+  app.kubernetes.io/name: postgresql-core-database
   app.kubernetes.io/version: "16"
   app.kubernetes.io/component: database
 
