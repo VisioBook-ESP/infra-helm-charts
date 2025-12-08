@@ -43,14 +43,24 @@ ingress:
   tls: []
 
 resources: {}
-livenessProbe:
-  httpGet:
-    path: /
-    port: http
+
 readinessProbe:
-  httpGet:
-    path: /
-    port: http
+  tcpSocket:
+    port: 27017
+  initialDelaySeconds: 10
+  periodSeconds: 10
+  timeoutSeconds: 5
+  successThreshold: 1
+  failureThreshold: 3
+
+livenessProbe:
+  tcpSocket:
+    port: 27017
+  initialDelaySeconds: 30
+  periodSeconds: 10
+  timeoutSeconds: 5
+  successThreshold: 1
+  failureThreshold: 3
 
 autoscaling:
   enabled: false
@@ -68,7 +78,7 @@ tolerations: []
 
 affinity: {}
 
-postgresql:
+mongo-db:
   auth:
     database: "visiobook_mongo_dev"
     username: "mongo"
