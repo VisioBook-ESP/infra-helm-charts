@@ -17,6 +17,7 @@ serviceAccount:
 
 podAnnotations:
   sidecar.istio.io/inject: "true"
+  traffic.sidecar.istio.io/excludeInboundPorts: "27017"
 
 
 podLabels:
@@ -45,8 +46,11 @@ ingress:
 resources: {}
 
 readinessProbe:
-  tcpSocket:
-    port: 27017
+  exec:
+    command:
+      - mongosh
+      - --eval
+      - "db.adminCommand('ping')"
   initialDelaySeconds: 10
   periodSeconds: 10
   timeoutSeconds: 5
@@ -54,8 +58,11 @@ readinessProbe:
   failureThreshold: 3
 
 livenessProbe:
-  tcpSocket:
-    port: 27017
+  exec:
+    command:
+      - mongosh
+      - --eval
+      - "db.adminCommand('ping')"
   initialDelaySeconds: 30
   periodSeconds: 10
   timeoutSeconds: 5
