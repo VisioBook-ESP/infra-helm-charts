@@ -8,7 +8,7 @@ image:
 service:
   type: ClusterIP
   port: 3000
-  nodePort: 30085
+
 
 nameOverride: ""
 fullnameOverride: "core-database-service"
@@ -68,21 +68,40 @@ podLabels:
   app.kubernetes.io/component: database
 
 resources: {}
+
+# ✅ CORRECTION : env doit être structuré différemment
 env:
-  DATABASE_URL: postgresql://postgres:password@postgres-core-database.database.svc.cluster.local:6432/visiobook_dev
-  DB_MAX_CONNECTIONS: 10
-  DB_CONNECTION_TIMEOUT: 30000
-  REDIS_HOST: redis.database.svc.cluster.local
-  REDIS_PORT: 6379
-  REDIS_PASSWORD:
-  REDIS_DB: 0
-  NODE_ENV: development
-  PORT: 3000
-  CORS_ORIGINS: *
-  LOG_LEVEL: debug
-  API_VERSION: v1
-  API_PREFIX: api
-  JWT_SECRET: blablablablalblalbla
-  JWT_EXPIRES_IN: 24h
-  ENABLE_METRICS: true
-  METRICS_PORT: 9090
+  - name: DATABASE_URL
+    value: "postgresql://postgres:password@postgresql-core-database.database.svc.cluster.local:6432/visiobook_dev"
+  - name: DB_MAX_CONNECTIONS
+    value: "10"
+  - name: DB_CONNECTION_TIMEOUT
+    value: "30000"
+  - name: REDIS_HOST
+    value: "redis.database.svc.cluster.local"
+  - name: REDIS_PORT
+    value: "6379"
+  - name: REDIS_PASSWORD
+    value: ""
+  - name: REDIS_DB
+    value: "0"
+  - name: NODE_ENV
+    value: "development"
+  - name: PORT
+    value: "3000"
+  - name: CORS_ORIGINS
+    value: "*"
+  - name: LOG_LEVEL
+    value: "debug"
+  - name: API_VERSION
+    value: "v1"
+  - name: API_PREFIX
+    value: "api"
+  - name: JWT_SECRET
+    value: "blablablablalblalbla"
+  - name: JWT_EXPIRES_IN
+    value: "24h"
+  - name: ENABLE_METRICS
+    value: "true"
+  - name: METRICS_PORT
+    value: "9090"
