@@ -65,21 +65,21 @@ test-connectivity:
 clean-k8s:
 	@echo "Nettoyage du cluster Kubernetes..."
 	@echo "Suppression des namespaces..."
-	@kubectl delete namespace argocd --ignore-not-found=true --wait=false
-	@kubectl delete namespace database --ignore-not-found=true --wait=false
-	@kubectl delete namespace backend --ignore-not-found=true --wait=false
-	@kubectl delete namespace istio-system --ignore-not-found=true --wait=false
+	kubectl delete namespace argocd --ignore-not-found=true --wait=false
+	kubectl delete namespace database --ignore-not-found=true --wait=false
+	kubectl delete namespace backend --ignore-not-found=true --wait=false
+	kubectl delete namespace istio-system --ignore-not-found=true --wait=false
 	@echo "Forçage de la suppression des finalizers..."
-	@kubectl get namespace argocd -o json 2>/dev/null | jq '.spec.finalizers = []' | kubectl replace --raw /api/v1/namespaces/argocd/finalize -f - 2>/dev/null || true
-	@kubectl get namespace database -o json 2>/dev/null | jq '.spec.finalizers = []' | kubectl replace --raw /api/v1/namespaces/database/finalize -f - 2>/dev/null || true
-	@kubectl get namespace backend -o json 2>/dev/null | jq '.spec.finalizers = []' | kubectl replace --raw /api/v1/namespaces/backend/finalize -f - 2>/dev/null || true
-	@kubectl get namespace istio-system -o json 2>/dev/null | jq '.spec.finalizers = []' | kubectl replace --raw /api/v1/namespaces/istio-system/finalize -f - 2>/dev/null || true
+	kubectl get namespace argocd -o json 2>/dev/null | jq '.spec.finalizers = []' | kubectl replace --raw /api/v1/namespaces/argocd/finalize -f - 2>/dev/null || true
+	kubectl get namespace database -o json 2>/dev/null | jq '.spec.finalizers = []' | kubectl replace --raw /api/v1/namespaces/database/finalize -f - 2>/dev/null || true
+	kubectl get namespace backend -o json 2>/dev/null | jq '.spec.finalizers = []' | kubectl replace --raw /api/v1/namespaces/backend/finalize -f - 2>/dev/null || true
+	kubectl get namespace istio-system -o json 2>/dev/null | jq '.spec.finalizers = []' | kubectl replace --raw /api/v1/namespaces/istio-system/finalize -f - 2>/dev/null || true
 	@echo "Attente de la suppression complète..."
-	@sleep 3
-	@kubectl wait --for=delete namespace/argocd --timeout=30s 2>/dev/null || echo "✓ argocd supprimé"
-	@kubectl wait --for=delete namespace/database --timeout=30s 2>/dev/null || echo "✓ database supprimé"
-	@kubectl wait --for=delete namespace/backend --timeout=30s 2>/dev/null || echo "✓ backend supprimé"
-	@kubectl wait --for=delete namespace/istio-system --timeout=30s 2>/dev/null || echo "✓ istio-system supprimé"
+	sleep 3
+	kubectl wait --for=delete namespace/argocd --timeout=30s 2>/dev/null || echo "✓ argocd supprimé"
+	kubectl wait --for=delete namespace/database --timeout=30s 2>/dev/null || echo "✓ database supprimé"
+	kubectl wait --for=delete namespace/backend --timeout=30s 2>/dev/null || echo "✓ backend supprimé"
+	kubectl wait --for=delete namespace/istio-system --timeout=30s 2>/dev/null || echo "✓ istio-system supprimé"
 	@echo "✓ Cluster nettoyé"
 
 clean-all-k8s:
