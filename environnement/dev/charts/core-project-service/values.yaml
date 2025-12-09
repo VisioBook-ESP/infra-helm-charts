@@ -1,0 +1,109 @@
+replicaCount: 1
+
+image:
+  repository: ghcr.io/visiobook-esp/core-project-service-dev
+  tag: latest
+  pullPolicy: IfNotPresent
+
+service:
+  type: ClusterIP
+  port: 3000
+
+nameOverride: ""
+fullnameOverride: "core-project-service"
+
+autoscaling:
+  enabled: false
+  minReplicas: 1
+  maxReplicas: 2
+  targetCPUUtilizationPercentage: 80
+
+serviceAccount:
+  create: true
+  annotations: {}
+  name: ""
+
+istio:
+  enabled: true
+  injection: true
+
+  virtualService:
+    enabled: true
+    hosts:
+      - "core-project-service"
+      - "core-project-service.visiobook.dev"
+    gateways:
+      - mesh
+  destinationRule:
+    enabled: true
+    trafficPolicy:
+      connectionPool:
+        tcp:
+          maxConnections: 100
+        http:
+          http1MaxPendingRequests: 100
+          http2MaxRequests: 100
+          maxRequestsPerConnection: 2
+      loadBalancer:
+        simple: ROUND_ROBIN
+      outlierDetection:
+        consecutiveErrors: 5
+        interval: 30s
+        baseEjectionTime: 30s
+
+  mtls:
+    enabled: true
+    mode: ISTIO_MUTUAL
+
+nodeSelector: {}
+tolerations: []
+affinity: {}
+
+podLabels:
+  app: core-project-service
+  version: "latest"
+  app.kubernetes.io/name: core-project-service
+  app.kubernetes.io/version: "latest"
+  app.kubernetes.io/component: backend
+
+resources: {}
+
+env:
+  - name: DATABASE_URL
+    value: "postgresql://postgres:password@postgresql-core-project.database.svc.cluster.local:6432/visiobook_dev"
+  - name: MONGODB_URL
+    value: "mongodb://mongodb-core-project.database.svc.cluster.local:27017/visiobook_core_project"
+  - name: REDIS_URL
+    value: "redis://redis-core-project.database.svc.cluster.local:6379"
+  - name: USER_SERVICE_URL
+    value: ""
+  - name: STORAGE_SERVICE_URL
+    value: ""
+  - name: AI_SERVICE_URL
+    value: ""
+  - name: QUEUE_REDIS_URL
+    value: "redis://redis-core-project.database.svc.cluster.local:6379"
+  - name: QUEUE_CONCURRENCY
+    value: "5"
+  - name: QUEUE_RETRY_ATTEMPTS
+    value: "3"
+  - name: QUEUE_RETRY_DELAY
+    value: "5000"
+  - name: MAX_WORKFLOW_DURATION
+    value: "3600"
+  - name: WORKFLOW_CLEANUP_INTERVAL
+    value: "86400"
+  - name: AUTO_SAVE_INTERVAL
+    value: "30000"
+  - name: NODE_ENV
+    value: "production"
+  - name: PORT
+    value: "3000"
+  - name: JWT_SECRET
+    value: "your-jwt-secret-change-in-production"
+  - name: ENCRYPTION_KEY
+    value: "your-encryption-key-change-in-production"
+  - name: LOG_LEVEL
+    value: "info"
+  - name: STORAGE_SERVICE_MOCK
+    value: "false"
