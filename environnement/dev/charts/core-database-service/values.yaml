@@ -77,7 +77,7 @@ env:
   - name: DB_CONNECTION_TIMEOUT
     value: "30000"
   - name: REDIS_HOST
-    value: "redis.database.svc.cluster.local"
+    value: "redis-core-database.database.svc.cluster.local"
   - name: REDIS_PORT
     value: "6379"
   - name: REDIS_PASSWORD
