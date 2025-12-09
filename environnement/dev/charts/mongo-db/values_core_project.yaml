@@ -21,7 +21,7 @@ podAnnotations:
 
 
 podLabels:
-  app: mongo
+  app: mongo-core-project
   version: "8"
 
 podSecurityContext: {}
