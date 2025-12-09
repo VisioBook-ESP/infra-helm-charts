@@ -1,5 +1,5 @@
 replicaCount: 1
-name: redis-core-project
+name: redis-core-database
 
 image:
   repository: ghcr.io/visiobook-esp/redis
@@ -24,7 +24,7 @@ podAnnotations:
 
 podLabels:
   version: v1
-  app: redis-core-project
+  app: redis-core-database
 
 podSecurityContext:
   fsGroup: 999
@@ -103,7 +103,7 @@ istio:
 
   gateway:
     enabled: true
-    host: "redis-core-project.local"
+    host: "redis-core-database.local"
 
   connectionPool:
     maxConnections: 100
