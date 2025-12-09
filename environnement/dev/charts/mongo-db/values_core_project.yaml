@@ -6,8 +6,8 @@ image:
   pullPolicy: IfNotPresent
 
 imagePullSecrets: []
-nameOverride: "mongodb"
-fullnameOverride: "mongodb"
+nameOverride: "mongodb-core-project"
+fullnameOverride: "mongodb-core-project"
 
 serviceAccount:
   create: true
@@ -108,4 +108,4 @@ istio:
     mode: ISTIO_MUTUAL
   gateway:
     enabled: true
-    host: "mongo.local"
+    host: "mongo-core-project.local"
