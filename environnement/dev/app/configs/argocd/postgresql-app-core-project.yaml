@@ -1,7 +1,7 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: postgresql-core-project
+  name: postgresql-app-core-project
   namespace: argocd
   finalizers:
     - resources-finalizer.argocd.argoproj.io
@@ -9,7 +9,7 @@ spec:
   project: default
   source:
     repoURL: https://github.com/VisioBook-ESP/infra-helm-charts
-    targetRevision: main
+    targetRevision: 24-ci-poc-17-decembre
     # Changer le path en fonction de l'application et de l'environnement
     path: environnement/dev/charts/postgresql-db
     helm:
