@@ -69,7 +69,6 @@ podLabels:
 
 resources: {}
 
-# ✅ CORRECTION : env doit être structuré différemment
 env:
   - name: DATABASE_URL
     value: "postgresql://postgres:password@postgresql-core-database.database.svc.cluster.local:6432/visiobook_dev"

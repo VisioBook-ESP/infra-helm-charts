@@ -1,0 +1,111 @@
+replicaCount: 1
+name: mongo-core-project
+image:
+  repository: ghcr.io/visiobook-esp/mongo
+  tag: 8
+  pullPolicy: IfNotPresent
+
+imagePullSecrets: []
+nameOverride: "mongodb"
+fullnameOverride: "mongodb"
+
+serviceAccount:
+  create: true
+  automount: true
+  annotations: {}
+  name: ""
+
+podAnnotations:
+  sidecar.istio.io/inject: "true"
+  traffic.sidecar.istio.io/excludeInboundPorts: "27017"
+
+
+podLabels:
+  app: mongo
+  version: "8"
+
+podSecurityContext: {}
+
+securityContext: {}
+
+service:
+  type: NodePort
+  port: 27017
+
+ingress:
+  enabled: false
+  className: ""
+  annotations: {}
+  hosts:
+    - host: chart-example.local
+      paths:
+        - path: /
+          pathType: ImplementationSpecific
+  tls: []
+
+resources: {}
+
+readinessProbe:
+  exec:
+    command:
+      - mongosh
+      - --eval
+      - "db.adminCommand('ping')"
+  initialDelaySeconds: 10
+  periodSeconds: 10
+  timeoutSeconds: 5
+  successThreshold: 1
+  failureThreshold: 3
+
+livenessProbe:
+  exec:
+    command:
+      - mongosh
+      - --eval
+      - "db.adminCommand('ping')"
+  initialDelaySeconds: 30
+  periodSeconds: 10
+  timeoutSeconds: 5
+  successThreshold: 1
+  failureThreshold: 3
+
+autoscaling:
+  enabled: false
+  minReplicas: 1
+  maxReplicas: 100
+  targetCPUUtilizationPercentage: 80
+
+volumes: []
+
+volumeMounts: []
+
+nodeSelector: {}
+
+tolerations: []
+
+affinity: {}
+
+mongo-db:
+  auth:
+    database: "visiobook_mongo_dev"
+    username: "mongo"
+    password: "password"
+
+  persistence:
+    enabled: true
+    storageClass: ""
+    size: "8Gi"
+    accessModes:
+      - ReadWriteOnce
+
+istio:
+  enabled: true
+  injection: true
+  connectionPool:
+    maxConnections: 100
+  mtls:
+    enabled: true
+    mode: ISTIO_MUTUAL
+  gateway:
+    enabled: true
+    host: "mongo.local"
