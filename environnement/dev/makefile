@@ -11,7 +11,6 @@ setup:
 
 setup-k8s:
 	@echo "Configuration de l'environnement de développement..."
-	@$(MAKE) setup-storage
 	@$(MAKE) setup-k9s
 	@$(MAKE) setup-argocd
 	@$(MAKE) setup-argocd-image-updater
@@ -68,7 +67,6 @@ clean-k8s:
 	kubectl delete namespace argocd --ignore-not-found=true --wait=false
 	kubectl delete namespace database --ignore-not-found=true --wait=false
 	kubectl delete namespace backend --ignore-not-found=true --wait=false
-	kubectl delete namespace istio-system --ignore-not-found=true --wait=false
 	@echo "Forçage de la suppression des finalizers..."
 	kubectl get namespace argocd -o json 2>/dev/null | jq '.spec.finalizers = []' | kubectl replace --raw /api/v1/namespaces/argocd/finalize -f - 2>/dev/null || true
 	kubectl get namespace database -o json 2>/dev/null | jq '.spec.finalizers = []' | kubectl replace --raw /api/v1/namespaces/database/finalize -f - 2>/dev/null || true
@@ -89,8 +87,3 @@ clean-all-k8s:
 	sudo rm -rf /etc/cni /etc/kubernetes /var/lib/kubelet /var/lib/etcd ~/.kube
 	sudo iptables -F && sudo iptables -t nat -F && sudo iptables -t mangle -F && sudo iptables -X
 	@echo "Cluster complètement réinitialisé. Relancez l'installation avec kubeadm init."
-
-setup-storage:
-	@echo "Configuration du stockage persistant..."
-	./scripts/setup-storage.sh
-	@echo "✓ Stockage configuré"
