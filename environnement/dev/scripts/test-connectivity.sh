@@ -167,7 +167,9 @@ cat > "$OUTPUT_FILE" << 'EOF'
         .summary-card.error .number { color: #dc3545; }
 
         .nav-tabs {
-            display: flex;
+            display: grid;
+            grid-auto-flow: column;
+            grid-auto-columns: minmax(150px, 1fr);
             background: #f8f9fa;
             padding: 0 40px;
             border-bottom: 2px solid #e0e0e0;
@@ -182,6 +184,10 @@ cat > "$OUTPUT_FILE" << 'EOF'
             font-weight: 600;
             color: #666;
             white-space: nowrap;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100%;
         }
 
         .nav-tab:hover {
@@ -453,6 +459,11 @@ cat > "$OUTPUT_FILE" << 'EOF'
         @media (max-width: 768px) {
             .header h1 {
                 font-size: 2em;
+            }
+
+            .nav-tabs {
+                grid-auto-flow: row;
+                grid-auto-columns: auto;
             }
 
             .nav-tab {
