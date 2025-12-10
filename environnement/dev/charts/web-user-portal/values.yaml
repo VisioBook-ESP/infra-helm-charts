@@ -8,6 +8,9 @@ service:
   port: 80
   nodePort: 30084
 
+networkPolicy:
+  enabled: true
+
 nameOverride: ""
 fullnameOverride: "web-user-portal"
 
@@ -66,3 +69,19 @@ podLabels:
   app.kubernetes.io/component: frontend
 
 resources: {}
+
+backend:
+  namespace: backend
+  services:
+    coreProject:
+      host: core-project-service.backend.svc.cluster.local
+      port: 8080
+    aiAnalysis:
+      host: ai-analysis-service.backend.svc.cluster.local
+      port: 8080
+    supportStorage:
+      host: support-storage-service.backend.svc.cluster.local
+      port: 8080
+    coreUser:
+      host: core-user-service.backend.svc.cluster.local
+      port: 8080
