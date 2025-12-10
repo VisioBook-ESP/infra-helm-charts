@@ -53,6 +53,9 @@ podLabels:
   app.kubernetes.io/version: "latest"
   app.kubernetes.io/component: backend
 
+selectorLabels:
+  app: ai-analysis-service
+  version: latest
 
 resources: {}
 

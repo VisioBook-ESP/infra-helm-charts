@@ -4,11 +4,15 @@ metadata:
   name: {{ include "ai-analysis-service.fullname" . }}
   labels:
     app: {{ include "ai-analysis-service.name" . }}
+    version: {{ .Values.image.tag | quote }}
 spec:
   type: {{ .Values.service.type }}
   selector:
     app: {{ include "ai-analysis-service.name" . }}
   ports:
-    - port: {{ .Values.service.port }}       # 80 côté service
-      targetPort: 8083                       # ⚠️ vers le container port
-      nodePort: {{ .Values.service.nodePort }} # 30080 exposé sur Minikube
+    - name: http
+      port: {{ .Values.service.port }}
+      targetPort: http
+      {{- if eq .Values.service.type "NodePort" }}
+      nodePort: {{ .Values.service.nodePort }}
+      {{- end }}
