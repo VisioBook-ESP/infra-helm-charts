@@ -70,3 +70,5 @@ env:
     value: "8080"
   - name: LOG_LEVEL
     value: "info"
+  - name: SKIP_REDIS_HEALTH_CHECK
+    value: "true"
