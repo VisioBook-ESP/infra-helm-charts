@@ -38,6 +38,7 @@ kubectl apply -f argocd/postgresql-app-core-project.yaml
 kubectl apply -f argocd/mongodb-app-core-project.yaml
 kubectl apply -f argocd/redis-app-core-project.yaml
 kubectl apply -f argocd/redis-app-core-database.yaml
+kubectl apply -f argocd/redis-app-support-storage.yaml
 #kubectl apply -f argocd/redis-app.yaml
 kubectl apply -f argocd/core-user-service.yaml
 kubectl apply -f argocd/ai-analysis-service.yaml
