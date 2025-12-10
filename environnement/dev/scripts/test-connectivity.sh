@@ -498,7 +498,7 @@ cat > "$OUTPUT_FILE" << 'EOF'
     <div class="container">
         <div class="header">
             <h1>🌐 Full Cluster Connectivity Report</h1>
-            <div class="subtitle">Kubernetes Service Mesh - Complete Analysis</div>
+            <div class="subtitle">Kubernetes Service Mesh</div>
             <div class="timestamp">Generated: TIMESTAMP_PLACEHOLDER</div>
         </div>
 
@@ -535,10 +535,6 @@ cat > "$OUTPUT_FILE" << 'EOF'
 
         <div class="footer">
             <p class="footer-title">🚀 Visiobook Connectivity Test Suite</p>
-            <p>Kubernetes Service Mesh Complete Connectivity Analysis</p>
-            <p style="margin-top: 10px; font-size: 0.9em; opacity: 0.8;">
-                Powered by Claude & Anthropic • Generated on TIMESTAMP_PLACEHOLDER
-            </p>
         </div>
     </div>
 
@@ -814,64 +810,64 @@ test_from_service \
 IS_FIRST="false"
 
 # Test depuis core-project-service
-#test_from_service \
-#    "core-project-service" \
-#    "backend" \
-#    "app=core-project-service" \
-#    "core-project-section" \
-#    "$IS_FIRST" \
-#    "Core User Service" "http://core-user-service.backend.svc.cluster.local:80/health" \
-#    "AI Analysis Service" "http://ai-analysis-service.backend.svc.cluster.local:80/health" \
-#    "Support Storage Service" "http://support-storage-service.backend.svc.cluster.local:80/health" \
-#    "Core Database Service" "http://core-database-service.database.svc.cluster.local:3000/api/v1/health" \
-#    "Redis Core Project" "http://redis-core-project.database.svc.cluster.local:6379/"
-#
-## Test depuis core-user-service
-#test_from_service \
-#    "core-user-service" \
-#    "backend" \
-#    "app=core-user-service" \
-#    "core-user-section" \
-#    "$IS_FIRST" \
-#    "Core Project Service" "http://core-project-service.backend.svc.cluster.local:3000/health" \
-#    "AI Analysis Service" "http://ai-analysis-service.backend.svc.cluster.local:80/health" \
-#    "Support Storage Service" "http://support-storage-service.backend.svc.cluster.local:80/health" \
-#    "Core Database Service" "http://core-database-service.database.svc.cluster.local:3000/api/v1/health"
-#
-## Test depuis ai-analysis-service
-#test_from_service \
-#    "ai-analysis-service" \
-#    "backend" \
-#    "app=ai-analysis-service" \
-#    "ai-analysis-section" \
-#    "$IS_FIRST" \
-#    "Core Project Service" "http://core-project-service.backend.svc.cluster.local:3000/health" \
-#    "Core User Service" "http://core-user-service.backend.svc.cluster.local:80/health" \
-#    "Support Storage Service" "http://support-storage-service.backend.svc.cluster.local:80/health"
-#
-## Test depuis support-storage-service
-#test_from_service \
-#    "support-storage-service" \
-#    "backend" \
-#    "app=support-storage-service" \
-#    "support-storage-section" \
-#    "$IS_FIRST" \
-#    "Core Project Service" "http://core-project-service.backend.svc.cluster.local:3000/health" \
-#    "Core User Service" "http://core-user-service.backend.svc.cluster.local:80/health" \
-#    "AI Analysis Service" "http://ai-analysis-service.backend.svc.cluster.local:80/health" \
-#    "Redis Support Storage" "http://redis-support-storage.database.svc.cluster.local:6379/"
-#
-## Test depuis core-database-service
-#test_from_service \
-#    "core-database-service" \
-#    "database" \
-#    "app=core-database-service" \
-#    "core-database-section" \
-#    "$IS_FIRST" \
-#    "Core Project Service" "http://core-project-service.backend.svc.cluster.local:3000/health" \
-#    "Core User Service" "http://core-user-service.backend.svc.cluster.local:80/health" \
-#    "PostgreSQL Core Database" "http://postgresql-core-database.database.svc.cluster.local:5432/" \
-#    "Redis Core Database" "http://redis-core-database.database.svc.cluster.local:6379/"
+test_from_service \
+    "core-project-service" \
+    "backend" \
+    "app=core-project-service" \
+    "core-project-section" \
+    "$IS_FIRST" \
+    "Core User Service" "http://core-user-service.backend.svc.cluster.local:80/health" \
+    "AI Analysis Service" "http://ai-analysis-service.backend.svc.cluster.local:80/health" \
+    "Support Storage Service" "http://support-storage-service.backend.svc.cluster.local:80/health" \
+    "Core Database Service" "http://core-database-service.database.svc.cluster.local:3000/api/v1/health" \
+    "Redis Core Project" "http://redis-core-project.database.svc.cluster.local:6379/"
+
+# Test depuis core-user-service
+test_from_service \
+    "core-user-service" \
+    "backend" \
+    "app=core-user-service" \
+    "core-user-section" \
+    "$IS_FIRST" \
+    "Core Project Service" "http://core-project-service.backend.svc.cluster.local:3000/health" \
+    "AI Analysis Service" "http://ai-analysis-service.backend.svc.cluster.local:80/health" \
+    "Support Storage Service" "http://support-storage-service.backend.svc.cluster.local:80/health" \
+    "Core Database Service" "http://core-database-service.database.svc.cluster.local:3000/api/v1/health"
+
+# Test depuis ai-analysis-service
+test_from_service \
+    "ai-analysis-service" \
+    "backend" \
+    "app=ai-analysis-service" \
+    "ai-analysis-section" \
+    "$IS_FIRST" \
+    "Core Project Service" "http://core-project-service.backend.svc.cluster.local:3000/health" \
+    "Core User Service" "http://core-user-service.backend.svc.cluster.local:80/health" \
+    "Support Storage Service" "http://support-storage-service.backend.svc.cluster.local:80/health"
+
+# Test depuis support-storage-service
+test_from_service \
+    "support-storage-service" \
+    "backend" \
+    "app=support-storage-service" \
+    "support-storage-section" \
+    "$IS_FIRST" \
+    "Core Project Service" "http://core-project-service.backend.svc.cluster.local:3000/health" \
+    "Core User Service" "http://core-user-service.backend.svc.cluster.local:80/health" \
+    "AI Analysis Service" "http://ai-analysis-service.backend.svc.cluster.local:80/health" \
+    "Redis Support Storage" "http://redis-support-storage.database.svc.cluster.local:6379/"
+
+# Test depuis core-database-service
+test_from_service \
+    "core-database-service" \
+    "database" \
+    "app=core-database-service" \
+    "core-database-section" \
+    "$IS_FIRST" \
+    "Core Project Service" "http://core-project-service.backend.svc.cluster.local:3000/health" \
+    "Core User Service" "http://core-user-service.backend.svc.cluster.local:80/health" \
+    "PostgreSQL Core Database" "http://postgresql-core-database.database.svc.cluster.local:5432/" \
+    "Redis Core Database" "http://redis-core-database.database.svc.cluster.local:6379/"
 
 echo "=================================================="
 echo -e "${GREEN}✅ Full report generated!${NC}"
