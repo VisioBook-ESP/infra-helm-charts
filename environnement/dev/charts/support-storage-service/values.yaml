@@ -59,11 +59,11 @@ resources: {}
 
 env:
   - name: REDIS_HOST
-    value: "redis-support-storage.backend.svc.cluster.local"
+    value: "redis-support-storage.database.svc.cluster.local"
   - name: REDIS_PORT
     value: "6379"
   - name: REDIS_URL
-    value: "redis://redis-support-storage.backend.svc.cluster.local:6379"
+    value: "redis://redis-support-storage.database.svc.cluster.local:6379"
   - name: NODE_ENV
     value: "production"
   - name: PORT
