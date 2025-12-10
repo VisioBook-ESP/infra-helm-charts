@@ -92,7 +92,7 @@ redis:
 
   persistence:
     enabled: true
-    storageClass: "standard"
+    storageClass: "local-path"
     accessMode: ReadWriteOnce
     size: 8Gi
 

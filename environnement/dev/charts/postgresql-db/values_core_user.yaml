@@ -1,13 +1,13 @@
 replicaCount: 1
-name: postgresql-test
+name: postgresql-core-user
 image:
   repository: ghcr.io/visiobook-esp/postgres
   tag: 16
   pullPolicy: IfNotPresent
 
 imagePullSecrets: []
-nameOverride: ""
-fullnameOverride: ""
+nameOverride: "postgresql-core-user"
+fullnameOverride: "postgresql-core-user"
 
 serviceAccount:
   create: true
@@ -20,9 +20,9 @@ podAnnotations:
 
 # Ajout des labels recommandés par Istio
 podLabels:
-  app: postgresql-test
+  app: postgresql-core-user
   version: "16"
-  app.kubernetes.io/name: postgresql-test
+  app.kubernetes.io/name: postgresql-core-user
   app.kubernetes.io/version: "16"
   app.kubernetes.io/component: database
 
@@ -32,7 +32,7 @@ securityContext: {}
 
 service:
   type: NodePort
-  port: 5432
+  port: 6432
 
 ingress:
   enabled: false
@@ -79,7 +79,7 @@ postgresql:
 
   persistence:
     enabled: true
-    storageClass: ""
+    storageClass: "local-path"
     size: "8Gi"
     accessModes:
       - ReadWriteOnce
@@ -94,4 +94,4 @@ istio:
     mode: ISTIO_MUTUAL
   gateway:
     enabled: true
-    host: "postgres-test.local"
+    host: "postgres-core-user.local"

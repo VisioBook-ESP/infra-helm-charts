@@ -93,7 +93,7 @@ mongo-db:
 
   persistence:
     enabled: true
-    storageClass: "standard"
+    storageClass: "local-path"
     size: "8Gi"
     accessModes:
       - ReadWriteOnce
