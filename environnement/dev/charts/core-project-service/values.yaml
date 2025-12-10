@@ -8,6 +8,7 @@ image:
 service:
   type: ClusterIP
   port: 3000
+  targetPort: 8086
 
 nameOverride: ""
 fullnameOverride: "core-project-service"
@@ -98,7 +99,7 @@ env:
   - name: NODE_ENV
     value: "production"
   - name: PORT
-    value: "3000"
+    value: "8086"
   - name: JWT_SECRET
     value: "your-jwt-secret-change-in-production"
   - name: ENCRYPTION_KEY
