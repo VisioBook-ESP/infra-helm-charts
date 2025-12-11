@@ -1,0 +1,17 @@
+{{- if index .Values "mongo-db" "persistence" "enabled" }}
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: {{ include "mongo-db.fullname" . }}
+  labels:
+    {{- include "mongo-db.labels" . | nindent 4 }}
+spec:
+  accessModes:
+    {{- toYaml (index .Values "mongo-db" "persistence" "accessModes") | nindent 4 }}
+  resources:
+    requests:
+      storage: {{ index .Values "mongo-db" "persistence" "size" }}
+  {{- if (index .Values "mongo-db" "persistence" "storageClass") }}
+  storageClassName: {{ index .Values "mongo-db" "persistence" "storageClass" }}
+  {{- end }}
+{{- end }}

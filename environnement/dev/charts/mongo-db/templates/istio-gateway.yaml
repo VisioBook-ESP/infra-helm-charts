@@ -1,0 +1,19 @@
+{{- if .Values.istio.gateway.enabled }}
+apiVersion: networking.istio.io/v1beta1
+kind: Gateway
+metadata:
+  name: {{ include "mongo-db.fullname" . }}-gateway
+  namespace: {{ .Release.Namespace }}
+  labels:
+    {{- include "mongo-db.labels" . | nindent 4 }}
+spec:
+  selector:
+    istio: ingress  # Utilise le ingress gateway d'Istio
+  servers:
+    - port:
+        number: 27017
+        name: tcp-mongo
+        protocol: TCP
+      hosts:
+        - "{{ .Values.istio.gateway.host }}"
+{{- end }}

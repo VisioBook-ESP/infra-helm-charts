@@ -6,4 +6,4 @@ environnement/dev/minikube-linux-amd64/
 environnement/dev/argocd_password.txt
 linux-amd64
 LICENSE
-environnement/dev/argocd_password.txt
+.environnement/dev/argocd_password.txt

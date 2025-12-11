@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "core-database-service.fullname" . }}
+  labels:
+    app: {{ include "core-database-service.name" . }}
+spec:
+  type: {{ .Values.service.type }}
+  selector:
+    app: {{ include "core-database-service.name" . }}
+  ports:
+    - port: 3000
+      targetPort: 3000
+      protocol: TCP

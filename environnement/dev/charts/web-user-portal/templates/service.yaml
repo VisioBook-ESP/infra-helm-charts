@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "web-user-portal.fullname" . }}
+  labels:
+    app: {{ include "web-user-portal.name" . }}
+spec:
+  type: {{ .Values.service.type }}
+  selector:
+    app: {{ include "web-user-portal.name" . }}
+  ports:
+    - port: {{ .Values.service.port }}
+      targetPort: 8080
+      nodePort: {{ .Values.service.nodePort }}

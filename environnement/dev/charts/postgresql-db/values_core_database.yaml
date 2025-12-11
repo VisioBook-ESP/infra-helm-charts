@@ -1,0 +1,97 @@
+replicaCount: 1
+name: postgresql-core-database
+image:
+  repository: ghcr.io/visiobook-esp/postgres
+  tag: 16
+  pullPolicy: IfNotPresent
+
+imagePullSecrets: []
+nameOverride: "postgresql-core-database"
+fullnameOverride: "postgresql-core-database"
+
+serviceAccount:
+  create: true
+  automount: true
+  annotations: {}
+  name: ""
+
+podAnnotations:
+  sidecar.istio.io/inject: "true"
+
+# Ajout des labels recommandés par Istio
+podLabels:
+  app: postgresql-core-database
+  version: "16"
+  app.kubernetes.io/name: postgresql-core-database
+  app.kubernetes.io/version: "16"
+  app.kubernetes.io/component: database
+
+podSecurityContext: {}
+
+securityContext: {}
+
+service:
+  type: NodePort
+  port: 6432
+
+ingress:
+  enabled: false
+  className: ""
+  annotations: {}
+  hosts:
+    - host: chart-example.local
+      paths:
+        - path: /
+          pathType: ImplementationSpecific
+  tls: []
+
+resources: {}
+livenessProbe:
+  httpGet:
+    path: /
+    port: http
+readinessProbe:
+  httpGet:
+    path: /
+    port: http
+
+autoscaling:
+  enabled: false
+  minReplicas: 1
+  maxReplicas: 100
+  targetCPUUtilizationPercentage: 80
+
+volumes: []
+
+volumeMounts: []
+
+nodeSelector: {}
+
+tolerations: []
+
+affinity: {}
+
+postgresql:
+  auth:
+    database: "visiobook_dev"
+    username: "postgres"
+    password: "password"
+
+  persistence:
+    enabled: true
+    storageClass: "local-path"
+    size: "8Gi"
+    accessModes:
+      - ReadWriteOnce
+
+istio:
+  enabled: true
+  injection: true
+  connectionPool:
+    maxConnections: 100
+  mtls:
+    enabled: true
+    mode: ISTIO_MUTUAL
+  gateway:
+    enabled: true
+    host: "postgres-core-database.local"

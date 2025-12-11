@@ -139,7 +139,7 @@ spec:
       enableServiceLinks: true
       containers:
         - name: grafana
-          image: "docker.io/grafana/grafana:11.3.1"
+          image: "ghcr.io/visiobook-esp/grafana:latest"
           imagePullPolicy: IfNotPresent
           securityContext:
             allowPrivilegeEscalation: false

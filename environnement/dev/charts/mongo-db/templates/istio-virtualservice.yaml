@@ -1,0 +1,19 @@
+{{- if .Values.istio.enabled }}
+apiVersion: networking.istio.io/v1beta1
+kind: VirtualService
+metadata:
+  name: {{ include "mongo-db.fullname" . }}
+  labels:
+    {{- include "mongo-db.labels" . | nindent 4 }}
+spec:
+  hosts:
+    - {{ include "mongo-db.fullname" . }}.{{ .Release.Namespace }}.svc.cluster.local
+  tcp:
+    - match:
+        - port: 27017
+      route:
+        - destination:
+            host: {{ include "mongo-db.fullname" . }}
+            port:
+              number: 27017
+{{- end }}

@@ -79,7 +79,7 @@ postgresql:
 
   persistence:
     enabled: true
-    storageClass: ""
+    storageClass: "local-path"
     size: "8Gi"
     accessModes:
       - ReadWriteOnce
