@@ -7,3 +7,9 @@ environnement/dev/argocd_password.txt
 linux-amd64
 LICENSE
 .environnement/dev/argocd_password.txt
+
+environnement/prod/terraform/.terraform/*
+environnement/prod/terraform/.terrafor*
+environnement/prod/terraform/terraform.tfstate
+environnement/prod/terraform.tfstate
+environnement/prod/terraform/terraform.tfstate.backup
