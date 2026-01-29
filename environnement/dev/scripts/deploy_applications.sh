@@ -46,3 +46,6 @@ kubectl apply -f argocd/support-storage-service.yaml
 kubectl apply -f argocd/core-database-service.yaml
 kubectl apply -f argocd/core-project-service.yaml
 
+
+
+

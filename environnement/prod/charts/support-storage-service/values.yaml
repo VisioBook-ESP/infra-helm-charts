@@ -1,0 +1,74 @@
+image:
+  repository: ghcr.io/visiobook-esp/support-storage-service-dev
+  tag: latest
+  pullPolicy: IfNotPresent
+
+service:
+  type: NodePort
+  port: 80
+  targetPort: 8080
+  nodePort: 30080
+
+nameOverride: ""
+fullnameOverride: "support-storage-service"
+
+istio:
+  enabled: true
+  injection: true
+
+  virtualService:
+    enabled: true
+    hosts:
+      - "support-storage-service"
+      - "storage-service.visiobook.dev"
+    gateways:
+      - mesh
+  destinationRule:
+    enabled: true
+    trafficPolicy:
+      connectionPool:
+        tcp:
+          maxConnections: 100
+        http:
+          http1MaxPendingRequests: 100
+          http2MaxRequests: 100
+          maxRequestsPerConnection: 2
+      loadBalancer:
+        simple: ROUND_ROBIN
+      outlierDetection:
+        consecutiveErrors: 5
+        interval: 30s
+        baseEjectionTime: 30s
+
+  mtls:
+    enabled: true
+    mode: ISTIO_MUTUAL
+
+nodeSelector: {}
+tolerations: []
+affinity: {}
+
+podLabels:
+  app: support-storage-service
+  version: "latest"
+  app.kubernetes.io/name: support-storage-service
+  app.kubernetes.io/version: "latest"
+  app.kubernetes.io/component: backend
+
+resources: {}
+
+env:
+  - name: REDIS_HOST
+    value: "redis-support-storage.database.svc.cluster.local"
+  - name: REDIS_PORT
+    value: "6379"
+  - name: REDIS_URL
+    value: "redis://redis-support-storage.database.svc.cluster.local:6379"
+  - name: NODE_ENV
+    value: "production"
+  - name: PORT
+    value: "8080"
+  - name: LOG_LEVEL
+    value: "info"
+  - name: SKIP_REDIS_HEALTH_CHECK
+    value: "true"

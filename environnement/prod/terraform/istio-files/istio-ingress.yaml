@@ -1,0 +1,15 @@
+# istio-files/istio-ingress.yaml
+service:
+  type: LoadBalancer
+  ports:
+  - name: http
+    port: 80
+    targetPort: 8080
+  - name: https
+    port: 443
+    targetPort: 8443
+
+autoscaling:
+  enabled: true
+  minReplicas: 2
+  maxReplicas: 5

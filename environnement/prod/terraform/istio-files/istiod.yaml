@@ -1,0 +1,23 @@
+# istio-files/istiod.yaml
+
+# Pilot configuration
+pilot:
+  # Resource requests/limits
+  resources:
+    requests:
+      cpu: 500m
+      memory: 2048Mi
+    limits:
+      cpu: 1000m
+      memory: 4096Mi
+
+# Global mesh configuration
+meshConfig:
+  # Access logging (optional - useful for debugging)
+  accessLogFile: /dev/stdout
+  
+  # Default config for proxies
+  defaultConfig:
+    # Tracing configuration (if using Jaeger)
+    tracing:
+      sampling: 100.0

@@ -1,8 +1,7 @@
 resource "azurerm_resource_group" "rg" {
   name     = "rg-aks"
-  location = "francecentral"
+  location = "australiacentral"
 }
-
 resource "azurerm_kubernetes_cluster" "aks" {
   name                = "aks-basic"
   location            = azurerm_resource_group.rg.location
@@ -10,9 +9,12 @@ resource "azurerm_kubernetes_cluster" "aks" {
   dns_prefix          = "aks-basic"
 
   default_node_pool {
-    name       = "system"
-    node_count = 1
-    vm_size    = "standard_a2_v2"
+    name                         = "system"
+    vm_size                      = "Standard_D4s_v3"
+    node_count                   = 1
+    os_disk_size_gb              = 50
+    max_pods                     = 30
+    temporary_name_for_rotation  = "tempnp"
   }
 
   identity {
