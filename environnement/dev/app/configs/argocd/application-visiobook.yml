@@ -6,16 +6,19 @@ spec:
   destination:
     namespace: visiobook-namespace
     server: https://kubernetes.default.svc
+  sources:
+    - repoURL: https://github.com/VisioBook-ESP/infra-helm-charts
+      path: environnement/dev/charts/ai-analysis-service
+      targetRevision: 33-1-application-par-pod-to-applciation-pour-tous-les-pods
+      helm:
+        valueFiles:
+          - $values-support/k8s/values.yaml
 
-  source:
-    repoURL: >-
-      https://github.com/VisioBook-ESP/infra-helm-charts
-    path: environnement/dev/charts/visiobook-all
-    targetRevision: 33-1-application-par-pod-to-applciation-pour-tous-les-pods
-    # helm:
-    #   valueFiles:
-    #     - ../../charts/application-values.yml
-  project: default
+    - repoURL: https://github.com/VisioBook-ESP/ai-analysis-service
+      targetRevision: feat/add-value.yaml
+      ref: values-support
+
+  project: application-visobook
   syncPolicy:
     automated:
       prune: true
