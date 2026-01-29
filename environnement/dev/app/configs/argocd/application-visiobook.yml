@@ -10,7 +10,7 @@ spec:
   source:
     repoURL: >-
       https://github.com/VisioBook-ESP/infra-helm-charts
-    path: environnement/charts/*
+    path: environnement/dev/charts/
     targetRevision: 33-1-application-par-pod-to-applciation-pour-tous-les-pods
     # helm:
     #   valueFiles:
