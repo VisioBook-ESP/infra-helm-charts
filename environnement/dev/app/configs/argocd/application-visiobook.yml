@@ -1,22 +1,20 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: application-visobook
+  name: application-visiobook
+  namespace: argocd
 spec:
   destination:
     namespace: visiobook-namespace
     server: https://kubernetes.default.svc
+
   sources:
     - repoURL: https://github.com/VisioBook-ESP/infra-helm-charts
-      path: environnement/dev/charts/ai-analysis-service
+      path: environnement/dev/charts/support-storage-service
       targetRevision: 33-1-application-par-pod-to-applciation-pour-tous-les-pods
       helm:
         valueFiles:
-          - $values-support/k8s/values.yaml
-
-    - repoURL: https://github.com/VisioBook-ESP/ai-analysis-service
-      targetRevision: feat/add-value.yaml
-      ref: values-support
+          - values.yml
 
   project: application-visobook
   syncPolicy:
