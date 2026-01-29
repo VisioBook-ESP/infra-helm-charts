@@ -7,9 +7,9 @@ version: 1.0.0
 dependencies:
   - name: core-user-service
     version: "*"
-    repository: file://./core-user-service
+    repository: file://../core-user-service
     
   - name: core-project-service
     version: "*"
-    repository: file://./core-project-service
+    repository: file://../core-project-service
     
