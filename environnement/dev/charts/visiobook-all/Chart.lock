@@ -1,0 +1,9 @@
+dependencies:
+- name: core-user-service
+  repository: file://../core-user-service
+  version: 0.1.0
+- name: core-project-service
+  repository: file://../core-project-service
+  version: 0.1.0
+digest: sha256:26a3809726643cd03c4d098f6a43e97674b0111330527b9a795f45afaead42f4
+generated: "2026-01-29T16:00:09.325643964+01:00"
