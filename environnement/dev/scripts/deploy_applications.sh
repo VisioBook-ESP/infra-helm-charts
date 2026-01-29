@@ -20,29 +20,31 @@ kubectl apply -f istio-addons/grafana.yaml -n istio-system
 kubectl apply -f istio-addons/kiali.yaml -n istio-system
 kubectl apply -f istio-addons/jaeger.yaml -n istio-system
 #
-kubectl create namespace database
-kubectl label namespace database istio-injection=enabled
-kubectl create namespace backend
-kubectl label namespace backend istio-injection=enabled
-kubectl create namespace frontend
-kubectl label namespace frontend istio-injection=enabled
+# kubectl create namespace database
+# kubectl label namespace database istio-injection=enabled
+# kubectl create namespace backend
+# kubectl label namespace backend istio-injection=enabled
+# kubectl create namespace frontend
+# kubectl label namespace frontend istio-injection=enabled
+kubectl create namespace visiobook-namespace
+kubectl label namespace visiobook-namespace istio-injection=enabled
 
 cd ..
 
 #kubectl apply -f argocd/postgresql-app.yaml
-kubectl apply -f argocd/web-user-portal.yaml
-kubectl apply -f argocd/postgresql-app-core-database.yaml
-kubectl apply -f argocd/postgresql-app-core-user.yaml
-#kubectl apply -f argocd/mongodb-app.yaml
-kubectl apply -f argocd/postgresql-app-core-project.yaml
-kubectl apply -f argocd/mongodb-app-core-project.yaml
-kubectl apply -f argocd/redis-app-core-project.yaml
-kubectl apply -f argocd/redis-app-core-database.yaml
-kubectl apply -f argocd/redis-app-support-storage.yaml
-#kubectl apply -f argocd/redis-app.yaml
-kubectl apply -f argocd/core-user-service.yaml
-kubectl apply -f argocd/ai-analysis-service.yaml
-kubectl apply -f argocd/support-storage-service.yaml
-kubectl apply -f argocd/core-database-service.yaml
-kubectl apply -f argocd/core-project-service.yaml
+kubectl apply -f application-visiobook.yml
+# kubectl apply -f argocd/postgresql-app-core-database.yaml
+# kubectl apply -f argocd/postgresql-app-core-user.yaml
+# #kubectl apply -f argocd/mongodb-app.yaml
+# kubectl apply -f argocd/postgresql-app-core-project.yaml
+# kubectl apply -f argocd/mongodb-app-core-project.yaml
+# kubectl apply -f argocd/redis-app-core-project.yaml
+# kubectl apply -f argocd/redis-app-core-database.yaml
+# kubectl apply -f argocd/redis-app-support-storage.yaml
+# #kubectl apply -f argocd/redis-app.yaml
+# kubectl apply -f argocd/core-user-service.yaml
+# kubectl apply -f argocd/ai-analysis-service.yaml
+# kubectl apply -f argocd/support-storage-service.yaml
+# kubectl apply -f argocd/core-database-service.yaml
+# kubectl apply -f argocd/core-project-service.yaml
 

@@ -59,7 +59,7 @@ env:
   SERVICE_VERSION: 1.0.0
   ENV: prod
   PORT: 8080
-  LOG_LEVEL: info
+  LOG_LEVEL: {{ .Values.loglevel }}
   DATABASE_URL: postgresql://postgres:password@postgres-core-user.database.svc.cluster.local:5432/visiobook_dev
   DATABASE_ECHO: false
   SECRET_KEY: blablablablalblalbla
