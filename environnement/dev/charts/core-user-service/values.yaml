@@ -1,5 +1,6 @@
 replicaCount: 1
 name: core-user-service
+
 image:
   repository: ghcr.io/visiobook-esp/core-user-service-dev
   tag: latest
@@ -59,7 +60,7 @@ env:
   SERVICE_VERSION: 1.0.0
   ENV: prod
   PORT: 8080
-  LOG_LEVEL: {{ .Values.loglevel }}
+  LOG_LEVEL: {{ .Values.core-user-service.loglevel }}
   DATABASE_URL: postgresql://postgres:password@postgres-core-user.database.svc.cluster.local:5432/visiobook_dev
   DATABASE_ECHO: false
   SECRET_KEY: blablablablalblalbla
