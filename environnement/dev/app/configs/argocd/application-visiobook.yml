@@ -14,8 +14,14 @@ spec:
       targetRevision: 33-1-application-par-pod-to-applciation-pour-tous-les-pods
       helm:
         valueFiles:
-          - values.yml
-
+          - values.yaml
+          
+    - repoURL: https://github.com/VisioBook-ESP/infra-helm-charts
+      path: environnement/dev/charts/ai-analysis-service
+      targetRevision: 33-1-application-par-pod-to-applciation-pour-tous-les-pods
+      helm:
+        valueFiles:
+          - values.yaml
   project: application-visobook
   syncPolicy:
     automated:
