@@ -9,19 +9,41 @@ spec:
     server: https://kubernetes.default.svc
 
   sources:
-    - repoURL: https://github.com/VisioBook-ESP/infra-helm-charts
-      path: environnement/dev/charts/support-storage-service
-      targetRevision: 33-1-application-par-pod-to-applciation-pour-tous-les-pods
+    - repoURL: https://github.com/VisioBook-ESP/support-storage-service
+      path: charts/
+      targetRevision: dev
       helm:
         valueFiles:
           - values.yaml
-          
-    - repoURL: https://github.com/VisioBook-ESP/infra-helm-charts
-      path: environnement/dev/charts/ai-analysis-service
-      targetRevision: 33-1-application-par-pod-to-applciation-pour-tous-les-pods
+
+    - repoURL: https://github.com/VisioBook-ESP/ai-analysis-service
+      path: charts/
+      targetRevision: dev
       helm:
         valueFiles:
           - values.yaml
+
+    - repoURL: https://github.com/VisioBook-ESP/core-user-service
+      path: charts/
+      targetRevision: dev
+      helm:
+        valueFiles:
+          - values.yaml
+
+    # - repoURL: https://github.com/VisioBook-ESP/web-user-portal
+    #   path: charts/
+    #   targetRevision: dev
+    #   helm:
+    #     valueFiles:
+    #       - values.yaml
+
+    - repoURL: https://github.com/VisioBook-ESP/core-project-service
+      path: charts/
+      targetRevision: dev
+      helm:
+        valueFiles:
+          - values.yaml
+
   project: application-visobook
   syncPolicy:
     automated:

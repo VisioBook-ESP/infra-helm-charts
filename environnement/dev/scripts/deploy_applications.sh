@@ -31,23 +31,8 @@ kubectl label namespace visiobook-namespace istio-injection=enabled
 
 cd ..
 
-# kubectl apply -f argocd/app-project.yml
+kubectl apply -f argocd/app-project.yml
 
-
-#kubectl apply -f argocd/postgresql-app.yaml
 kubectl apply -f argocd/application-visiobook.yml
-# kubectl apply -f argocd/postgresql-app-core-database.yaml
-# kubectl apply -f argocd/postgresql-app-core-user.yaml
-# #kubectl apply -f argocd/mongodb-app.yaml
-# kubectl apply -f argocd/postgresql-app-core-project.yaml
-# kubectl apply -f argocd/mongodb-app-core-project.yaml
-# kubectl apply -f argocd/redis-app-core-project.yaml
-# kubectl apply -f argocd/redis-app-core-database.yaml
-# kubectl apply -f argocd/redis-app-support-storage.yaml
-# #kubectl apply -f argocd/redis-app.yaml
-# kubectl apply -f argocd/core-user-service.yaml
-# kubectl apply -f argocd/ai-analysis-service.yaml
-# kubectl apply -f argocd/support-storage-service.yaml
-# kubectl apply -f argocd/core-database-service.yaml
-# kubectl apply -f argocd/core-project-service.yaml
+
 

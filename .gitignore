@@ -7,3 +7,4 @@ environnement/dev/argocd_password.txt
 linux-amd64
 LICENSE
 .environnement/dev/argocd_password.txt
+./environnement/dev/argocd_password.txt
