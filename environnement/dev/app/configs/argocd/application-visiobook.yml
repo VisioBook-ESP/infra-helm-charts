@@ -20,7 +20,7 @@ spec:
 
     # PostgreSQL Cluster (sync-wave 1)
     - repoURL: https://github.com/VisioBook-ESP/infra-helm-charts  # Your repo
-      path: charts/cloud-native-postgres/  # or postgres-cluster/charts/
+      path: ../../../charts/cloud-native-postgres/  # or postgres-cluster/charts/
       targetRevision: 35-creer-un-chart-cnpg
       helm:
         valueFiles:
