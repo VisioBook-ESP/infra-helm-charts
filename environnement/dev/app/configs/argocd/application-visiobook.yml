@@ -9,6 +9,23 @@ spec:
     server: https://kubernetes.default.svc
 
   sources:
+
+    - repoURL: https://cloudnative-pg.github.io/charts
+      chart: cloudnative-pg
+      targetRevision: 0.22.1
+      helm:
+        values: |
+          monitoring:
+            podMonitorEnabled: true
+
+    # PostgreSQL Cluster (sync-wave 1)
+    - repoURL: https://github.com/VisioBook-ESP/infra-helm-charts  # Your repo
+      path: charts/cloud-native-postgres/  # or postgres-cluster/charts/
+      targetRevision: 35-creer-un-chart-cnpg
+      helm:
+        valueFiles:
+          - values.yaml
+
     - repoURL: https://github.com/VisioBook-ESP/support-storage-service
       path: charts/
       targetRevision: dev

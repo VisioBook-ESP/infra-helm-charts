@@ -1,0 +1,79 @@
+apiVersion: postgresql.cnpg.io/v1
+kind: Cluster
+metadata:
+  name: {{ .Values.cluster.name }}
+  labels:
+    app: {{ .Values.cluster.name }}
+    chart: {{ .Chart.Name }}-{{ .Chart.Version }}
+spec:
+  instances: {{ .Values.cluster.instances }}
+  
+  imageName: ghcr.io/cloudnative-pg/postgresql:{{ .Values.cluster.postgresql.version }}
+  
+  storage:
+    size: {{ .Values.cluster.storage.size }}
+    {{- if .Values.cluster.storage.storageClass }}
+    storageClass: {{ .Values.cluster.storage.storageClass }}
+    {{- end }}
+  
+  {{- if .Values.cluster.resources }}
+  resources:
+    {{- toYaml .Values.cluster.resources | nindent 4 }}
+  {{- end }}
+  
+  postgresql:
+    parameters:
+      {{- range $key, $value := .Values.cluster.postgresql.parameters }}
+      {{ $key }}: {{ $value | quote }}
+      {{- end }}
+  
+  bootstrap:
+    initdb:
+      database: {{ .Values.cluster.bootstrap.initdb.database }}
+      owner: {{ .Values.cluster.bootstrap.initdb.owner }}
+      {{- if .Values.cluster.bootstrap.initdb.dataChecksums }}
+      dataChecksums: {{ .Values.cluster.bootstrap.initdb.dataChecksums }}
+      {{- end }}
+      {{- if .Values.cluster.bootstrap.initdb.encoding }}
+      encoding: {{ .Values.cluster.bootstrap.initdb.encoding }}
+      {{- end }}
+      {{- if .Values.cluster.bootstrap.initdb.localeCollate }}
+      localeCollate: {{ .Values.cluster.bootstrap.initdb.localeCollate }}
+      {{- end }}
+      {{- if .Values.cluster.bootstrap.initdb.localeCType }}
+      localeCType: {{ .Values.cluster.bootstrap.initdb.localeCType }}
+      {{- end }}
+      secret:
+        name: {{ .Values.cluster.name }}-superuser
+  
+  superuserSecret:
+    name: {{ .Values.cluster.name }}-superuser
+  
+  {{- if and .Values.cluster.backup .Values.cluster.backup.enabled }}
+  backup:
+    retentionPolicy: {{ .Values.cluster.backup.retentionPolicy | default "30d" }}
+    barmanObjectStore:
+      {{- toYaml .Values.cluster.backup.barmanObjectStore | nindent 6 }}
+    {{- if .Values.cluster.backup.schedule }}
+    schedule: {{ .Values.cluster.backup.schedule | quote }}
+    {{- end }}
+  {{- end }}
+  
+  {{- if and .Values.cluster.monitoring .Values.cluster.monitoring.enabled }}
+  monitoring:
+    enablePodMonitor: {{ .Values.cluster.monitoring.podMonitorEnabled | default true }}
+  {{- end }}
+  
+  # Affinity rules for high availability
+  affinity:
+    podAntiAffinity:
+      preferredDuringSchedulingIgnoredDuringExecution:
+        - weight: 100
+          podAffinityTerm:
+            labelSelector:
+              matchExpressions:
+                - key: postgresql
+                  operator: In
+                  values:
+                    - {{ .Values.cluster.name }}
+            topologyKey: kubernetes.io/hostname
