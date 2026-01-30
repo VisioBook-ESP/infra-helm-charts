@@ -30,7 +30,7 @@ spec:
   bootstrap:
     initdb:
       database: {{ .Values.cluster.bootstrap.initdb.database }}
-      owner: {{ .Values.cluster.bootstrap.initdb.owner }}
+      owner: {{ .Values.appUser.username }}
       {{- if .Values.cluster.bootstrap.initdb.dataChecksums }}
       dataChecksums: {{ .Values.cluster.bootstrap.initdb.dataChecksums }}
       {{- end }}
@@ -44,7 +44,7 @@ spec:
       localeCType: {{ .Values.cluster.bootstrap.initdb.localeCType }}
       {{- end }}
       secret:
-        name: {{ .Values.cluster.name }}-superuser
+        name: {{ .Values.cluster.name }}-app  # CNPG will create this
   
   superuserSecret:
     name: {{ .Values.cluster.name }}-superuser
@@ -64,7 +64,6 @@ spec:
     enablePodMonitor: {{ .Values.cluster.monitoring.podMonitorEnabled | default true }}
   {{- end }}
   
-  # Affinity rules for high availability
   affinity:
     podAntiAffinity:
       preferredDuringSchedulingIgnoredDuringExecution:
