@@ -63,12 +63,12 @@ spec:
   {{- end }}
   {{- end }}
   
-  {{- if .Values.cluster.monitoring }}
-  {{- if .Values.cluster.monitoring.enabled }}
-  monitoring:
-    enablePodMonitor: {{ .Values.cluster.monitoring.podMonitorEnabled | default true }}
-  {{- end }}
-  {{- end }}
+#   {{- if .Values.cluster.monitoring }}
+#   {{- if .Values.cluster.monitoring.enabled }}
+#   monitoring:
+#     enablePodMonitor: {{ .Values.cluster.monitoring.podMonitorEnabled | default true }}
+#   {{- end }}
+#   {{- end }}
   
   affinity:
     podAntiAffinity:

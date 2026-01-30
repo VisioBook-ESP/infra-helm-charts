@@ -17,9 +17,6 @@ cluster:
       database: visiobook
       owner: visiobook
       dataChecksums: true
-      encoding: UTF8
-      localeCollate: en_US.UTF-8
-      localeCType: en_US.UTF-8
   
   resources:
     requests:
@@ -30,28 +27,19 @@ cluster:
       cpu: "2000m"
   
   monitoring:
-    enabled: true
-    podMonitorEnabled: true
-  
+    enabled: false  # Change from true to false
+    podMonitorEnabled: false
+
   backup:
     enabled: false
-    # When you want to enable backups, uncomment:
-    # retentionPolicy: "30d"
-    # schedule: "0 0 2 * * *"
-    # barmanObjectStore:
-    #   destinationPath: s3://bucket/path
-    #   s3Credentials:
-    #     accessKeyId:
-    #       name: s3-creds
-    #       key: ACCESS_KEY_ID
 
 superuser:
   username: postgres
-  password: "changeme"  # or leave empty for auto-generation
+  password: "changeme"
 
 appUser:
   username: visiobook
-  password: "changeme"  # or leave empty for auto-generation
+  password: "changeme"
 
 pooler:
   enabled: true
