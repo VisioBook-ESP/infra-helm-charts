@@ -1,0 +1,7 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: argocd-cm
+  namespace: argocd
+data:
+  timeout.reconciliation: "60s"  # Vérifie toutes les 60 secondes (au lieu de 3 minutes par défaut)
