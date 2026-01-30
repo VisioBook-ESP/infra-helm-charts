@@ -7,8 +7,8 @@ spec:
   description: VisioBook applications
 
   sourceRepos:
-    - https://github.com/VisioBook-ESP/*
-    - 'https://cloudnative-pg.github.io/charts'  # Add this line
+    - 'https://github.com/VisioBook-ESP/*'
+    - 'https://cloudnative-pg.github.io/charts'
 
   destinations:
     - namespace: visiobook-namespace

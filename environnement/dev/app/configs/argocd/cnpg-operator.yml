@@ -1,0 +1,32 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: cnpg-operator
+  namespace: argocd
+spec:
+  project: default
+  
+  source:
+    # CNPG Operator in visiobook-namespace
+    - repoURL: https://cloudnative-pg.github.io/charts
+      chart: cloudnative-pg
+      targetRevision: 0.22.1
+      helm:
+        skipCrds: true  # We already installed CRDs manually
+        values: |
+          monitoring:
+            podMonitorEnabled: false
+          config:
+            data:
+              WATCH_NAMESPACE: "visiobook-namespace"  # Watch only this namespace
+
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: cnpg-system
+  
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true

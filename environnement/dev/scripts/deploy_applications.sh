@@ -30,7 +30,8 @@ kubectl create namespace visiobook-namespace
 kubectl label namespace visiobook-namespace istio-injection=enabled
 
 cd ..
-
+# kubectl create namespace cnpg-operator
+# kubectl apply -f argocd/cnpg-operator.yml
 kubectl apply -f argocd/app-project.yml
 # kubectl apply -f argocd/argo-configmap.yml
 
