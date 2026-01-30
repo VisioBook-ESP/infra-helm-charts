@@ -9,12 +9,12 @@ spec:
     server: https://kubernetes.default.svc
 
   sources:
-    - repoURL: https://github.com/VisioBook-ESP/support-storage-service
-      path: charts/
-      targetRevision: dev
-      helm:
-        valueFiles:
-          - values.yaml
+  #   - repoURL: https://github.com/VisioBook-ESP/support-storage-service
+  #     path: charts/
+  #     targetRevision: dev
+  #     helm:
+  #       valueFiles:
+  #         - values.yaml
 
     - repoURL: https://github.com/VisioBook-ESP/ai-analysis-service
       path: charts/
@@ -37,12 +37,12 @@ spec:
     #     valueFiles:
     #       - values.yaml
 
-    - repoURL: https://github.com/VisioBook-ESP/core-project-service
-      path: charts/
-      targetRevision: dev
-      helm:
-        valueFiles:
-          - values.yaml
+    # - repoURL: https://github.com/VisioBook-ESP/core-project-service
+    #   path: charts/
+    #   targetRevision: dev
+    #   helm:
+    #     valueFiles:
+    #       - values.yaml
 
   project: application-visobook
   syncPolicy:
@@ -51,3 +51,9 @@ spec:
       selfHeal: true
     syncOptions:
       - CreateNamespace=true
+    retry:
+      limit: 5
+      backoff:
+        duration: 5s
+        factor: 2
+        maxDuration: 3m
