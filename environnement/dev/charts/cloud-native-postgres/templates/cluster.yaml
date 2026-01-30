@@ -44,24 +44,30 @@ spec:
       localeCType: {{ .Values.cluster.bootstrap.initdb.localeCType }}
       {{- end }}
       secret:
-        name: {{ .Values.cluster.name }}-app  # CNPG will create this
+        name: {{ .Values.cluster.name }}-app
   
   superuserSecret:
     name: {{ .Values.cluster.name }}-superuser
   
-  {{- if and .Values.cluster.backup .Values.cluster.backup.enabled }}
+  {{- if .Values.cluster.backup }}
+  {{- if .Values.cluster.backup.enabled }}
   backup:
     retentionPolicy: {{ .Values.cluster.backup.retentionPolicy | default "30d" }}
+    {{- if .Values.cluster.backup.barmanObjectStore }}
     barmanObjectStore:
       {{- toYaml .Values.cluster.backup.barmanObjectStore | nindent 6 }}
+    {{- end }}
     {{- if .Values.cluster.backup.schedule }}
     schedule: {{ .Values.cluster.backup.schedule | quote }}
     {{- end }}
   {{- end }}
+  {{- end }}
   
-  {{- if and .Values.cluster.monitoring .Values.cluster.monitoring.enabled }}
+  {{- if .Values.cluster.monitoring }}
+  {{- if .Values.cluster.monitoring.enabled }}
   monitoring:
     enablePodMonitor: {{ .Values.cluster.monitoring.podMonitorEnabled | default true }}
+  {{- end }}
   {{- end }}
   
   affinity:
