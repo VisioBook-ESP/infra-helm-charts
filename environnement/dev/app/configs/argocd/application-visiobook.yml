@@ -16,7 +16,7 @@ spec:
       helm:
         values: |
           monitoring:
-            podMonitorEnabled: true
+            podMonitorEnabled: false
 
     # PostgreSQL Cluster (sync-wave 1)
     - repoURL: https://github.com/VisioBook-ESP/infra-helm-charts  # Your repo
