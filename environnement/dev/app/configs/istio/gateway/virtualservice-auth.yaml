@@ -11,7 +11,7 @@ spec:
   http:
   - match:
     - uri:
-        prefix: "/auth/login*"
+        prefix: "/auth/login"
       method:
         exact: "POST"
     - uri:
@@ -26,5 +26,5 @@ spec:
     - destination:
         host: core-user-service
         port:
-          number: 8080
+          number: 80
     # Pas de JWT requis pour ces endpoints
