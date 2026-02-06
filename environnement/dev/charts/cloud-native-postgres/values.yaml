@@ -1,52 +1,27 @@
-cluster:
-  name: visiobook-postgres
-  instances: 3
-  
-  storage:
-    size: 20Gi
-    storageClass: standard
-  
-  postgresql:
-    version: "16"
-    parameters:
-      max_connections: "200"
-      shared_buffers: "512MB"
-  
-  bootstrap:
-    initdb:
-      database: visiobook
-      owner: visiobook
-      dataChecksums: true
-  
-  resources:
-    requests:
-      memory: "1Gi"
-      cpu: "500m"
-    limits:
-      memory: "2Gi"
-      cpu: "2000m"
-  
-  monitoring:
-    enabled: false  # Change from true to false
-    podMonitorEnabled: false
+replicaCount: 1
+image:
+  repository: postgres
+  tag: "16-alpine"
+  pullPolicy: IfNotPresent
 
-  backup:
-    enabled: false
+resources:
+  limits:
+    memory: 256Mi
+    cpu: 500m
+  requests:
+    memory: 128Mi
+    cpu: 100m
 
-superuser:
-  username: postgres
-  password: "changeme"
-
-appUser:
-  username: visiobook
-  password: "changeme"
-
-pooler:
+persistence:
   enabled: true
-  instances: 2
-  type: rw
-  pgbouncer:
-    poolMode: transaction
-    parameters:
-      max_client_conn: "1000"
-      default_pool_size: "25"
+  size: 1Gi
+  storageClass: ""
+
+auth:
+  database: app
+  username: appuser
+  password: changeme
+
+service:
+  type: ClusterIP
+  port: 5432
