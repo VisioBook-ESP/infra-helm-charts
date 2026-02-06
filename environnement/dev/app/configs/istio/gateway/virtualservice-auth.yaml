@@ -20,7 +20,7 @@ spec:
         prefix: "/auth/.well-known/jwks.json"
     route:
     - destination:
-        host: core-user-service.visiobook-namespace.svc.cluster.local
+        host: core-user-service
         port:
           number: 80
     # Pas de JWT requis pour ces endpoints
