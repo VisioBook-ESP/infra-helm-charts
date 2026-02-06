@@ -14,11 +14,11 @@ database:
 # ⚠️ STRUCTURE CORRIGÉE
 resources:
   requests:
-    memory: "512Mi"  # ⚠️ AUGMENTÉ - minimum pour PostgreSQL
+    memory: "1Gi"  # ⚠️ AUGMENTÉ - minimum pour PostgreSQL
     cpu: "250m"
   limits:
-    memory: "1Gi"
-    cpu: "1000m"
+    memory: "2Gi"
+    cpu: "2000m"
 
 # Configuration PostgreSQL
 postgresql:
