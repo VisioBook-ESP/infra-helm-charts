@@ -43,7 +43,7 @@ spec:
 
     route:
     - destination:
-        host: core-user-service.visiobook-namespace.svc.cluster.local
+        host: core-user-service
         port:
           number: 80
   
