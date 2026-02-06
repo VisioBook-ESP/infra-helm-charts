@@ -13,7 +13,7 @@ spec:
   - to:
     - operation:
         paths: 
-        - "/api/v1/auth/*"
+        - "/auth/*"
         - "/health"
         - "/metrics"
   

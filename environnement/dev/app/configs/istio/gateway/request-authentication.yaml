@@ -10,7 +10,7 @@ spec:
   jwtRules:
   - issuer: "core-user-service"
     # Option 1: JWKS URI (recommandé - clés dynamiques)
-    jwksUri: "http://core-user-service.visiobook-namespace.svc.cluster.local:80/auth/.well-known/jwks.json"
+    jwksUri: "http://core-user-service.visiobook-namespace.svc.cluster.local:80/api/v1/auth/.well-known/jwks.json"
     
     # Option 2: Clé publique statique (si vous préférez)
     # jwks: |
