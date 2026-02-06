@@ -26,5 +26,5 @@ spec:
     - destination:
         host: core-user-service
         port:
-          number: 80
+          number: 8080
     # Pas de JWT requis pour ces endpoints
