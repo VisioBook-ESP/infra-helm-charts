@@ -1,0 +1,29 @@
+apiVersion: postgresql.cnpg.io/v1
+kind: Cluster
+metadata:
+  name: {{ .Values.cluster.name }}
+spec:
+  instances: {{ .Values.cluster.instances }}
+  
+  postgresql:
+    parameters:
+      max_connections: "100"
+      shared_buffers: "128MB"
+  
+  bootstrap:
+    initdb:
+      database: {{ .Values.database.name }}
+      owner: {{ .Values.database.user }}
+      secret:
+        name: {{ .Values.cluster.name }}-app-user
+  
+  storage:
+    size: {{ .Values.cluster.storageSize }}
+  
+  resources:
+    limits:
+      memory: {{ .Values.resources.memory }}
+      cpu: {{ .Values.resources.cpu }}
+    requests:
+      memory: {{ .Values.resources.memory }}
+      cpu: 100m

@@ -29,6 +29,12 @@ kubectl apply -f istio-addons/jaeger.yaml -n istio-system
 kubectl create namespace visiobook-namespace
 kubectl label namespace visiobook-namespace istio-injection=enabled
 
+
+# install cnpg operator
+kubectl apply -f https://raw.githubusercontent.com/cloudnative-pg/cloudnative-pg/release-1.24/releases/cnpg-1.24.0.yaml
+
+
+
 cd ..
 # kubectl create namespace cnpg-operator
 # kubectl apply -f argocd/cnpg-operator.yml
