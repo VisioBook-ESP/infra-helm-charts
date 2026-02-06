@@ -1,13 +1,27 @@
+# Namespace où déployer
+namespace: visiobook-namespace
+
 cluster:
   name: postgres
   instances: 1
-  storageSize: 1Gi
-  
+  storageSize: 5Gi  # ⚠️ AUGMENTÉ - 1Gi est trop petit
+
 database:
   name: app
   user: appuser
-  password: changeme
+  password: "MySecurePassword123!"  # ⚠️ Changez en production
 
+# ⚠️ STRUCTURE CORRIGÉE
 resources:
-  memory: 256Mi
-  cpu: 500m
+  requests:
+    memory: "512Mi"  # ⚠️ AUGMENTÉ - minimum pour PostgreSQL
+    cpu: "250m"
+  limits:
+    memory: "1Gi"
+    cpu: "1000m"
+
+# Configuration PostgreSQL
+postgresql:
+  parameters:
+    max_connections: "100"
+    shared_buffers: "256MB"

@@ -2,30 +2,51 @@ apiVersion: postgresql.cnpg.io/v1
 kind: Cluster
 metadata:
   name: {{ .Values.cluster.name }}
+  namespace: {{ .Values.namespace }}  # ⚠️ AJOUTÉ
   annotations:
     argocd.argoproj.io/sync-wave: "2"
 spec:
   instances: {{ .Values.cluster.instances }}
   
+  # ===== Image PostgreSQL =====
+  imageName: ghcr.io/cloudnative-pg/postgresql:16.2
+  
+  # ===== Configuration PostgreSQL =====
   postgresql:
     parameters:
-      max_connections: "100"
-      shared_buffers: "128MB"
+      {{- range $key, $value := .Values.postgresql.parameters }}
+      {{ $key }}: {{ $value | quote }}
+      {{- end }}
   
+  # ===== Bootstrap =====
   bootstrap:
     initdb:
       database: {{ .Values.database.name }}
       owner: {{ .Values.database.user }}
       secret:
         name: {{ .Values.cluster.name }}-app-user
+      encoding: UTF8
+      localeCollate: en_US.UTF-8
+      localeCType: en_US.UTF-8
   
+  # ===== Stockage =====
   storage:
     size: {{ .Values.cluster.storageSize }}
   
+  # ===== Ressources =====
   resources:
-    limits:
-      memory: {{ .Values.resources.memory }}
-      cpu: {{ .Values.resources.cpu }}
     requests:
-      memory: {{ .Values.resources.memory }}
-      cpu: 100m
+      memory: {{ .Values.resources.requests.memory }}
+      cpu: {{ .Values.resources.requests.cpu }}
+    limits:
+      memory: {{ .Values.resources.limits.memory }}
+      cpu: {{ .Values.resources.limits.cpu }}
+  
+  # ===== Health Checks =====
+  startDelay: 30
+  stopDelay: 30
+  switchoverDelay: 60
+  
+  # ===== Monitoring =====
+  monitoring:
+    enablePodMonitor: false
