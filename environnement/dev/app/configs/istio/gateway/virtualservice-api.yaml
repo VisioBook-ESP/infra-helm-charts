@@ -13,13 +13,34 @@ spec:
   - match:
     - uri:
         prefix: "/api/v1/users"
-      methods: ["GET"]
+      method:
+        exact: "GET"
+
     - uri:
         prefix: "/api/v1/users/me"
-      methods: ["PUT", "POST"]
+      method:
+        exact: "POST"
+
     - uri:
-        prefix: "/api/v1/users*"
-      methods: ["GET", "PUT", "DELETE"]
+        prefix: "/api/v1/users/me"
+      method:
+        exact: "PUT"
+
+    - uri:
+        prefix: "/api/v1/users"
+      method:
+        exact: "GET"
+
+    - uri:
+        prefix: "/api/v1/users"
+      method:
+        exact: "POST"
+
+    - uri:
+        prefix: "/api/v1/users"
+      method:
+        exact: "DELETE"
+
     route:
     - destination:
         host: core-user-service.visiobook-namespace.svc.cluster.local
