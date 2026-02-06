@@ -11,13 +11,14 @@ spec:
   http:
   - match:
     - uri:
-        prefix: "/auth/login"
+        prefix: "/auth/login*"
+        methods: ["POST"]
     - uri:
         prefix: "/api/v1/users"
-      method:
-        exact: "POST"
+      methods: ["POST"]
     - uri:
         prefix: "/auth/.well-known/jwks.json"
+      methods: ["GET"]
     route:
     - destination:
         host: core-user-service
