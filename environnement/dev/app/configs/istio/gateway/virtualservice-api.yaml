@@ -1,0 +1,41 @@
+apiVersion: networking.istio.io/v1beta1
+kind: VirtualService
+metadata:
+  name: api-routes
+  namespace: visiobook-namespace
+spec:
+  hosts:
+  - "*"
+  gateways:
+  - istio-system/visiobook-gateway
+  http:
+  # Route pour le service utilisateurs
+  - match:
+    - uri:
+        prefix: "/api/v1/users"
+
+    route:
+    - destination:
+        host: core-user-service.visiobook-namespace.svc.cluster.local
+        port:
+          number: 80
+  
+  # # Route pour d'autres services
+  # - match:
+  #   - uri:
+  #       prefix: "/api/books"
+  #   route:
+  #   - destination:
+  #       host: book-service.visiobook-namespace.svc.cluster.local
+  #       port:
+  #         number: 8080
+  
+  # # Route générique pour d'autres APIs
+  # - match:
+  #   - uri:
+  #       prefix: "/api/"
+  #   route:
+  #   - destination:
+  #       host: core-user-service.visiobook-namespace.svc.cluster.local
+  #       port:
+  #         number: 8080

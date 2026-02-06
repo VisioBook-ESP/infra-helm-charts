@@ -1,0 +1,38 @@
+apiVersion: security.istio.io/v1beta1
+kind: RequestAuthentication
+metadata:
+  name: jwt-auth
+  namespace: istio-system
+spec:
+  selector:
+    matchLabels:
+      istio: ingress  # S'applique au istio-ingress gateway
+  jwtRules:
+  - issuer: "core-user-service"
+    # Option 1: JWKS URI (recommandé - clés dynamiques)
+    jwksUri: "http://core-user-service.visiobook-namespace.svc.cluster.local:80/auth/.well-known/jwks.json"
+    
+    # Option 2: Clé publique statique (si vous préférez)
+    # jwks: |
+    #   {
+    #     "keys": [
+    #       {
+    #         "kty": "RSA",
+    #         "kid": "visiobook-key-1",
+    #         "use": "sig",
+    #         "alg": "RS256",
+    #         "n": "VOTRE_CLE_PUBLIQUE_BASE64",
+    #         "e": "AQAB"
+    #       }
+    #     ]
+    #   }
+    
+    forwardOriginalToken: true
+    outputPayloadToHeader: "x-jwt-payload"
+    
+    # Extraire des claims spécifiques dans des headers
+    outputClaimToHeaders:
+    - header: "x-jwt-user-id"
+      claim: "sub"
+    - header: "x-jwt-roles"
+      claim: "roles"
