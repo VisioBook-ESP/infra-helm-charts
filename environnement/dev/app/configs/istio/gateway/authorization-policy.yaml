@@ -13,7 +13,7 @@ spec:
   - to:
     - operation:
         paths: 
-        - "/auth/login"
+        - "/auth/login*"
         - "/health"
         - "/metrics"
   
