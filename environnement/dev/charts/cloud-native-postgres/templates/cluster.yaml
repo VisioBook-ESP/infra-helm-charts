@@ -2,22 +2,30 @@ apiVersion: postgresql.cnpg.io/v1
 kind: Cluster
 metadata:
   name: {{ .Values.cluster.name }}
-  namespace: {{ .Values.namespace }}  # ⚠️ AJOUTÉ
+  namespace: {{ .Values.namespace }}
   annotations:
-    argocd.argoproj.io/sync-wave: "2"
+    argocd.argoproj.io/sync-wave: {{ .Values.argocd.syncWave | quote }}
+    {{- if .Values.argocd.syncOptions }}
+    argocd.argoproj.io/sync-options: {{ join "," .Values.argocd.syncOptions }}
+    {{- end }}
+  labels:
+    app: {{ .Values.cluster.name }}
+    component: postgresql
 spec:
+  # ===== Nombre d'instances =====
   instances: {{ .Values.cluster.instances }}
-  
+
   # ===== Image PostgreSQL =====
-  imageName: ghcr.io/cloudnative-pg/postgresql:16.2
-  
+  imageName: {{ .Values.cluster.imageName }}
+  imagePullPolicy: {{ .Values.cluster.imagePullPolicy }}
+
   # ===== Configuration PostgreSQL =====
   postgresql:
     parameters:
       {{- range $key, $value := .Values.postgresql.parameters }}
       {{ $key }}: {{ $value | quote }}
       {{- end }}
-  
+
   # ===== Bootstrap =====
   bootstrap:
     initdb:
@@ -25,28 +33,83 @@ spec:
       owner: {{ .Values.database.user }}
       secret:
         name: {{ .Values.cluster.name }}-app-user
-      encoding: UTF8
-      localeCollate: en_US.UTF-8
-      localeCType: en_US.UTF-8
-  
-  # ===== Stockage =====
+      encoding: {{ .Values.database.encoding }}
+      localeCollate: {{ .Values.database.localeCollate }}
+      localeCType: {{ .Values.database.localeCType }}
+      # Options pour éviter les problèmes de permissions
+      postInitSQL:
+        - ALTER DATABASE {{ .Values.database.name }} OWNER TO {{ .Values.database.user }};
+        - GRANT ALL PRIVILEGES ON DATABASE {{ .Values.database.name }} TO {{ .Values.database.user }};
+
+  # ===== Configuration du stockage PGDATA =====
   storage:
-    size: {{ .Values.cluster.storageSize }}
-  
-  # ===== Ressources =====
+    size: {{ .Values.cluster.storage.size }}
+    {{- if .Values.cluster.storage.storageClass }}
+    storageClass: {{ .Values.cluster.storage.storageClass }}
+    {{- end }}
+    pvcTemplate:
+      accessModes:
+        {{- range .Values.cluster.storage.accessModes }}
+        - {{ . }}
+        {{- end }}
+      resources:
+        requests:
+          storage: {{ .Values.cluster.storage.size }}
+      {{- if .Values.cluster.storage.storageClass }}
+      storageClassName: {{ .Values.cluster.storage.storageClass }}
+      {{- end }}
+      volumeMode: Filesystem
+
+  {{- if .Values.cluster.walStorage.enabled }}
+  # ===== Configuration du stockage WAL (Write-Ahead Logs) =====
+  walStorage:
+    size: {{ .Values.cluster.walStorage.size }}
+    {{- if .Values.cluster.walStorage.storageClass }}
+    storageClass: {{ .Values.cluster.walStorage.storageClass }}
+    {{- end }}
+    pvcTemplate:
+      accessModes:
+        {{- range .Values.cluster.walStorage.accessModes }}
+        - {{ . }}
+        {{- end }}
+      resources:
+        requests:
+          storage: {{ .Values.cluster.walStorage.size }}
+      {{- if .Values.cluster.walStorage.storageClass }}
+      storageClassName: {{ .Values.cluster.walStorage.storageClass }}
+      {{- end }}
+      volumeMode: Filesystem
+  {{- end }}
+
+  # ===== Ressources CPU/Mémoire =====
   resources:
     requests:
-      memory: {{ .Values.resources.requests.memory }}
-      cpu: {{ .Values.resources.requests.cpu }}
+      memory: {{ .Values.resources.requests.memory | quote }}
+      cpu: {{ .Values.resources.requests.cpu | quote }}
     limits:
-      memory: {{ .Values.resources.limits.memory }}
-      cpu: {{ .Values.resources.limits.cpu }}
-  
+      memory: {{ .Values.resources.limits.memory | quote }}
+      cpu: {{ .Values.resources.limits.cpu | quote }}
+
   # ===== Health Checks =====
-  startDelay: 30
-  stopDelay: 30
-  switchoverDelay: 60
-  
-  # ===== Monitoring =====
+  startDelay: {{ .Values.healthChecks.startDelay }}
+  stopDelay: {{ .Values.healthChecks.stopDelay }}
+  switchoverDelay: {{ .Values.healthChecks.switchoverDelay }}
+
+  # ===== Monitoring Prometheus =====
+  {{- if .Values.monitoring.enabled }}
   monitoring:
-    enablePodMonitor: false
+    enablePodMonitor: {{ .Values.monitoring.podMonitorEnabled }}
+    # Les métriques seront exposées sur le port 9187 à /metrics
+  {{- end }}
+
+  # ===== Configuration du failover automatique =====
+  failoverDelay: 0
+
+  # ===== Politique de mise à jour =====
+  primaryUpdateStrategy: unsupervised
+
+  # ===== Affinity et anti-affinity =====
+  affinity:
+    enablePodAntiAffinity: true
+    topologyKey: kubernetes.io/hostname
+    podAntiAffinityType: preferred
