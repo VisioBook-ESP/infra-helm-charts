@@ -20,7 +20,7 @@ spec:
   imagePullPolicy: {{ .Values.cluster.imagePullPolicy }}
 
   # ===== Annotations des pods (désactiver Istio) =====
-  metadata:
+  inheritedMetadata:
     annotations:
       sidecar.istio.io/inject: "false"
     labels:
