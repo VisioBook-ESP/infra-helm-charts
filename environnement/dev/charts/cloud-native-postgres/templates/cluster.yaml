@@ -19,6 +19,14 @@ spec:
   imageName: {{ .Values.cluster.imageName }}
   imagePullPolicy: {{ .Values.cluster.imagePullPolicy }}
 
+  # ===== Annotations des pods (désactiver Istio) =====
+  metadata:
+    annotations:
+      sidecar.istio.io/inject: "false"
+    labels:
+      app: {{ .Values.cluster.name }}
+      component: postgresql-instance
+
   # ===== Configuration PostgreSQL =====
   postgresql:
     parameters:
