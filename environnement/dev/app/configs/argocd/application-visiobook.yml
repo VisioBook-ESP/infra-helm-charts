@@ -33,6 +33,8 @@ spec:
     - repoURL: https://github.com/VisioBook-ESP/infra-helm-charts
       path: environnement/dev/app/configs/secrets/
       targetRevision: 35-creer-un-chart-cnpg
+      directory:
+        recurse: false
     # - repoURL: https://github.com/VisioBook-ESP/support-storage-service
     #   path: charts/
     #   targetRevision: dev
