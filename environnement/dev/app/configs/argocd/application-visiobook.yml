@@ -28,12 +28,12 @@ spec:
         valueFiles:
           - values.yaml
 
-    # - repoURL: https://github.com/VisioBook-ESP/support-storage-service
-    #   path: charts/
-    #   targetRevision: dev
-    #   helm:
-    #     valueFiles:
-    #       - values.yaml
+    - repoURL: https://github.com/VisioBook-ESP/support-storage-service
+      path: charts/
+      targetRevision: dev
+      helm:
+        valueFiles:
+          - values.yaml
 
     # - repoURL: https://github.com/VisioBook-ESP/ai-analysis-service
     #   path: charts/
