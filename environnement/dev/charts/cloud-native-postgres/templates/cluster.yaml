@@ -36,10 +36,6 @@ spec:
       encoding: {{ .Values.database.encoding }}
       localeCollate: {{ .Values.database.localeCollate }}
       localeCType: {{ .Values.database.localeCType }}
-      # Options pour éviter les problèmes de permissions
-      postInitSQL:
-        - ALTER DATABASE {{ .Values.database.name }} OWNER TO {{ .Values.database.user }};
-        - GRANT ALL PRIVILEGES ON DATABASE {{ .Values.database.name }} TO {{ .Values.database.user }};
 
   # ===== Configuration du stockage PGDATA =====
   storage:

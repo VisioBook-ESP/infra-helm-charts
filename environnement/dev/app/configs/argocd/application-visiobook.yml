@@ -18,7 +18,7 @@ spec:
           monitoring:
             podMonitorEnabled: false
 
-    # PostgreSQL Cluster (sync-wave 1)
+    # PostgreSQL Cluster (sync-wave 2)
     - repoURL: https://github.com/VisioBook-ESP/infra-helm-charts  # Your repo
       path: environnement/dev/charts/cloud-native-postgres/  # or postgres-cluster/charts/
       targetRevision: 35-creer-un-chart-cnpg
