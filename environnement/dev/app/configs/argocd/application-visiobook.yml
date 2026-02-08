@@ -57,22 +57,13 @@ spec:
   ignoreDifferences:
     - group: postgresql.cnpg.io
       kind: Cluster
+      managedFieldsManagers:
+        - cnpg-webhook-service
       jsonPointers:
         - /status
         - /metadata/resourceVersion
         - /metadata/generation
         - /metadata/managedFields
-      # Ignore default values added by CNPG mutating webhook
-      jqPathExpressions:
-        - .spec.enablePDB
-        - .spec.enableSuperuserAccess
-        - .spec.logLevel
-        - .spec.maxSyncReplicas
-        - .spec.minSyncReplicas
-        - .spec.postgresGID
-        - .spec.postgresUID
-        - .spec.primaryUpdateMethod
-        - .spec.postgresql.parameters
 
   syncPolicy:
     automated:
