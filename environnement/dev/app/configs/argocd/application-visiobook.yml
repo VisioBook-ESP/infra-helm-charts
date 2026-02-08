@@ -10,6 +10,7 @@ spec:
 
   sources:
 
+    # CloudNative-PG Operator (sync-wave 1)
     - repoURL: https://cloudnative-pg.github.io/charts
       chart: cloudnative-pg
       targetRevision: 0.22.1
@@ -51,13 +52,24 @@ spec:
 
 
   project: application-visobook
+
+  # Ignore operator-managed fields
+  ignoreDifferences:
+    - group: postgresql.cnpg.io
+      kind: Cluster
+      jsonPointers:
+        - /status
+        - /metadata/resourceVersion
+        - /metadata/generation
+        - /metadata/managedFields
+
   syncPolicy:
     automated:
       prune: true
       selfHeal: true
     syncOptions:
       - CreateNamespace=true
-      - ServerSideApply=true 
+      - ServerSideApply=true
     retry:
       limit: 5
       backoff:
