@@ -58,7 +58,7 @@ spec:
     - group: postgresql.cnpg.io
       kind: Cluster
       managedFieldsManagers:
-        - cnpg-webhook-service
+        - manager  # CNPG operator controller
       jsonPointers:
         - /status
         - /metadata/resourceVersion
@@ -72,6 +72,7 @@ spec:
     syncOptions:
       - CreateNamespace=true
       - ServerSideApply=true
+      - RespectIgnoreDifferences=true
     retry:
       limit: 5
       backoff:
