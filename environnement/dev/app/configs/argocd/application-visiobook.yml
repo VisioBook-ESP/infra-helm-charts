@@ -74,7 +74,6 @@ spec:
     # Ignore common Kubernetes auto-managed fields globally
     - kind: "*"
       jsonPointers:
-        - /metadata/managedFields
         - /metadata/resourceVersion
         - /metadata/generation
 
