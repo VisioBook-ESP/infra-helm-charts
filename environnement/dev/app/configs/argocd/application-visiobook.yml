@@ -71,18 +71,35 @@ spec:
 
   # Ignore operator-managed fields
   ignoreDifferences:
-    # Ignore managedFields globally (Kubernetes auto-generated field)
+    # Ignore common Kubernetes auto-managed fields globally
     - kind: "*"
       jsonPointers:
         - /metadata/managedFields
+        - /metadata/resourceVersion
+        - /metadata/generation
 
-    # Ignore CNPG operator-managed status fields
+    # Ignore CNPG operator-managed fields on Cluster
     - group: postgresql.cnpg.io
       kind: Cluster
       jsonPointers:
         - /status
-        - /metadata/resourceVersion
-        - /metadata/generation
+        - /spec/imageName
+
+    # Ignore CNPG webhook CA bundles (injected by operator)
+    - kind: MutatingWebhookConfiguration
+      jsonPointers:
+        - /webhooks/0/clientConfig/caBundle
+        - /webhooks/1/clientConfig/caBundle
+    - kind: ValidatingWebhookConfiguration
+      jsonPointers:
+        - /webhooks/0/clientConfig/caBundle
+        - /webhooks/1/clientConfig/caBundle
+
+    # Ignore CRD conversion webhook CA and fields managed by the API server
+    - kind: CustomResourceDefinition
+      jsonPointers:
+        - /spec/conversion/webhook/clientConfig/caBundle
+        - /status
 
   syncPolicy:
     automated:
