@@ -23,11 +23,11 @@ spec:
       method:
         exact: "GET"
     - uri:
-        prefix: "health"
+        prefix: "/health"
       method:
         exact: "GET"
     - uri:
-        prefix: "health-db"
+        prefix: "/health-db"
       method:
         exact: "GET"
     route:
