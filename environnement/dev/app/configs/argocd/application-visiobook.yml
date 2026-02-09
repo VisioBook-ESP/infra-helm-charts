@@ -72,7 +72,8 @@ spec:
   # Ignore operator-managed fields
   ignoreDifferences:
     # Ignore managedFields globally (Kubernetes auto-generated field)
-    - jsonPointers:
+    - kind: "*"
+      jsonPointers:
         - /metadata/managedFields
 
     # Ignore CNPG operator-managed status fields
