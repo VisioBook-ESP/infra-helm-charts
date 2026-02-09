@@ -23,7 +23,7 @@ kubectl apply -f istio-addons/jaeger.yaml -n istio-system
 kubectl create namespace visiobook-namespace
 kubectl label namespace visiobook-namespace istio-injection=enabled
 
-/usr/bin apply-gateway.sh
+./apply-gateway.sh
 # kubectl create namespace database
 # kubectl label namespace database istio-injection=enabled
 # kubectl create namespace backend

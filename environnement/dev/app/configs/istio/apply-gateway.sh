@@ -40,6 +40,13 @@ kubectl get virtualservice -n visiobook-namespace
 kubectl get requestauthentication -n istio-system
 kubectl get authorizationpolicy -n istio-system
 
+
+sudo systemctl daemon-reload
+sudo systemctl enable minikube-tunnel
+sudo systemctl start minikube-tunnel
+
+
 echo ""
 echo "🔍 Get LoadBalancer IP:"
 kubectl get svc istio-ingress -n istio-system
+
