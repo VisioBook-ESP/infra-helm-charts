@@ -45,6 +45,7 @@ sudo systemctl daemon-reload
 sudo systemctl enable minikube-tunnel
 sudo systemctl start minikube-tunnel
 
+sleep 2
 
 echo ""
 echo "🔍 Get LoadBalancer IP:"
