@@ -46,7 +46,7 @@ sudo systemctl start minikube-tunnel
 
 
 # test de la gateway pour creer un user
-curl -X POST http://10.97.102.235/api/v1/users/   -H "Content-Type: application/json"   -d '{
+curl -X POST http://10.111.189.124/api/v1/users/   -H "Content-Type: application/json"   -d '{
     "email": "user@example.com",
     "password": "SecurePassword123!",
     "username": "myusername"
