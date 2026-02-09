@@ -40,7 +40,7 @@ spec:
       database: {{ .Values.database.name }}
       owner: {{ .Values.database.user }}
       secret:
-        name: {{ .Values.cluster.name }}-app-user
+        name: {{ .Values.existingSecret | default (printf "%s-app-user" .Values.cluster.name) }}
       encoding: {{ .Values.database.encoding }}
       localeCollate: {{ .Values.database.localeCollate }}
       localeCType: {{ .Values.database.localeCType }}

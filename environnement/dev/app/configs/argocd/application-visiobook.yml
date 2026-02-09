@@ -28,6 +28,8 @@ spec:
       helm:
         valueFiles:
           - values.yaml
+        values: |
+          existingSecret: "central-secret"
 
     # Database secrets (managed in infra repo)
     - repoURL: https://github.com/VisioBook-ESP/infra-helm-charts
@@ -59,7 +61,7 @@ spec:
         valueFiles:
           - values.yaml
         values: |
-          existingSecret: "postgres-db-secret"
+          existingSecret: "central-secret"
           env:
             ENV: prod
             LOG_LEVEL: warn

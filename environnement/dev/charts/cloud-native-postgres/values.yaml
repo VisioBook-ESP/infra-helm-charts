@@ -90,6 +90,14 @@ monitoring:
   podMonitorEnabled: false
 
 # ============================================================
+# Secret Management
+# ============================================================
+# Name of existing secret for CNPG bootstrap
+# The secret must contain: username, password, dbname
+# If empty, chart will create a secret from database.* values
+existingSecret: ""
+
+# ============================================================
 # Configuration ArgoCD
 # ============================================================
 argocd:
