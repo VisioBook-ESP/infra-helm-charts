@@ -71,15 +71,17 @@ spec:
 
   # Ignore operator-managed fields
   ignoreDifferences:
+    # Ignore managedFields globally (Kubernetes auto-generated field)
+    - jsonPointers:
+        - /metadata/managedFields
+
+    # Ignore CNPG operator-managed status fields
     - group: postgresql.cnpg.io
       kind: Cluster
-      managedFieldsManagers:
-        - manager  # CNPG operator controller
       jsonPointers:
         - /status
         - /metadata/resourceVersion
         - /metadata/generation
-        - /metadata/managedFields
 
   syncPolicy:
     automated:
