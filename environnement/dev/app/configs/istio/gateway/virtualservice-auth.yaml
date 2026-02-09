@@ -22,6 +22,14 @@ spec:
         prefix: "/auth/.well-known/jwks.json"
       method:
         exact: "GET"
+    - uri:
+        prefix: "health"
+      method:
+        exact: "GET"
+    - uri:
+        prefix: "health-db"
+      method:
+        exact: "GET"
     route:
     - destination:
         host: core-user-service
