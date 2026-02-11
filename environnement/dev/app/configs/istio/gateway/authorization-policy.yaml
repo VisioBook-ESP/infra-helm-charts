@@ -16,7 +16,6 @@ spec:
         - "/auth/login*"
         - "/api/v1/users*"  # Endpoint de création de compte
         - "/health"
-        - "/health-db"
         - "/metrics"
   
   # Règle 2: Exiger un JWT valide pour /api
