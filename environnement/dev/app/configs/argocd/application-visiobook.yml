@@ -20,13 +20,13 @@ spec:
     # PostgreSQL Cluster (sync-wave 2, operator installed by deploy script)
     - repoURL: https://github.com/VisioBook-ESP/infra-helm-charts
       path: environnement/dev/charts/cloud-native-postgres/
-      targetRevision: main
+      targetRevision: 39-ajouter-un-fichier-de-variable-par-micro-sync-wave
       helm:
         valueFiles:
           - values.yaml
         values: |
           existingSecret: "central-secret"
-          # syncWave: "-1"
+          syncWave: "-1"
 
     # Core User Service
     - repoURL: https://github.com/VisioBook-ESP/core-user-service
