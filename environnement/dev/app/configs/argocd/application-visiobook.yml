@@ -3,6 +3,8 @@ kind: Application
 metadata:
   name: application-visiobook
   namespace: argocd
+  annotations:
+    argocd.argoproj.io/compare-options: ServerSideDiff=true
 spec:
   destination:
     namespace: visiobook-namespace
@@ -10,21 +12,10 @@ spec:
 
   sources:
 
-    # CloudNative-PG Operator (sync-wave 1)
-    - repoURL: https://cloudnative-pg.github.io/charts
-      chart: cloudnative-pg
-      targetRevision: 0.22.1
-      helm:
-        values: |
-          image:
-            tag: "1.24.0"
-          monitoring:
-            podMonitorEnabled: false
-
     # PostgreSQL Cluster (sync-wave 2)
-    - repoURL: https://github.com/VisioBook-ESP/infra-helm-charts  # Your repo
-      path: environnement/dev/charts/cloud-native-postgres/  # or postgres-cluster/charts/
-      targetRevision: 35-creer-un-chart-cnpg
+    - repoURL: https://github.com/VisioBook-ESP/infra-helm-charts
+      path: environnement/dev/charts/cloud-native-postgres/
+      targetRevision: main
       helm:
         valueFiles:
           - values.yaml
@@ -34,24 +25,9 @@ spec:
     # Database secrets (managed in infra repo)
     - repoURL: https://github.com/VisioBook-ESP/infra-helm-charts
       path: environnement/dev/app/configs/secrets/
-      targetRevision: 35-creer-un-chart-cnpg
+      targetRevision: main
       directory:
         recurse: false
-    # - repoURL: https://github.com/VisioBook-ESP/support-storage-service
-    #   path: charts/
-    #   targetRevision: dev
-    #   helm:
-    #     valueFiles:
-    #       - values.yaml
-
-    # - repoURL: https://github.com/VisioBook-ESP/ai-analysis-service
-    #   path: charts/
-    #   targetRevision: dev
-    #   helm:
-    #     valueFiles:
-    #       - values.yaml
-
-
 
     # Core User Service
     - repoURL: https://github.com/VisioBook-ESP/core-user-service
@@ -66,6 +42,20 @@ spec:
             ENV: prod
             LOG_LEVEL: warn
 
+    # - repoURL: https://github.com/VisioBook-ESP/support-storage-service
+    #   path: charts/
+    #   targetRevision: dev
+    #   helm:
+    #     valueFiles:
+    #       - values.yaml
+
+    # - repoURL: https://github.com/VisioBook-ESP/ai-analysis-service
+    #   path: charts/
+    #   targetRevision: dev
+    #   helm:
+    #     valueFiles:
+    #       - values.yaml
+
     # - repoURL: https://github.com/VisioBook-ESP/content-ingestion-service
     #   path: charts/
     #   targetRevision: dev
@@ -77,6 +67,17 @@ spec:
     #       env:
     #         ENV: prod
     #         LOG_LEVEL: warn
+
+    # CloudNative-PG Operator (sync-wave 1)
+    - repoURL: https://cloudnative-pg.github.io/charts
+      chart: cloudnative-pg
+      targetRevision: 0.22.1
+      helm:
+        values: |
+          image:
+            tag: "1.24.0"
+          monitoring:
+            podMonitorEnabled: false
 
   project: application-visobook
 
