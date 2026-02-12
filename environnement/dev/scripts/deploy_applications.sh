@@ -1,6 +1,5 @@
 #!/bin/bash
-
-
+set -e
 
 # ISTIO
 kubectl create namespace istio-system
@@ -23,14 +22,17 @@ kubectl label namespace visiobook-namespace istio-injection=enabled
 ./apply-gateway.sh
 
 # CNPG
-## install cnpg operator
-kubectl apply --server-side -f https://raw.githubusercontent.com/cloudnative-pg/cloudnative-pg/release-1.24/releases/cnpg-1.24.0.yaml
+## install cnpg operator (download first to catch network errors)
+echo "Downloading CNPG operator manifest..."
+curl -sSfL -o /tmp/cnpg-1.24.0.yaml https://raw.githubusercontent.com/cloudnative-pg/cloudnative-pg/release-1.24/releases/cnpg-1.24.0.yaml
+echo "Installing CNPG operator..."
+kubectl apply --server-side -f /tmp/cnpg-1.24.0.yaml
 
 # Wait for CNPG CRDs to be available before deploying ArgoCD apps
 kubectl wait --for=condition=Established crd/clusters.postgresql.cnpg.io --timeout=60s
 cd ..
 # Secret
-kubectl apply -f secret/secret.yaml
+kubectl apply -f secrets/central-secret.yaml
 # kubectl create namespace cnpg-operator
 # kubectl apply -f argocd/cnpg-operator.yml
 kubectl apply -f argocd/app-project.yml
