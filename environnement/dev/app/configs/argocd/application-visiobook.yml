@@ -17,18 +17,7 @@ spec:
       directory:
         recurse: false
 
-    # CloudNative-PG Operator — installs CRDs (must come before Cluster)
-    - repoURL: https://cloudnative-pg.github.io/charts
-      chart: cloudnative-pg
-      targetRevision: 0.22.1
-      helm:
-        values: |
-          image:
-            tag: "1.24.0"
-          monitoring:
-            podMonitorEnabled: false
-
-    # PostgreSQL Cluster (sync-wave 2, needs CRDs from operator above)
+    # PostgreSQL Cluster (sync-wave 2, operator installed by deploy script)
     - repoURL: https://github.com/VisioBook-ESP/infra-helm-charts
       path: environnement/dev/charts/cloud-native-postgres/
       targetRevision: main
@@ -94,21 +83,6 @@ spec:
         - /status
         - /spec/imageName
 
-    # Ignore CNPG webhook CA bundles (injected by operator)
-    - kind: MutatingWebhookConfiguration
-      jsonPointers:
-        - /webhooks/0/clientConfig/caBundle
-        - /webhooks/1/clientConfig/caBundle
-    - kind: ValidatingWebhookConfiguration
-      jsonPointers:
-        - /webhooks/0/clientConfig/caBundle
-        - /webhooks/1/clientConfig/caBundle
-
-    # Ignore CRD conversion webhook CA and fields managed by the API server
-    - kind: CustomResourceDefinition
-      jsonPointers:
-        - /spec/conversion/webhook/clientConfig/caBundle
-        - /status
 
   syncPolicy:
     automated:
