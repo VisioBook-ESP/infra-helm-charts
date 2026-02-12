@@ -3,6 +3,16 @@ kind: Application
 metadata:
   name: application-visiobook
   namespace: argocd
+  annotations:
+    argocd-image-updater.argoproj.io/image-list: >
+      core-user=ghcr.io/visiobook-esp/core-user-service-dev:latest,
+      storage=ghcr.io/visiobook-esp/support-storage-service-dev:latest,
+      ai=ghcr.io/visiobook-esp/ai-analysis-service-dev:latest
+
+    # Strategie par image (digest = detecte quand latest change de SHA)
+    argocd-image-updater.argoproj.io/core-user.update-strategy: digest
+    argocd-image-updater.argoproj.io/storage.update-strategy: digest
+    argocd-image-updater.argoproj.io/ai.update-strategy: digest
 spec:
   destination:
     namespace: visiobook-namespace
