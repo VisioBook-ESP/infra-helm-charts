@@ -3,8 +3,6 @@ kind: Application
 metadata:
   name: application-visiobook
   namespace: argocd
-  annotations:
-    argocd.argoproj.io/compare-options: ServerSideDiff=true
 spec:
   destination:
     namespace: visiobook-namespace
