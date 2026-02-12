@@ -18,9 +18,9 @@ kubectl apply -f istio-addons/jaeger.yaml -n istio-system
 
 kubectl create namespace visiobook-namespace
 kubectl label namespace visiobook-namespace istio-injection=enabled
+
 # GATEWAY
 ./apply-gateway.sh
-
 
 # CNPG
 ## install cnpg operator

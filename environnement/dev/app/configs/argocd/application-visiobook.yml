@@ -33,10 +33,18 @@ spec:
 
     # Database secrets (managed in infra repo)
     - repoURL: https://github.com/VisioBook-ESP/infra-helm-charts
-      path: environnement/dev/app/configs/secrets/
+      path: environnement/dev/charts/content-ingestion-service
       targetRevision: 35-creer-un-chart-cnpg
-      directory:
-        recurse: false
+      helm:
+        valueFiles:
+          - values.yaml
+        values: |
+          existingSecret: "central-secret"
+          env:
+            ENV: prod
+            LOG_LEVEL: warn
+
+
     # - repoURL: https://github.com/VisioBook-ESP/support-storage-service
     #   path: charts/
     #   targetRevision: dev
@@ -68,7 +76,7 @@ spec:
 
     - repoURL: https://github.com/VisioBook-ESP/content-ingestion-service
       path: charts/
-      targetRevision: dev
+      targetRevision: 35-creer-un-chart-cnpg
       helm:
         valueFiles:
           - values.yaml
