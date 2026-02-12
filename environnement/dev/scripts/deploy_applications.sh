@@ -31,10 +31,7 @@ kubectl apply --server-side -f /tmp/cnpg-1.24.0.yaml || { echo "ERROR: Failed to
 echo "Waiting for CNPG CRDs..."
 kubectl wait --for=condition=Established crd/clusters.postgresql.cnpg.io --timeout=60s || { echo "ERROR: CNPG CRDs not ready"; exit 1; }
 cd ..
-# Secret
-kubectl apply -f secrets/central-secret.yaml
-# kubectl create namespace cnpg-operator
-# kubectl apply -f argocd/cnpg-operator.yml
+# Secret is managed by ArgoCD (sync-wave -1), no need to pre-create
 kubectl apply -f argocd/app-project.yml
 # kubectl apply -f argocd/argo-configmap.yml
 
