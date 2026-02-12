@@ -66,17 +66,17 @@ spec:
             ENV: prod
             LOG_LEVEL: warn
 
-    - repoURL: https://github.com/VisioBook-ESP/content-ingestion-service
-      path: environnement/dev/charts/content-injection-service/
-      targetRevision: 35-creer-un-chart-cnpg
-      helm:
-        valueFiles:
-          - values.yaml
-        values: |
-          existingSecret: "central-secret"
-          env:
-            ENV: prod
-            LOG_LEVEL: warn
+    # - repoURL: https://github.com/VisioBook-ESP/content-ingestion-service
+    #   path: environnement/dev/charts/content-injection-service/
+    #   targetRevision: 35-creer-un-chart-cnpg
+    #   helm:
+    #     valueFiles:
+    #       - values.yaml
+    #     values: |
+    #       existingSecret: "central-secret"
+    #       env:
+    #         ENV: prod
+    #         LOG_LEVEL: warn
 
   project: application-visobook
 
