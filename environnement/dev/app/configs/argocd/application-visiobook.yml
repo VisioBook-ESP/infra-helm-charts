@@ -31,7 +31,7 @@ spec:
     # Core User Service
     - repoURL: https://github.com/VisioBook-ESP/core-user-service
       path: charts/
-      targetRevision: dev
+      targetRevision: 27-modify-charts
       helm:
         valueFiles:
           - values.yaml
