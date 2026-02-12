@@ -6,8 +6,7 @@ echo "1. Création du namespace argocd..."
 kubectl create namespace argocd || echo "Namespace argocd existe déjà"
 
 echo "2. Installation d'Argo CD via les manifests officiels..."
-kubectl apply -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml
-
+kubectl apply -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml --server-side --force-conflicts
 echo "3. Attente que les pods soient prêts..."
 kubectl wait --for=condition=available --timeout=180s deployment/argocd-server -n argocd
 

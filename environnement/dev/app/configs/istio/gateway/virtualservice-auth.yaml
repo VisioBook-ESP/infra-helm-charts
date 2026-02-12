@@ -1,0 +1,30 @@
+apiVersion: networking.istio.io/v1beta1
+kind: VirtualService
+metadata:
+  name: auth-service-routes
+  namespace: visiobook-namespace
+spec:
+  hosts:
+  - "*"  # Ou spécifiez votre domaine : "api.visiobook.com"
+  gateways:
+  - istio-system/visiobook-gateway  # Référence à la Gateway
+  http:
+  - match:
+    - uri:
+        prefix: "/api/v1/auth/login"
+      method:
+        exact: "POST"
+    - uri:
+        prefix: "/api/v1/auth/register"
+      method:
+        exact: "POST"
+    - uri:
+        prefix: "/auth/.well-known/jwks.json"
+      method:
+        exact: "GET"
+    route:
+    - destination:
+        host: core-user-service
+        port:
+          number: 80
+    # Pas de JWT requis pour ces endpoints

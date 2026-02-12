@@ -1,0 +1,38 @@
+apiVersion: security.istio.io/v1beta1
+kind: AuthorizationPolicy
+metadata:
+  name: visiobook-authz
+  namespace: istio-system
+spec:
+  selector:
+    matchLabels:
+      istio: ingress
+  action: ALLOW
+  rules:
+  # Règle 1: Autoriser /auth sans JWT
+  - to:
+    - operation:
+        paths: 
+        - "/api/v1/auth/login*"
+        - "/api/v1/auth/register*"  # Endpoint de création de compte
+        - "/health"
+        - "/metrics"
+  
+  # Règle 2: Exiger un JWT valide pour /api
+  - from:
+    - source:
+        requestPrincipals: ["*"]  # N'importe quel JWT valide
+    to:
+    - operation:
+        paths: ["/api/*"]
+  
+  # Règle 3 (optionnelle): Exiger un rôle spécifique pour certains endpoints
+  # - from:
+  #   - source:
+  #       requestPrincipals: ["*"]
+  #   to:
+  #   - operation:
+  #       paths: ["/api/admin/*"]
+  #   when:
+  #   - key: request.auth.claims[roles]
+  #     values: ["admin"]

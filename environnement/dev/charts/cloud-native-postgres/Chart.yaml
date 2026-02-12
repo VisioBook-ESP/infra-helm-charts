@@ -1,0 +1,5 @@
+apiVersion: v2
+name: pgsql-cnpg-simple
+description: Minimal CloudNativePG cluster (files only)
+version: 0.1.0
+appVersion: "16"
