@@ -26,6 +26,7 @@ spec:
           - values.yaml
         values: |
           existingSecret: "central-secret"
+          syncWave: "-1"
 
     # Core User Service
     - repoURL: https://github.com/VisioBook-ESP/core-user-service
@@ -36,6 +37,7 @@ spec:
           - values.yaml
         values: |
           existingSecret: "central-secret"
+          syncWave: "0"
           env:
             ENV: prod
             LOG_LEVEL: warn
