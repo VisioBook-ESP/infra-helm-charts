@@ -12,7 +12,25 @@ spec:
 
   sources:
 
-    # PostgreSQL Cluster (sync-wave 2)
+    # Database secrets (sync-wave -1)
+    - repoURL: https://github.com/VisioBook-ESP/infra-helm-charts
+      path: environnement/dev/app/configs/secrets/
+      targetRevision: main
+      directory:
+        recurse: false
+
+    # CloudNative-PG Operator — installs CRDs (must come before Cluster)
+    - repoURL: https://cloudnative-pg.github.io/charts
+      chart: cloudnative-pg
+      targetRevision: 0.22.1
+      helm:
+        values: |
+          image:
+            tag: "1.24.0"
+          monitoring:
+            podMonitorEnabled: false
+
+    # PostgreSQL Cluster (sync-wave 2, needs CRDs from operator above)
     - repoURL: https://github.com/VisioBook-ESP/infra-helm-charts
       path: environnement/dev/charts/cloud-native-postgres/
       targetRevision: main
@@ -21,13 +39,6 @@ spec:
           - values.yaml
         values: |
           existingSecret: "central-secret"
-
-    # Database secrets (managed in infra repo)
-    - repoURL: https://github.com/VisioBook-ESP/infra-helm-charts
-      path: environnement/dev/app/configs/secrets/
-      targetRevision: main
-      directory:
-        recurse: false
 
     # Core User Service
     - repoURL: https://github.com/VisioBook-ESP/core-user-service
@@ -67,17 +78,6 @@ spec:
     #       env:
     #         ENV: prod
     #         LOG_LEVEL: warn
-
-    # CloudNative-PG Operator (sync-wave 1)
-    - repoURL: https://cloudnative-pg.github.io/charts
-      chart: cloudnative-pg
-      targetRevision: 0.22.1
-      helm:
-        values: |
-          image:
-            tag: "1.24.0"
-          monitoring:
-            podMonitorEnabled: false
 
   project: application-visobook
 
