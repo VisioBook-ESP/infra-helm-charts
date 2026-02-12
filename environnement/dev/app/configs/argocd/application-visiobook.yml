@@ -54,17 +54,17 @@ spec:
 
 
     # Core User Service
-    # - repoURL: https://github.com/VisioBook-ESP/core-user-service
-    #   path: charts/
-    #   targetRevision: dev
-    #   helm:
-    #     valueFiles:
-    #       - values.yaml
-    #     values: |
-    #       existingSecret: "central-secret"
-    #       env:
-    #         ENV: prod
-    #         LOG_LEVEL: warn
+    - repoURL: https://github.com/VisioBook-ESP/core-user-service
+      path: charts/
+      targetRevision: dev
+      helm:
+        valueFiles:
+          - values.yaml
+        values: |
+          existingSecret: "central-secret"
+          env:
+            ENV: prod
+            LOG_LEVEL: warn
 
     # - repoURL: https://github.com/VisioBook-ESP/content-ingestion-service
     #   path: charts/
