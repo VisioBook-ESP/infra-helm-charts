@@ -30,8 +30,15 @@ kubectl apply --server-side -f /tmp/cnpg-1.24.0.yaml || { echo "ERROR: Failed to
 # Wait for CNPG CRDs to be available before deploying ArgoCD apps
 echo "Waiting for CNPG CRDs..."
 kubectl wait --for=condition=Established crd/clusters.postgresql.cnpg.io --timeout=60s || { echo "ERROR: CNPG CRDs not ready"; exit 1; }
+echo "Waiting for CNPG operator to be ready..."
+kubectl wait --for=condition=Available deployment/cnpg-controller-manager -n cnpg-system --timeout=120s || { echo "ERROR: CNPG operator not ready"; exit 1; }
 cd ..
-# Secret is managed by ArgoCD (sync-wave -1), no need to pre-create
+
+# Configure ArgoCD health check for CNPG Cluster (wait for healthy before next sync-wave)
+echo "Configuring ArgoCD CNPG health check..."
+kubectl patch configmap argocd-cm -n argocd --type merge -p '{"data":{"resource.customizations.health.postgresql.cnpg.io_Cluster":"hs = {}\nif obj.status ~= nil then\n  if obj.status.phase == \"Cluster in healthy state\" then\n    hs.status = \"Healthy\"\n  else\n    hs.status = \"Progressing\"\n    hs.message = obj.status.phase or \"Waiting\"\n  end\nelse\n  hs.status = \"Progressing\"\n  hs.message = \"Waiting for status\"\nend\nreturn hs"}}'
+
+# Secret is managed by ArgoCD (sync-wave -2), no need to pre-create
 kubectl apply -f argocd/app-project.yml
 # kubectl apply -f argocd/argo-configmap.yml
 
