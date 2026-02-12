@@ -14,8 +14,8 @@ spec:
     hosts:
     - "*"
     # Pour forcer HTTPS, décommentez :
-    # tls:
-    #   httpsRedirect: true
+    tls:
+      httpsRedirect: true
   - port:
       number: 443
       name: https
