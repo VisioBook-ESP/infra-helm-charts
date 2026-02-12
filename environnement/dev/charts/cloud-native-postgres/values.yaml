@@ -1,107 +1,11 @@
-# ============================================================
-# Configuration CNPG pour ArgoCD
-# ============================================================
+name: postgres
+instances: 1
 
-# Namespace où déployer
-namespace: visiobook-namespace
-
-# ============================================================
-# Configuration du Cluster PostgreSQL
-# ============================================================
-cluster:
-  name: postgres
-  instances: 1
-
-  # Image PostgreSQL
-  imageName: ghcr.io/cloudnative-pg/postgresql:16.2
-  imagePullPolicy: IfNotPresent
-
-  # Configuration du stockage principal (PGDATA)
-  storage:
-    size: 5Gi
-    # StorageClass à utiliser (laissez vide pour utiliser le default)
-    storageClass: ""
-    # AccessModes pour le PVC
-    accessModes:
-      - ReadWriteOnce
-
-  # Configuration du stockage WAL (Write-Ahead Logs)
-  # Recommandé pour de meilleures performances en production
-  walStorage:
-    enabled: false
-    size: 2Gi
-    storageClass: ""
-    accessModes:
-      - ReadWriteOnce
-
-# ============================================================
-# Configuration de la base de données
-# ============================================================
 database:
   name: app
-  user: appuser
-  password: "MySecurePassword123!"  # ⚠️ Changez en production
-  encoding: UTF8
-  localeCollate: en_US.UTF-8
-  localeCType: en_US.UTF-8
+  owner: appuser
 
-# ============================================================
-# Ressources CPU/Mémoire
-# ============================================================
-resources:
-  requests:
-    memory: "1Gi"
-    cpu: "250m"
-  limits:
-    memory: "2Gi"
-    cpu: "2000m"
-
-# ============================================================
-# Configuration PostgreSQL
-# ============================================================
-postgresql:
-  parameters:
-    max_connections: "100"
-    shared_buffers: "256MB"
-    effective_cache_size: "1536MB"
-    maintenance_work_mem: "256MB"
-    checkpoint_completion_target: "0.9"
-    wal_buffers: "16MB"
-    default_statistics_target: "100"
-    random_page_cost: "1.1"
-    effective_io_concurrency: "200"
-    work_mem: "2621kB"
-    min_wal_size: "1GB"
-    max_wal_size: "4GB"
-
-# ============================================================
-# Configuration des Health Checks
-# ============================================================
-healthChecks:
-  startDelay: 30
-  stopDelay: 30
-  switchoverDelay: 60
-
-# ============================================================
-# Configuration du Monitoring Prometheus
-# ============================================================
-monitoring:
-  enabled: false
-  podMonitorEnabled: false
-
-# ============================================================
-# Secret Management
-# ============================================================
-# Name of existing secret for CNPG bootstrap
-# The secret must contain: username, password, dbname
-# If empty, chart will create a secret from database.* values
 existingSecret: ""
 
-# ============================================================
-# Configuration ArgoCD
-# ============================================================
-argocd:
-  syncWave: "2"
-  # Stratégie de synchronisation
-  syncOptions:
-    - CreateNamespace=false
+storage:
+  size: 5Gi

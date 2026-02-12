@@ -81,7 +81,6 @@ spec:
       kind: Cluster
       jsonPointers:
         - /status
-        - /spec/imageName
 
 
   syncPolicy:

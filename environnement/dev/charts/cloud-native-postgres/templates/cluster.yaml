@@ -1,119 +1,22 @@
 apiVersion: postgresql.cnpg.io/v1
 kind: Cluster
 metadata:
-  name: {{ .Values.cluster.name }}
-  namespace: {{ .Values.namespace }}
+  name: {{ .Values.name }}
+  namespace: {{ .Release.Namespace }}
   annotations:
-    argocd.argoproj.io/sync-wave: {{ .Values.argocd.syncWave | quote }}
-    {{- if .Values.argocd.syncOptions }}
-    argocd.argoproj.io/sync-options: {{ join "," .Values.argocd.syncOptions }}
-    {{- end }}
-  labels:
-    app: {{ .Values.cluster.name }}
-    component: postgresql
+    argocd.argoproj.io/sync-wave: "2"
 spec:
-  # ===== Nombre d'instances =====
-  instances: {{ .Values.cluster.instances }}
-
-  # ===== Image PostgreSQL =====
-  imageName: {{ .Values.cluster.imageName }}
-  imagePullPolicy: {{ .Values.cluster.imagePullPolicy }}
-
-  # ===== Annotations des pods (désactiver Istio) =====
+  instances: {{ .Values.instances }}
   inheritedMetadata:
     annotations:
       sidecar.istio.io/inject: "false"
-    labels:
-      app: {{ .Values.cluster.name }}
-      component: postgresql-instance
-
-  # ===== Configuration PostgreSQL =====
-  postgresql:
-    parameters:
-      {{- range $key, $value := .Values.postgresql.parameters }}
-      {{ $key }}: {{ $value | quote }}
-      {{- end }}
-
-  # ===== Bootstrap =====
   bootstrap:
     initdb:
       database: {{ .Values.database.name }}
-      owner: {{ .Values.database.user }}
+      owner: {{ .Values.database.owner }}
       secret:
-        name: {{ .Values.existingSecret | default (printf "%s-app-user" .Values.cluster.name) }}
-      encoding: {{ .Values.database.encoding }}
-      localeCollate: {{ .Values.database.localeCollate }}
-      localeCType: {{ .Values.database.localeCType }}
-
-  # ===== Configuration du stockage PGDATA =====
+        name: {{ .Values.existingSecret }}
   storage:
-    size: {{ .Values.cluster.storage.size }}
-    {{- if .Values.cluster.storage.storageClass }}
-    storageClass: {{ .Values.cluster.storage.storageClass }}
-    {{- end }}
-    pvcTemplate:
-      accessModes:
-        {{- range .Values.cluster.storage.accessModes }}
-        - {{ . }}
-        {{- end }}
-      resources:
-        requests:
-          storage: {{ .Values.cluster.storage.size }}
-      {{- if .Values.cluster.storage.storageClass }}
-      storageClassName: {{ .Values.cluster.storage.storageClass }}
-      {{- end }}
-      volumeMode: Filesystem
-
-  {{- if .Values.cluster.walStorage.enabled }}
-  # ===== Configuration du stockage WAL (Write-Ahead Logs) =====
-  walStorage:
-    size: {{ .Values.cluster.walStorage.size }}
-    {{- if .Values.cluster.walStorage.storageClass }}
-    storageClass: {{ .Values.cluster.walStorage.storageClass }}
-    {{- end }}
-    pvcTemplate:
-      accessModes:
-        {{- range .Values.cluster.walStorage.accessModes }}
-        - {{ . }}
-        {{- end }}
-      resources:
-        requests:
-          storage: {{ .Values.cluster.walStorage.size }}
-      {{- if .Values.cluster.walStorage.storageClass }}
-      storageClassName: {{ .Values.cluster.walStorage.storageClass }}
-      {{- end }}
-      volumeMode: Filesystem
-  {{- end }}
-
-  # ===== Ressources CPU/Mémoire =====
-  resources:
-    requests:
-      memory: {{ .Values.resources.requests.memory | quote }}
-      cpu: {{ .Values.resources.requests.cpu | quote }}
-    limits:
-      memory: {{ .Values.resources.limits.memory | quote }}
-      cpu: {{ .Values.resources.limits.cpu | quote }}
-
-  # ===== Health Checks =====
-  startDelay: {{ .Values.healthChecks.startDelay }}
-  stopDelay: {{ .Values.healthChecks.stopDelay }}
-  switchoverDelay: {{ .Values.healthChecks.switchoverDelay }}
-
-  # ===== Monitoring Prometheus =====
-  {{- if .Values.monitoring.enabled }}
+    size: {{ .Values.storage.size }}
   monitoring:
-    enablePodMonitor: {{ .Values.monitoring.podMonitorEnabled }}
-    # Les métriques seront exposées sur le port 9187 à /metrics
-  {{- end }}
-
-  # ===== Configuration du failover automatique =====
-  failoverDelay: 0
-
-  # ===== Politique de mise à jour =====
-  primaryUpdateStrategy: unsupervised
-
-  # ===== Affinity et anti-affinity =====
-  affinity:
-    enablePodAntiAffinity: true
-    topologyKey: kubernetes.io/hostname
-    podAntiAffinityType: preferred
+    enablePodMonitor: true
