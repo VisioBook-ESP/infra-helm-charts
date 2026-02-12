@@ -37,7 +37,7 @@ spec:
           - values.yaml
         values: |
           existingSecret: "central-secret"
-          syncWave: "0"
+          syncWave: "1"
           env:
             ENV: prod
             LOG_LEVEL: warn
