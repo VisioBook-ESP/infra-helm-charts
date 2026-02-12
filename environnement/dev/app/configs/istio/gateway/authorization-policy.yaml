@@ -13,8 +13,8 @@ spec:
   - to:
     - operation:
         paths: 
-        - "/auth/login*"
-        - "/api/v1/users*"  # Endpoint de création de compte
+        - "/api/v1/auth/login*"
+        - "/api/v1/auth/register*"  # Endpoint de création de compte
         - "/health"
         - "/metrics"
   
