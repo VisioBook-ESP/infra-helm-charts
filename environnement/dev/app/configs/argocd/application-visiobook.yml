@@ -56,7 +56,7 @@ spec:
     # Core User Service
     - repoURL: https://github.com/VisioBook-ESP/core-user-service
       path: charts/
-      targetRevision: 35-creer-un-chart-cnpg
+      targetRevision: dev
       helm:
         valueFiles:
           - values.yaml
