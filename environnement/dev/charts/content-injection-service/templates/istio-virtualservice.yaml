@@ -2,19 +2,19 @@
 apiVersion: networking.istio.io/v1beta1
 kind: VirtualService
 metadata:
-  name: {{ include "content-injection-service.fullname" . }}
+  name: {{ include "content-ingestion-service.fullname" . }}
   labels:
-    {{- include "content-injection-service.labels" . | nindent 4 }}
+    {{- include "content-ingestion-service.labels" . | nindent 4 }}
 spec:
   hosts:
-    - {{ include "content-injection-service.fullname" . }}.{{ .Release.Namespace }}.svc.cluster.local
+    - {{ include "content-ingestion-service.fullname" . }}.{{ .Release.Namespace }}.svc.cluster.local
   http:
     - match:
         - uri:
             prefix: /
       route:
         - destination:
-            host: {{ include "content-injection-service.fullname" . }}
+            host: {{ include "content-ingestion-service.fullname" . }}
             port:
               number: {{ .Values.service.port }}
 {{- end }}

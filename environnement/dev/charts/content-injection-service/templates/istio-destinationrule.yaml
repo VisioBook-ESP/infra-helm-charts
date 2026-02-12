@@ -2,11 +2,11 @@
 apiVersion: networking.istio.io/v1beta1
 kind: DestinationRule
 metadata:
-  name: {{ include "content-injection-service.fullname" . }}
+  name: {{ include "content-ingestion-service.fullname" . }}
   labels:
-    {{- include "content-injection-service.labels" . | nindent 4 }}
+    {{- include "content-ingestion-service.labels" . | nindent 4 }}
 spec:
-  host: {{ include "content-injection-service.fullname" . }}
+  host: {{ include "content-ingestion-service.fullname" . }}
   trafficPolicy:
     {{- toYaml .Values.istio.destinationRule.trafficPolicy | nindent 4 }}
     {{- if .Values.istio.mtls.enabled }}

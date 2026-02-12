@@ -67,7 +67,7 @@ spec:
             LOG_LEVEL: warn
 
     - repoURL: https://github.com/VisioBook-ESP/infra-helm-charts
-      path: environnement/dev/charts/content-injection-service/
+      path: environnement/dev/charts/content-ingestion-service/
       targetRevision: 35-creer-un-chart-cnpg
       helm:
         valueFiles:
