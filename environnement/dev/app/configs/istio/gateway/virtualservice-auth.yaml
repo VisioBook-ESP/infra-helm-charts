@@ -11,7 +11,7 @@ spec:
   http:
   - match:
     - uri:
-        prefix: "/auth/login"
+        prefix: "/api/v1/auth/login"
       method:
         exact: "POST"
     - uri:
