@@ -8,11 +8,13 @@ metadata:
       core-user=ghcr.io/visiobook-esp/core-user-service-dev:latest,
       storage=ghcr.io/visiobook-esp/support-storage-service-dev:latest,
       ai=ghcr.io/visiobook-esp/ai-analysis-service-dev:latest
+      core-project=ghcr.io/visiobook-esp/core-project-service-dev:latest
 
     # Strategie par image (digest = detecte quand latest change de SHA)
     argocd-image-updater.argoproj.io/core-user.update-strategy: digest
     argocd-image-updater.argoproj.io/storage.update-strategy: digest
     argocd-image-updater.argoproj.io/ai.update-strategy: digest
+    argocd-image-updater.argoproj.io/core-project.update-strategy: digest
 spec:
   destination:
     namespace: visiobook-namespace
@@ -30,7 +32,7 @@ spec:
     # PostgreSQL Cluster (sync-wave 2, operator installed by deploy script)
     - repoURL: https://github.com/VisioBook-ESP/infra-helm-charts
       path: environnement/dev/charts/cloud-native-postgres/
-      targetRevision: 39-ajouter-un-fichier-de-variable-par-micro-sync-wave
+      targetRevision: main
       helm:
         valueFiles:
           - values.yaml
@@ -41,7 +43,7 @@ spec:
     # Core User Service
     - repoURL: https://github.com/VisioBook-ESP/core-user-service
       path: charts/
-      targetRevision: 27-modify-charts
+      targetRevision: dev
       helm:
         valueFiles:
           - values.yaml
@@ -74,6 +76,7 @@ spec:
     #       - values.yaml
     #     values: |
     #       existingSecret: "central-secret"
+    #       syncWave: "0"
     #       env:
     #         ENV: prod
     #         LOG_LEVEL: warn
