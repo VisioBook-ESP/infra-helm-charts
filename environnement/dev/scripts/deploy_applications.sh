@@ -24,8 +24,8 @@ kubectl apply -f https://github.com/cert-manager/cert-manager/releases/latest/do
 kubectl wait --for=condition=ready pod -l app.kubernetes.io/instance=cert-manager -n cert-manager --timeout=120s
 echo "CERTIFICATS"
 kubectl apply -f ../cert_manager/lets_encrypt.yaml
-kubectl apply -f ../acme-solver-route.yaml
-kubectl apply -f ../istio-ingressclass.yaml
+kubectl apply -f ../cert_manager/acme-solver-route.yaml
+kubectl apply -f ../cert_manager/istio-ingressclass.yaml
 # GATEWAY
 ./apply-gateway.sh
 
