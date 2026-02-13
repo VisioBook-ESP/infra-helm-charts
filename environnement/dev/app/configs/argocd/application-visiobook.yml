@@ -3,6 +3,18 @@ kind: Application
 metadata:
   name: application-visiobook
   namespace: argocd
+  annotations:
+    argocd-image-updater.argoproj.io/image-list: >
+      core-user=ghcr.io/visiobook-esp/core-user-service-dev:latest,
+      storage=ghcr.io/visiobook-esp/support-storage-service-dev:latest,
+      ai=ghcr.io/visiobook-esp/ai-analysis-service-dev:latest
+      core-project=ghcr.io/visiobook-esp/core-project-service-dev:latest
+
+    # Strategie par image (digest = detecte quand latest change de SHA)
+    argocd-image-updater.argoproj.io/core-user.update-strategy: digest
+    argocd-image-updater.argoproj.io/storage.update-strategy: digest
+    argocd-image-updater.argoproj.io/ai.update-strategy: digest
+    argocd-image-updater.argoproj.io/core-project.update-strategy: digest
 spec:
   destination:
     namespace: visiobook-namespace
@@ -26,6 +38,7 @@ spec:
           - values.yaml
         values: |
           existingSecret: "central-secret"
+          syncWave: "-1"
 
     # Core User Service
     - repoURL: https://github.com/VisioBook-ESP/core-user-service
@@ -36,6 +49,7 @@ spec:
           - values.yaml
         values: |
           existingSecret: "central-secret"
+          syncWave: "0"
           env:
             ENV: prod
             LOG_LEVEL: warn
@@ -62,6 +76,7 @@ spec:
     #       - values.yaml
     #     values: |
     #       existingSecret: "central-secret"
+    #       syncWave: "0"
     #       env:
     #         ENV: prod
     #         LOG_LEVEL: warn
