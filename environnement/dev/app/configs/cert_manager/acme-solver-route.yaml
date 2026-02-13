@@ -1,0 +1,35 @@
+# Service stable qui cible automatiquement les solver pods de cert-manager
+# Les pods ont le label acme.cert-manager.io/http01-solver: "true"
+apiVersion: v1
+kind: Service
+metadata:
+  name: cert-manager-acme-solver
+  namespace: istio-system
+spec:
+  selector:
+    acme.cert-manager.io/http01-solver: "true"
+  ports:
+    - port: 8089
+      targetPort: 8089
+      protocol: TCP
+---
+# VirtualService permanent qui route les challenges ACME vers le solver
+apiVersion: networking.istio.io/v1beta1
+kind: VirtualService
+metadata:
+  name: acme-challenge-solver
+  namespace: istio-system
+spec:
+  hosts:
+  - "visiobook.cloud"
+  gateways:
+  - visiobook-gateway
+  http:
+  - match:
+    - uri:
+        prefix: "/.well-known/acme-challenge/"
+    route:
+    - destination:
+        host: cert-manager-acme-solver.istio-system.svc.cluster.local
+        port:
+          number: 8089
