@@ -1,0 +1,22 @@
+name: postgres-io
+instances: 1  # Can scale to 2-3 for high availability
+
+database:
+  name: storage
+  owner: storage_user
+
+existingSecret: postgres-io-storage-secret
+
+storage:
+  size: 20Gi  # Larger for I/O-intensive workloads
+
+syncWave: "-1"
+
+# Create additional databases and users via SQL
+postInitSQL:
+  - CREATE USER analysis_user WITH PASSWORD 'AnalysisPass123!'
+  - CREATE DATABASE analysis OWNER analysis_user
+  - GRANT ALL PRIVILEGES ON DATABASE analysis TO analysis_user
+  - CREATE USER ingestion_user WITH PASSWORD 'IngestionPass123!'
+  - CREATE DATABASE ingestion OWNER ingestion_user
+  - GRANT ALL PRIVILEGES ON DATABASE ingestion TO ingestion_user
