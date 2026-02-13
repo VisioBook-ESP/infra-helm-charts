@@ -11,7 +11,7 @@ spec:
     solvers:
       - http01:
           ingress:
-            class: istio
+            ingressClassName: istio
 ---
 apiVersion: cert-manager.io/v1
 kind: Certificate
