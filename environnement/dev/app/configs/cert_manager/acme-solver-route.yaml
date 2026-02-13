@@ -21,7 +21,7 @@ metadata:
   namespace: istio-system
 spec:
   hosts:
-  - "visiobook.cloud"
+  - "*"
   gateways:
   - visiobook-gateway
   http:
