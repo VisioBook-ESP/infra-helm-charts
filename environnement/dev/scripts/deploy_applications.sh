@@ -22,7 +22,7 @@ kubectl apply -f https://github.com/cert-manager/cert-manager/releases/latest/do
 
 ## 2. Attendre que les pods soient prets
 kubectl wait --for=condition=ready pod -l app.kubernetes.io/instance=cert-manager -n cert-manager --timeout=120s
-
+echo "CERTIFICATS"
 kubectl apply -f ../cert_manager/lets_encrypt.yaml
 
 # GATEWAY
