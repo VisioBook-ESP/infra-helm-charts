@@ -1,0 +1,22 @@
+apiVersion: security.istio.io/v1beta1
+kind: AuthorizationPolicy
+metadata:
+  name: authz-public
+  namespace: istio-system
+spec:
+  selector:
+    matchLabels:
+      istio: ingress
+  action: ALLOW
+  rules:
+  - to:
+    - operation:
+        paths:
+        - "/api/v1/auth/login"
+        - "/api/v1/auth/register"
+        - "/api/v1/auth/.well-known/jwks.json"
+        - "/health"
+        - "/ready"
+        - "/health-db"
+        - "/metrics"
+        - "/.well-known/*"

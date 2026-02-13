@@ -1,0 +1,31 @@
+apiVersion: security.istio.io/v1beta1
+kind: AuthorizationPolicy
+metadata:
+  name: authz-users
+  namespace: istio-system
+spec:
+  selector:
+    matchLabels:
+      istio: ingress
+  action: ALLOW
+  rules:
+  # User authentifie -> son propre profil
+  - from:
+    - source:
+        requestPrincipals: ["*"]
+    to:
+    - operation:
+        paths: ["/api/v1/users/me"]
+        methods: ["GET", "PUT"]
+
+  # Admin -> gestion de tous les utilisateurs
+  - from:
+    - source:
+        requestPrincipals: ["*"]
+    to:
+    - operation:
+        paths: ["/api/v1/users", "/api/v1/users/*"]
+        methods: ["GET", "POST", "PUT", "DELETE"]
+    when:
+    - key: request.auth.claims[roles]
+      values: ["admin"]
