@@ -17,6 +17,8 @@ kubectl apply -f istio-addons/jaeger.yaml -n istio-system
 kubectl create namespace visiobook-namespace
 kubectl label namespace visiobook-namespace istio-injection=enabled
 
+kubectl apply -f ../cert_manager/lets_encrypt.yaml
+
 # GATEWAY
 ./apply-gateway.sh
 

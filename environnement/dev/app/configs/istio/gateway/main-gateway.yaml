@@ -14,8 +14,8 @@ spec:
     hosts:
     - "*"
     # Pour forcer HTTPS, décommentez :
-    # tls:
-    #   httpsRedirect: true
+    tls:
+      httpsRedirect: true
   - port:
       number: 443
       name: https
@@ -24,4 +24,4 @@ spec:
     - "*"
     tls:
       mode: SIMPLE
-      credentialName: visiobook-tls-secret  # Secret TLS à créer
+      credentialName: visiobook-tls-secret  # Secret TLS provenant de cert-manager

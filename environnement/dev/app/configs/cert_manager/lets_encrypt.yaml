@@ -1,0 +1,15 @@
+# visiobook-certificate.yaml
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: visiobook-tls
+  namespace: istio-system    # meme namespace que le gateway
+  annotations:
+    argocd.argoproj.io/sync-wave: "-2"
+spec:
+  secretName: visiobook-tls-secret   # le nom reference dans ton gateway
+  issuerRef:
+    name: letsencrypt-prod
+    kind: ClusterIssuer
+  dnsNames:
+    - visiobook.cloud
