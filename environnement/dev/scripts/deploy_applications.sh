@@ -17,6 +17,12 @@ kubectl apply -f istio-addons/jaeger.yaml -n istio-system
 kubectl create namespace visiobook-namespace
 kubectl label namespace visiobook-namespace istio-injection=enabled
 
+#Gestion des certificats
+kubectl apply -f https://github.com/cert-manager/cert-manager/releases/latest/download/cert-manager.yaml
+
+## 2. Attendre que les pods soient prets
+kubectl wait --for=condition=ready pod -l app.kubernetes.io/instance=cert-manager -n cert-manager --timeout=120s
+
 kubectl apply -f ../cert_manager/lets_encrypt.yaml
 
 # GATEWAY
