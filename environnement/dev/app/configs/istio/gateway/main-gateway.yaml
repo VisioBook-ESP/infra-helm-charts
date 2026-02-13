@@ -13,7 +13,8 @@ spec:
       protocol: HTTP
     hosts:
     - "*"
-    # Pour forcer HTTPS, décommentez :
+    # httpsRedirect desactive pour permettre le challenge ACME de cert-manager
+    # Reactiver apres obtention du certificat :
     # tls:
     #   httpsRedirect: true
   - port:
@@ -24,4 +25,4 @@ spec:
     - "*"
     tls:
       mode: SIMPLE
-      credentialName: visiobook-tls-secret  # Secret TLS à créer
+      credentialName: visiobook-tls-secret  # Secret TLS provenant de cert-manager
