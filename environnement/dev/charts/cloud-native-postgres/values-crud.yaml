@@ -1,0 +1,19 @@
+name: postgres-crud
+instances: 1
+
+database:
+  name: core_user
+  owner: core_user_app
+
+existingSecret: postgres-crud-user-secret
+
+storage:
+  size: 5Gi
+
+syncWave: "-1"
+
+# Create additional database for core-project-service
+postInitSQL:
+  - CREATE USER core_project_app WITH PASSWORD 'ProjectPass123!'
+  - CREATE DATABASE core_project OWNER core_project_app
+  - GRANT ALL PRIVILEGES ON DATABASE core_project TO core_project_app

@@ -16,6 +16,12 @@ spec:
       owner: {{ .Values.database.owner }}
       secret:
         name: {{ .Values.existingSecret }}
+      {{- if .Values.postInitSQL }}
+      postInitSQL:
+        {{- range .Values.postInitSQL }}
+        - {{ . | quote }}
+        {{- end }}
+      {{- end }}
   storage:
     size: {{ .Values.storage.size }}
   monitoring:
