@@ -13,9 +13,10 @@ spec:
       protocol: HTTP
     hosts:
     - "*"
-    # Pour forcer HTTPS, décommentez :
-    tls:
-      httpsRedirect: true
+    # httpsRedirect desactive pour permettre le challenge ACME de cert-manager
+    # Reactiver apres obtention du certificat :
+    # tls:
+    #   httpsRedirect: true
   - port:
       number: 443
       name: https
