@@ -12,11 +12,12 @@ spec:
   # Règle 1: Autoriser /auth sans JWT
   - to:
     - operation:
-        paths: 
+        paths:
         - "/api/v1/auth/login*"
         - "/api/v1/auth/register*"  # Endpoint de création de compte
         - "/health"
         - "/metrics"
+        - "/.well-known/*"  # cert-manager ACME challenge
   
   # Règle 2: Exiger un JWT valide pour /api
   - from:
