@@ -7,7 +7,7 @@ metadata:
     argocd-image-updater.argoproj.io/image-list: >
       core-user=ghcr.io/visiobook-esp/core-user-service-dev:latest,
       storage=ghcr.io/visiobook-esp/support-storage-service-dev:latest,
-      ai=ghcr.io/visiobook-esp/ai-analysis-service-dev:latest
+      ai=ghcr.io/visiobook-esp/ai-analysis-service-dev:latest,
       core-project=ghcr.io/visiobook-esp/core-project-service-dev:latest
 
     # Strategie par image (digest = detecte quand latest change de SHA)

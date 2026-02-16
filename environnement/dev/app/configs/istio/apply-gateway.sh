@@ -20,8 +20,7 @@ sleep 5
 
 # Appliquer les VirtualServices
 echo "🔀 Creating VirtualServices..."
-kubectl apply -f gateway/virtualservice-auth.yaml
-kubectl apply -f gateway/virtualservice-api.yaml
+kubectl apply -f gateway/
 
 # Appliquer RequestAuthentication
 echo "🔐 Configuring JWT authentication..."
