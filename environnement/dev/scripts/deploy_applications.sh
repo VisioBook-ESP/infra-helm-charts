@@ -65,7 +65,7 @@ for i in $(seq 1 30); do
       -n visiobook-namespace --timeout=300s && \
       echo "Re-applying RequestAuthentication (force Istiod JWKS refresh)..." && \
       kubectl delete requestauthentication jwt-auth -n istio-system --ignore-not-found && \
-      kubectl apply -f ../app/configs/istio/gateway/request-authentication.yaml
+      kubectl apply -f ../istio/gateway/request-authentication.yaml
     break
   fi
   echo "  Attempt $i/30: deployment not yet created by ArgoCD, waiting 10s..."
