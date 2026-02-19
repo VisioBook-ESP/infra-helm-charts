@@ -57,12 +57,19 @@ kubectl apply -f argocd/application-visiobook.yml
 
 # Re-appliquer la RequestAuthentication APRÈS que le core-user-service soit prêt
 # (Istiod fetche le JWKS au moment de la création - le service doit être up)
-echo "Waiting for core-user-service to be ready..."
-kubectl wait --for=condition=available deployment/core-user-service \
-  -n visiobook-namespace --timeout=300s && \
-  echo "Re-applying RequestAuthentication (force Istiod JWKS refresh)..." && \
-  kubectl delete requestauthentication jwt-auth -n istio-system --ignore-not-found && \
-  kubectl apply -f ../app/configs/istio/gateway/request-authentication.yaml || \
-  echo "WARNING: core-user-service not ready in time - apply request-authentication.yaml manually after service is up"
+echo "Waiting for ArgoCD to create core-user-service deployment..."
+for i in $(seq 1 30); do
+  if kubectl get deployment/core-user-service -n visiobook-namespace 2>/dev/null; then
+    echo "Deployment found, waiting for it to be available..."
+    kubectl wait --for=condition=available deployment/core-user-service \
+      -n visiobook-namespace --timeout=300s && \
+      echo "Re-applying RequestAuthentication (force Istiod JWKS refresh)..." && \
+      kubectl delete requestauthentication jwt-auth -n istio-system --ignore-not-found && \
+      kubectl apply -f ../app/configs/istio/gateway/request-authentication.yaml
+    break
+  fi
+  echo "  Attempt $i/30: deployment not yet created by ArgoCD, waiting 10s..."
+  sleep 10
+done
 
 
