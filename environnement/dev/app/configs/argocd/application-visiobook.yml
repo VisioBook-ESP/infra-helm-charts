@@ -48,7 +48,7 @@ spec:
     # Core User Service (sync-wave 0)
     - repoURL: https://github.com/VisioBook-ESP/core-user-service
       path: charts/
-      targetRevision: 30-update-helm-chart-with-auto-rollback
+      targetRevision: dev
       helm:
         valueFiles:
           - values.yaml
