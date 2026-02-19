@@ -22,28 +22,28 @@ spec:
 
   sources:
 
-    # # Database secrets (sync-wave -2)
-    # - repoURL: https://github.com/VisioBook-ESP/infra-helm-charts
-    #   path: environnement/dev/app/configs/secrets/
-    #   targetRevision: main
-    #   directory:
-    #     recurse: false
+    # Database secrets (sync-wave -2)
+    - repoURL: https://github.com/VisioBook-ESP/infra-helm-charts
+      path: environnement/dev/app/configs/secrets/
+      targetRevision: main
+      directory:
+        recurse: false
 
-    # # CRUD PostgreSQL Cluster (sync-wave -1)
-    # - repoURL: https://github.com/VisioBook-ESP/infra-helm-charts
-    #   path: environnement/dev/charts/cloud-native-postgres/
-    #   targetRevision: main
-    #   helm:
-    #     valueFiles:
-    #       - values-crud.yaml
+    # CRUD PostgreSQL Cluster (sync-wave -1)
+    - repoURL: https://github.com/VisioBook-ESP/infra-helm-charts
+      path: environnement/dev/charts/cloud-native-postgres/
+      targetRevision: main
+      helm:
+        valueFiles:
+          - values-crud.yaml
 
-    # # I/O PostgreSQL Cluster (sync-wave -1)
-    # - repoURL: https://github.com/VisioBook-ESP/infra-helm-charts
-    #   path: environnement/dev/charts/cloud-native-postgres/
-    #   targetRevision: main
-    #   helm:
-    #     valueFiles:
-    #       - values-io.yaml
+    # I/O PostgreSQL Cluster (sync-wave -1)
+    - repoURL: https://github.com/VisioBook-ESP/infra-helm-charts
+      path: environnement/dev/charts/cloud-native-postgres/
+      targetRevision: main
+      helm:
+        valueFiles:
+          - values-io.yaml
 
     # Core User Service (sync-wave 0)
     - repoURL: https://github.com/VisioBook-ESP/core-user-service
