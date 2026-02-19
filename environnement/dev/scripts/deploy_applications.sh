@@ -55,4 +55,14 @@ kubectl apply -f argocd/app-project.yml
 # Lance les helms charts
 kubectl apply -f argocd/application-visiobook.yml
 
+# Re-appliquer la RequestAuthentication APRÈS que le core-user-service soit prêt
+# (Istiod fetche le JWKS au moment de la création - le service doit être up)
+echo "Waiting for core-user-service to be ready..."
+kubectl wait --for=condition=available deployment/core-user-service \
+  -n visiobook-namespace --timeout=300s && \
+  echo "Re-applying RequestAuthentication (force Istiod JWKS refresh)..." && \
+  kubectl delete requestauthentication jwt-auth -n istio-system --ignore-not-found && \
+  kubectl apply -f ../app/configs/istio/gateway/request-authentication.yaml || \
+  echo "WARNING: core-user-service not ready in time - apply request-authentication.yaml manually after service is up"
+
 
