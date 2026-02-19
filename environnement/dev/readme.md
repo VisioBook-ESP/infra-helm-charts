@@ -10,7 +10,7 @@ After=network.target
 [Service]
 Type=simple
 User=debian
-ExecStart=/usr/bin/kubectl port-forward svc/argocd-server -n argocd --address 0.0.0.0 8080:443
+ExecStart=/usr/bin/kubectl port-forward svc/argocd-server -n argocd --address 0.0.0.0 8080:80
 Restart=always
 RestartSec=5
 
