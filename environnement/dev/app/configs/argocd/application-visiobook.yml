@@ -61,7 +61,7 @@ spec:
 
     - repoURL: https://github.com/VisioBook-ESP/Repo-test-Infra-Front
       path: charts/
-      targetRevision: 1-tester-le-rechargement-automatique-helm-chart
+      targetRevision: dev
       helm:
         valueFiles:
           - values.yaml
