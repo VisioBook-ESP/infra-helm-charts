@@ -8,3 +8,5 @@ linux-amd64
 LICENSE
 .environnement/dev/argocd_password.txt
 ./environnement/dev/argocd_password.txt
+# Backup TLS secret - contient la clé privée, ne jamais committer
+**/visiobook-tls-secret-backup.yaml

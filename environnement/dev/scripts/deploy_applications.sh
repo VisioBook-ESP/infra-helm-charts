@@ -23,6 +23,15 @@ kubectl apply -f https://github.com/cert-manager/cert-manager/releases/latest/do
 ## 2. Attendre que les pods soient prets
 kubectl wait --for=condition=ready pod -l app.kubernetes.io/instance=cert-manager -n cert-manager --timeout=120s
 echo "CERTIFICATS"
+# Restaurer le secret TLS depuis le backup si disponible (évite de consommer le quota Let's Encrypt)
+# Stocké hors du repo Git car contient la clé privée TLS
+BACKUP="$HOME/secrets/visiobook-tls-secret-backup.yaml"
+if [ -f "$BACKUP" ]; then
+  echo "Restoring TLS secret from backup (skipping Let's Encrypt re-issuance)..."
+  kubectl apply -f "$BACKUP"
+else
+  echo "No TLS backup found - Let's Encrypt will issue a new certificate"
+fi
 kubectl apply -f ../cert_manager/lets_encrypt.yaml
 kubectl apply -f ../cert_manager/acme-solver-route.yaml
 kubectl apply -f ../cert_manager/istio-ingressclass.yaml

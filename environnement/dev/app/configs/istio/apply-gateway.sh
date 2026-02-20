@@ -19,17 +19,15 @@ kubectl apply -f gateway/main-gateway.yaml
 sleep 5
 
 # Appliquer les VirtualServices
-echo "🔀 Creating VirtualServices..."
 kubectl apply -f gateway/
 
+echo "🔀 Creating VirtualServices..."
 # Appliquer RequestAuthentication
 echo "🔐 Configuring JWT authentication..."
-kubectl apply -f gateway/request-authentication.yaml
 
 # Appliquer AuthorizationPolicy
 echo "🛡️  Configuring authorization policies..."
-kubectl apply -f gateway/authorization-policy-public.yaml
-kubectl apply -f gateway/authorization-policy-users.yaml
+
 echo ""
 echo "✅ Gateway configuration complete!"
 echo ""
