@@ -48,3 +48,11 @@ curl -X POST http://10.97.9.39/api/v1/auth/register/   -H "Content-Type: applica
     "password": "SecurePassword123!",
     "username": "myusername"
   }'
+
+commande pour stocker le certificat
+  ```
+  kubectl get secret visiobook-tls-secret -n istio-system -o yaml \
+  | grep -v "resourceVersion\|uid\|creationTimestamp\|generation" \
+  > ~/app/infra-helm-charts/environnement/dev/app/configs/cert_manager/visiobook-tls-secret-backup.yaml
+
+  ```

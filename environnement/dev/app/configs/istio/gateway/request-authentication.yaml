@@ -15,9 +15,3 @@ spec:
     forwardOriginalToken: true
     outputPayloadToHeader: "x-jwt-payload"
     
-    # Extraire des claims spécifiques dans des headers
-    outputClaimToHeaders:
-    - header: "x-jwt-user-id"
-      claim: "sub"
-    - header: "x-jwt-roles"
-      claim: "roles"
