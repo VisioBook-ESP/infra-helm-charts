@@ -45,7 +45,7 @@ spec:
         valueFiles:
           - values-io.yaml
 
-    Core User Service (sync-wave 0)
+    # Core User Service (sync-wave 0)
     - repoURL: https://github.com/VisioBook-ESP/core-user-service
       path: charts/
       targetRevision: dev
