@@ -25,7 +25,7 @@ kubectl wait --for=condition=ready pod -l app.kubernetes.io/instance=cert-manage
 echo "CERTIFICATS"
 # Restaurer le secret TLS depuis le backup si disponible (évite de consommer le quota Let's Encrypt)
 # Stocké hors du repo Git car contient la clé privée TLS
-BACKUP="$HOME/secrets/visiobook-tls-secret-backup.yaml"
+BACKUP="/home/debian/app/infra-helm-charts/environnement/dev/app/configs/cert_manager/visiobook-tls-secret-backup.yaml"
 if [ -f "$BACKUP" ]; then
   echo "Restoring TLS secret from backup (skipping Let's Encrypt re-issuance)..."
   kubectl apply -f "$BACKUP"
@@ -75,7 +75,7 @@ for i in $(seq 1 30); do
       echo "Re-applying RequestAuthentication (force Istiod JWKS refresh)..." && \
       kubectl delete requestauthentication jwt-auth -n istio-system --ignore-not-found && \
       pwd
-      kubectl apply -f ../istio/gateway/request-authentication.yaml
+      kubectl apply -f ./istio/gateway/request-authentication.yaml
     break
   fi
   echo "  Attempt $i/30: deployment not yet created by ArgoCD, waiting 10s..."
