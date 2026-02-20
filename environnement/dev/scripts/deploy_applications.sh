@@ -74,6 +74,7 @@ for i in $(seq 1 30); do
       -n visiobook-namespace --timeout=300s && \
       echo "Re-applying RequestAuthentication (force Istiod JWKS refresh)..." && \
       kubectl delete requestauthentication jwt-auth -n istio-system --ignore-not-found && \
+      pwd
       kubectl apply -f ../istio/gateway/request-authentication.yaml
     break
   fi
