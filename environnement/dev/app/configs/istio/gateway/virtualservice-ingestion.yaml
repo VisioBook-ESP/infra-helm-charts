@@ -20,4 +20,4 @@ spec:
     - destination:
         host: content-ingestion-service
         port:
-          number: 80
+          number: 8086
