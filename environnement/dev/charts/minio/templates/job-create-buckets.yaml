@@ -15,7 +15,7 @@ spec:
       labels:
         {{- include "minio.selectorLabels" . | nindent 8 }}
       annotations:
-        sidecar.istio.io/inject: "true"
+        sidecar.istio.io/inject: "false"
     spec:
       restartPolicy: OnFailure
       containers:

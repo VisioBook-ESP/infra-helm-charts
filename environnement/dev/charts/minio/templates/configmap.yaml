@@ -20,6 +20,4 @@ data:
     echo "Bucket '{{ . | trim }}' created."
     {{- end }}
     echo "All buckets created successfully."
-    # Terminate Istio sidecar so the Job can complete
-    wget -qO- --post-data='' http://localhost:15020/quitquitquit 2>/dev/null || true
 {{- end }}

@@ -10,5 +10,10 @@ spec:
     matchLabels:
       {{- include "minio.selectorLabels" . | nindent 6 }}
   mtls:
-    mode: {{ .Values.istio.peerAuthentication.mode }}
+    mode: PERMISSIVE
+  portLevelMtls:
+    9000:
+      mode: PERMISSIVE
+    9001:
+      mode: PERMISSIVE
 {{- end }}
