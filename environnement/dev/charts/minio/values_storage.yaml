@@ -76,7 +76,7 @@ minio:
   defaultBuckets: "documents,uploads,thumbnails"
   persistence:
     enabled: true
-    storageClass: "local-path"
+    storageClass: "standard"
     accessMode: ReadWriteOnce
     size: 20Gi
 
