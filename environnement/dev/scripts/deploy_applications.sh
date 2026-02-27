@@ -23,6 +23,15 @@ kubectl apply -f https://github.com/cert-manager/cert-manager/releases/latest/do
 ## 2. Attendre que les pods soient prets
 kubectl wait --for=condition=ready pod -l app.kubernetes.io/instance=cert-manager -n cert-manager --timeout=120s
 echo "CERTIFICATS"
+# Restaurer le secret TLS depuis le backup si disponible (évite de consommer le quota Let's Encrypt)
+# Stocké hors du repo Git car contient la clé privée TLS
+BACKUP="/home/debian/app/infra-helm-charts/environnement/dev/app/configs/cert_manager/visiobook-tls-secret-backup.yaml"
+if [ -f "$BACKUP" ]; then
+  echo "Restoring TLS secret from backup (skipping Let's Encrypt re-issuance)..."
+  kubectl apply -f "$BACKUP"
+else
+  echo "No TLS backup found - Let's Encrypt will issue a new certificate"
+fi
 kubectl apply -f ../cert_manager/lets_encrypt.yaml
 kubectl apply -f ../cert_manager/acme-solver-route.yaml
 kubectl apply -f ../cert_manager/istio-ingressclass.yaml
@@ -54,5 +63,23 @@ kubectl apply -f argocd/app-project.yml
 
 # Lance les helms charts
 kubectl apply -f argocd/application-visiobook.yml
+
+# Re-appliquer la RequestAuthentication APRÈS que le core-user-service soit prêt
+# (Istiod fetche le JWKS au moment de la création - le service doit être up)
+echo "Waiting for ArgoCD to create core-user-service deployment..."
+for i in $(seq 1 30); do
+  if kubectl get deployment/core-user-service -n visiobook-namespace 2>/dev/null; then
+    echo "Deployment found, waiting for it to be available..."
+    kubectl wait --for=condition=available deployment/core-user-service \
+      -n visiobook-namespace --timeout=300s && \
+      echo "Re-applying RequestAuthentication (force Istiod JWKS refresh)..." && \
+      kubectl delete requestauthentication jwt-auth -n istio-system --ignore-not-found && \
+      pwd
+      kubectl apply -f ./istio/gateway/request-authentication.yaml
+    break
+  fi
+  echo "  Attempt $i/30: deployment not yet created by ArgoCD, waiting 10s..."
+  sleep 10
+done
 
 
