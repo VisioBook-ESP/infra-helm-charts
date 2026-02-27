@@ -1,0 +1,23 @@
+{{- if .Values.minio.defaultBuckets }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "minio.fullname" . }}-config
+  labels:
+    {{- include "minio.labels" . | nindent 4 }}
+data:
+  create-buckets.sh: |
+    #!/bin/sh
+    set -e
+    echo "Waiting for MinIO to be ready..."
+    until mc alias set myminio http://{{ include "minio.fullname" . }}:{{ .Values.service.port }} $MINIO_ROOT_USER $MINIO_ROOT_PASSWORD 2>/dev/null; do
+      echo "MinIO not ready yet, retrying in 2s..."
+      sleep 2
+    done
+    echo "MinIO is ready. Creating buckets..."
+    {{- range (splitList "," .Values.minio.defaultBuckets) }}
+    mc mb --ignore-existing myminio/{{ . | trim }}
+    echo "Bucket '{{ . | trim }}' created."
+    {{- end }}
+    echo "All buckets created successfully."
+{{- end }}

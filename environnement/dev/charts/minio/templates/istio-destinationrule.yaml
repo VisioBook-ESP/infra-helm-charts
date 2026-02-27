@@ -1,0 +1,25 @@
+{{- if .Values.istio.enabled }}
+apiVersion: networking.istio.io/v1beta1
+kind: DestinationRule
+metadata:
+  name: {{ include "minio.fullname" . }}
+  labels:
+    {{- include "minio.labels" . | nindent 4 }}
+spec:
+  host: {{ include "minio.fullname" . }}.{{ .Release.Namespace }}.svc.cluster.local
+  trafficPolicy:
+    connectionPool:
+      tcp:
+        maxConnections: {{ .Values.istio.connectionPool.maxConnections }}
+        connectTimeout: 30s
+      http:
+        h2UpgradePolicy: DO_NOT_UPGRADE
+        http1MaxPendingRequests: 100
+        maxRequestsPerConnection: 0
+    loadBalancer:
+      simple: ROUND_ROBIN
+    {{- if .Values.istio.mtls.enabled }}
+    tls:
+      mode: {{ .Values.istio.mtls.mode }}
+    {{- end }}
+{{- end }}
