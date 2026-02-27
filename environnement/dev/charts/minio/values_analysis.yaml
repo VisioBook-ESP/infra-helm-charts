@@ -69,6 +69,8 @@ nodeSelector: {}
 tolerations: []
 affinity: {}
 
+existingSecret: "minio-analysis-secret"
+
 minio:
   auth:
     rootUser: "analysis-admin"

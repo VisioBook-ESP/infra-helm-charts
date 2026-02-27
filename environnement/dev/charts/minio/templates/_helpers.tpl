@@ -53,6 +53,17 @@ app.kubernetes.io/instance: {{ .Release.Name }}
 {{/*
 Create the name of the service account to use
 */}}
+{{/*
+Get the secret name (existingSecret or default)
+*/}}
+{{- define "minio.secretName" -}}
+{{- if .Values.existingSecret }}
+{{- .Values.existingSecret }}
+{{- else }}
+{{- include "minio.fullname" . }}-secret
+{{- end }}
+{{- end }}
+
 {{- define "minio.serviceAccountName" -}}
 {{- if .Values.serviceAccount.create }}
 {{- default (include "minio.fullname" .) .Values.serviceAccount.name }}

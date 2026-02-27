@@ -54,12 +54,12 @@ spec:
             - name: MINIO_ROOT_USER
               valueFrom:
                 secretKeyRef:
-                  name: {{ include "minio.fullname" . }}-secret
+                  name: {{ include "minio.secretName" . }}
                   key: root-user
             - name: MINIO_ROOT_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: {{ include "minio.fullname" . }}-secret
+                  name: {{ include "minio.secretName" . }}
                   key: root-password
           {{- if .Values.livenessProbe.enabled }}
           livenessProbe:
