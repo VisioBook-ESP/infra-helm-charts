@@ -32,10 +32,3 @@ spec:
     - operation:
         paths: ["/api/v1/extract*"]
         methods: ["GET", "POST"]
-  - from:
-    - source:
-        requestPrincipals: ["*"]
-    to:
-    - operation:
-        paths: ["/api/v1/validate*"]
-        methods: ["GET", "POST"]
