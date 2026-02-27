@@ -11,7 +11,11 @@ spec:
   http:
   - match:
     - uri:
-        prefix: "/api/v1/users"
+        prefix: "/api/v1/extract"
+    - uri:
+        prefix: "/api/v1/preprocess"
+    - uri:
+        prefix: "/api/v1/ingest"
     route:
     - destination:
         host: content-ingestion-service
