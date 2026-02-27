@@ -45,19 +45,19 @@ spec:
         valueFiles:
           - values-io.yaml
 
-    # # Core User Service (sync-wave 0)
-    # - repoURL: https://github.com/VisioBook-ESP/core-user-service
-    #   path: charts/
-    #   targetRevision: 32-mise-a-jour-chart
-    #   helm:
-    #     valueFiles:
-    #       - values.yaml
-    #     values: |
-    #       existingSecret: "postgres-crud-user-secret"
-    #       syncWave: 0
-    #       env:
-    #         ENV: prod
-    #         LOG_LEVEL: warn
+    # Core User Service (sync-wave 0)
+    - repoURL: https://github.com/VisioBook-ESP/core-user-service
+      path: charts/
+      targetRevision: 32-mise-a-jour-chart
+      helm:
+        valueFiles:
+          - values.yaml
+        values: |
+          existingSecret: "postgres-crud-user-secret"
+          syncWave: 0
+          env:
+            ENV: prod
+            LOG_LEVEL: warn
 
     # - repoURL: https://github.com/VisioBook-ESP/Repo-test-Infra-Front
     #   path: charts/
