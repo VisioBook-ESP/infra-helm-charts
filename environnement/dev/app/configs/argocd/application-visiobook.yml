@@ -89,7 +89,7 @@ spec:
     # # Content Ingestion Service (sync-wave 0)
     - repoURL: https://github.com/VisioBook-ESP/content-ingestion-service
       path: charts/
-      targetRevision: 13-mise-a-jour-helm-chart
+      targetRevision: dev
       helm:
         valueFiles:
           - values.yaml

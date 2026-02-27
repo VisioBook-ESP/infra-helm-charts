@@ -9,13 +9,12 @@ spec:
       istio: ingress
   action: ALLOW
   rules:
-  # User authentifie -> son propre profil
   - from:
     - source:
         requestPrincipals: ["*"]
     to:
     - operation:
-        paths: ["/api/v1/ingest"]
+        paths: ["/api/v1/ingest*"]
         methods: ["GET", "POST"]
 
   - from:
@@ -23,7 +22,7 @@ spec:
         requestPrincipals: ["*"]
     to:
     - operation:
-        paths: ["/api/v1/preprocess"]
+        paths: ["/api/v1/preprocess*"]
         methods: ["GET", "POST"]
 
   - from:
@@ -31,5 +30,5 @@ spec:
         requestPrincipals: ["*"]
     to:
     - operation:
-        paths: ["/api/v1/extract"]
+        paths: ["/api/v1/extract*"]
         methods: ["GET", "POST"]
