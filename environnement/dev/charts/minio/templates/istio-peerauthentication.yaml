@@ -1,0 +1,19 @@
+{{- if .Values.istio.enabled }}
+apiVersion: security.istio.io/v1beta1
+kind: PeerAuthentication
+metadata:
+  name: {{ include "minio.fullname" . }}
+  labels:
+    {{- include "minio.labels" . | nindent 4 }}
+spec:
+  selector:
+    matchLabels:
+      {{- include "minio.selectorLabels" . | nindent 6 }}
+  mtls:
+    mode: PERMISSIVE
+  portLevelMtls:
+    9000:
+      mode: PERMISSIVE
+    9001:
+      mode: PERMISSIVE
+{{- end }}
