@@ -23,7 +23,7 @@ spec:
         requestPrincipals: ["*"]
     to:
     - operation:
-        paths: ["/api/v1/ingest"]
+        paths: ["/api/v1/preprocess"]
         methods: ["GET", "POST"]
 
   - from:
@@ -31,5 +31,5 @@ spec:
         requestPrincipals: ["*"]
     to:
     - operation:
-        paths: ["/api/v1/ingest"]
+        paths: ["/api/v1/extract"]
         methods: ["GET", "POST"]
