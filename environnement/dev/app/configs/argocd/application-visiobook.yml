@@ -48,7 +48,7 @@ spec:
     # MinIO Storage Instance (sync-wave -1)
     - repoURL: https://github.com/VisioBook-ESP/infra-helm-charts
       path: environnement/dev/charts/minio/
-      targetRevision: main
+      targetRevision: 52-installer-deux-instance-minio-dans-le-cluster
       helm:
         valueFiles:
           - values_storage.yaml
@@ -56,7 +56,7 @@ spec:
     # MinIO Analysis Instance (sync-wave -1)
     - repoURL: https://github.com/VisioBook-ESP/infra-helm-charts
       path: environnement/dev/charts/minio/
-      targetRevision: main
+      targetRevision: 52-installer-deux-instance-minio-dans-le-cluster
       helm:
         valueFiles:
           - values_analysis.yaml
