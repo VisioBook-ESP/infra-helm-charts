@@ -111,6 +111,8 @@ spec:
           - values.yaml
         values: |
           existingSecret: "postgres-io-ingestion-secret"
+          existingMinioSecret: "minio-storage-secret"
+
 
   project: application-visobook
 
