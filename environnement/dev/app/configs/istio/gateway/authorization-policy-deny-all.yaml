@@ -1,0 +1,11 @@
+apiVersion: security.istio.io/v1beta1
+kind: AuthorizationPolicy
+metadata:
+  name: authz-deny-all
+  namespace: istio-system
+spec:
+  selector:
+    matchLabels:
+      istio: ingress
+  # Pas de rules = DENY ALL par défaut
+  # Toute requête qui ne match aucune autre policy ALLOW sera refusée
