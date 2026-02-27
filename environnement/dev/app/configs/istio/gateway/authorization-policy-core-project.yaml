@@ -22,5 +22,6 @@ spec:
         requestPrincipals: ["*"]
     to:
     - operation:
+        paths: ["/api/v1/shared*"]
         methods: ["GET", "POST","PUT", "DELETE"]
 
