@@ -54,12 +54,12 @@ spec:
           - values_storage.yaml
 
     # MinIO Analysis Instance (sync-wave -1)
-    - repoURL: https://github.com/VisioBook-ESP/infra-helm-charts
-      path: environnement/dev/charts/minio/
-      targetRevision: main
-      helm:
-        valueFiles:
-          - values_analysis.yaml
+    # - repoURL: https://github.com/VisioBook-ESP/infra-helm-charts
+    #   path: environnement/dev/charts/minio/
+    #   targetRevision: main
+    #   helm:
+    #     valueFiles:
+    #       - values_analysis.yaml
 
     # Core User Service (sync-wave 0)
     - repoURL: https://github.com/VisioBook-ESP/core-user-service
