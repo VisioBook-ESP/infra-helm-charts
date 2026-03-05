@@ -11,7 +11,7 @@ spec:
   http:
   - match:
     - uri:
-        prefix: "/api/v1/analyse"
+        prefix: "/api/v1/analyze"
     - uri:
         prefix: "/api/v1/jobs"
     route:
