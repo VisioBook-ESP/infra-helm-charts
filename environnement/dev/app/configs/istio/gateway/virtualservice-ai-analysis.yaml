@@ -1,7 +1,7 @@
 apiVersion: networking.istio.io/v1beta1
 kind: VirtualService
 metadata:
-  name: users-routes
+  name: ai-analyzis-routes
   namespace: visiobook-namespace
 spec:
   hosts:
