@@ -1,0 +1,106 @@
+
+replicaCount: 1
+name: pgadmin
+
+image:
+  repository: dpage/pgadmin4
+  pullPolicy: IfNotPresent
+  tag: "8.14"
+
+imagePullSecrets: []
+nameOverride: ""
+fullnameOverride: ""
+
+existingSecretPgadmin: ""
+
+serviceAccount:
+  create: true
+  automount: true
+  annotations: {}
+  name: ""
+
+podAnnotations:
+  sidecar.istio.io/inject: "true"
+
+podLabels:
+  app: pgadmin
+  app.kubernetes.io/name: pgadmin
+  app.kubernetes.io/component: database-management
+
+podSecurityContext:
+  runAsUser: 5050
+  runAsGroup: 5050
+  fsGroup: 5050
+
+securityContext: {}
+
+service:
+  type: ClusterIP
+  port: 80
+
+ingress:
+  enabled: false
+  className: ""
+  annotations: {}
+  hosts:
+    - host: pgadmin.local
+      paths:
+        - path: /
+          pathType: ImplementationSpecific
+  tls: []
+
+resources:
+  limits:
+    cpu: 500m
+    memory: 512Mi
+  requests:
+    cpu: 100m
+    memory: 256Mi
+
+persistence:
+  enabled: true
+  storageClass: ""
+  accessModes:
+    - ReadWriteOnce
+  size: 1Gi
+
+serverDefinitions:
+  enabled: false
+  servers: {}
+  #  core-database:
+  #    Name: "Core Database"
+  #    Group: "Visiobook"
+  #    Host: "postgresql-core-database"
+  #    Port: 5432
+  #    Username: "postgres"
+  #    SSLMode: "prefer"
+  #    MaintenanceDB: "postgres"
+
+livenessProbe:
+  httpGet:
+    path: /misc/ping
+    port: http
+  initialDelaySeconds: 30
+  periodSeconds: 10
+  timeoutSeconds: 5
+
+readinessProbe:
+  httpGet:
+    path: /misc/ping
+    port: http
+  initialDelaySeconds: 15
+  periodSeconds: 10
+  timeoutSeconds: 5
+
+autoscaling:
+  enabled: false
+  minReplicas: 1
+  maxReplicas: 3
+  targetCPUUtilizationPercentage: 80
+
+volumes: []
+volumeMounts: []
+nodeSelector: {}
+tolerations: []
+affinity: {}
+

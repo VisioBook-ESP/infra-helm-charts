@@ -1,0 +1,22 @@
+{{- if .Values.serverDefinitions.enabled }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "pgadmin.fullname" . }}-servers
+  namespace: {{ .Release.Namespace }}
+  labels:
+    {{- include "pgadmin.labels" . | nindent 4 }}
+data:
+  servers.json: |
+    {
+      "Servers": {
+        {{- $servers := .Values.serverDefinitions.servers }}
+        {{- $i := 1 }}
+        {{- range $key, $val := $servers }}
+        "{{ $i }}": {{ $val | toJson }}{{ if lt $i (len $servers) }},{{ end }}
+        {{- $i = add $i 1 }}
+        {{- end }}
+      }
+    }
+{{- end }}
+

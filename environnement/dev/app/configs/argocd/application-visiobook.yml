@@ -29,6 +29,13 @@ spec:
       directory:
         recurse: false
 
+    # Pgadmin secrets (sync-wave -2)
+    - repoURL: https://github.com/VisioBook-ESP/infra-helm-charts
+      path: environnement/dev/app/configs/secrets/
+      targetRevision: 54-mise-en-place-de-pgadmin
+      directory:
+        recurse: false
+
     # CRUD PostgreSQL Cluster (sync-wave -1)
     - repoURL: https://github.com/VisioBook-ESP/infra-helm-charts
       path: environnement/dev/charts/cloud-native-postgres/
@@ -45,6 +52,16 @@ spec:
         valueFiles:
           - values-io.yaml
 
+    # PGADMIN
+    - repoURL: https://github.com/VisioBook-ESP/infra-helm-charts
+      path: environnement/dev/charts/pgadmin/
+      targetRevision: 54-mise-en-place-de-pgadmin
+      helm:
+        valueFiles:
+          - values.yaml
+        values: |
+          existingSecretPgadmin: "pgadmin-user-secret"
+
     # MinIO Storage Instance (sync-wave -1)
     - repoURL: https://github.com/VisioBook-ESP/infra-helm-charts
       path: environnement/dev/charts/minio/
@@ -52,6 +69,7 @@ spec:
       helm:
         valueFiles:
           - values_storage.yaml
+
 
     # MinIO Analysis Instance (sync-wave -1)
     - repoURL: https://github.com/VisioBook-ESP/infra-helm-charts
@@ -112,8 +130,18 @@ spec:
         values: |
           existingSecret: "postgres-io-ingestion-secret"
           existingMinioSecret: "minio-storage-secret"
+          
 
-
+    - repoURL: https://github.com/VisioBook-ESP/core-project-service
+      path: charts/
+      targetRevision: dev
+      helm:
+        valueFiles:
+          - values.yaml
+        values: |
+          existingSecretPgcrud: "postgres-crud-project-secret"
+          syncWave: 0
+          
   project: application-visobook
 
   # Ignore operator-managed fields
