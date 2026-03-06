@@ -24,21 +24,38 @@ sudo systemctl enable argocd-portforward
 sudo systemctl start argocd-portforward
 
 
-# Créer le service systemd pour minikube tunnel (donne une ip au LB)
-sudo tee  argocd-portforward.service <<EOF
+## Health check automatique (redémarre le port-forward si ArgoCD ne répond plus)
+
+Le `kubectl port-forward` peut se dégrader sans crasher (timeouts silencieux).
+Un timer systemd vérifie la connectivité toutes les 2 minutes et redémarre le service si besoin.
+
+sudo nano /etc/systemd/system/argocd-healthcheck.service
+
+```
 [Unit]
-Description=ArgoCD Port Forward
-After=network.target
+Description=ArgoCD Port Forward Health Check
 
 [Service]
-Type=simple
-User=debian
-ExecStart=/usr/bin/kubectl port-forward svc/argocd-server -n argocd --address 0.0.0.0 8080:443
-Restart=always
-RestartSec=5
+Type=oneshot
+ExecStart=/bin/bash -c 'if ! curl -sf -o /dev/null -m 5 http://localhost:8080; then echo "ArgoCD port-forward unhealthy, restarting..."; systemctl restart argocd-portforward; fi'
+```
+
+sudo nano /etc/systemd/system/argocd-healthcheck.timer
+
+```
+[Unit]
+Description=ArgoCD Port Forward Health Check Timer
+
+[Timer]
+OnBootSec=60
+OnUnitActiveSec=120
 
 [Install]
-WantedBy=multi-user.target
+WantedBy=timers.target
+```
+
+sudo systemctl daemon-reload
+sudo systemctl enable --now argocd-healthcheck.timer
 
 
 
