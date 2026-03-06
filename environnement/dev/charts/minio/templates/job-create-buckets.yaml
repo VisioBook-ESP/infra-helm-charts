@@ -6,7 +6,6 @@ metadata:
   labels:
     {{- include "minio.labels" . | nindent 4 }}
 spec:
-  ttlSecondsAfterFinished: 300
   backoffLimit: 5
   template:
     metadata:
