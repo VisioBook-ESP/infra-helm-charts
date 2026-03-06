@@ -1,6 +1,6 @@
 #!/bin/bash
 
-NAMESPACE="dev"
+NAMESPACE="visiobook-namespace"
 MINIO_CONTAINER="minio"
 MINIO_PORT=9000
 
