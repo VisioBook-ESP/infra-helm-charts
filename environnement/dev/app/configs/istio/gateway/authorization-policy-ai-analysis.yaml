@@ -1,0 +1,27 @@
+apiVersion: security.istio.io/v1beta1
+kind: AuthorizationPolicy
+metadata:
+  name: ai-analyzis-policy
+  namespace: istio-system
+spec:
+  selector:
+    matchLabels:
+      istio: ingress
+  action: ALLOW
+  rules:
+  - from:
+    - source:
+        requestPrincipals: ["*"]
+    to:
+    - operation:
+        paths: ["/api/v1/analyze*"]
+        methods: ["POST"]
+
+  - from:
+    - source:
+        requestPrincipals: ["*"]
+    to:
+    - operation:
+        paths: ["/api/v1/jobs*"]
+        methods: ["GET"]
+
