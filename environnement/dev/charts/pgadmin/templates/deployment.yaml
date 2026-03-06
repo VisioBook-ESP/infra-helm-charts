@@ -49,13 +49,13 @@ spec:
             - name: PGADMIN_DEFAULT_EMAIL
               valueFrom:
                 secretKeyRef:
-                  name: {{ include "pgadmin.fullname" . }}-secret
-                  key: default-email
+                  name: {{ .Values.pgadmin.existingSecret }}
+                  key: defaultEmail
             - name: PGADMIN_DEFAULT_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: {{ include "pgadmin.fullname" . }}-secret
-                  key: default-password
+                  name: {{ .Values.pgadmin.existingSecret }}
+                  key: defaultPassword
             - name: PGADMIN_LISTEN_PORT
               value: "80"
           {{- with .Values.livenessProbe }}

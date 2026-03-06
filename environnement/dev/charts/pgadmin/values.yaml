@@ -12,8 +12,7 @@ nameOverride: ""
 fullnameOverride: ""
 
 pgadmin:
-  defaultEmail: "admin@visiobook.com"
-  defaultPassword: "admin"
+  existingSecret: pgadmin-user-secret
 
 serviceAccount:
   create: true
