@@ -77,7 +77,7 @@ spec:
         valueFiles:
           - values.yaml
         values: |
-          existingSecretPgcrud: "pgadmin-user-secret"
+          existingSecretPgcrud: "postgres-crud-project-secret"
 
     # MinIO Analysis Instance (sync-wave -1)
     - repoURL: https://github.com/VisioBook-ESP/infra-helm-charts
