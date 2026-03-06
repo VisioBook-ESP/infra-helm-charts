@@ -140,7 +140,7 @@ spec:
           - values.yaml
         values: |
           existingSecretPgcrud: "postgres-crud-project-secret"
-          syncWave: 1
+          syncWave: 0
   project: application-visobook
 
   # Ignore operator-managed fields
