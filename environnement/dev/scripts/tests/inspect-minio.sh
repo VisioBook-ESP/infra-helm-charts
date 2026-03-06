@@ -3,6 +3,7 @@
 NAMESPACE="visiobook-namespace"
 MINIO_CONTAINER="minio"
 MINIO_PORT=9000
+MINIO_INSTANCES=("minio-storage" "minio-analysis")
 
 # Couleurs
 GREEN='\033[0;32m'
@@ -25,34 +26,45 @@ section() {
   echo -e "${CYAN}${BOLD}--- $1 ---${NC}"
 }
 
-error() {
-  echo -e "${RED}[ERREUR] $1${NC}"
-  exit 1
+fmt_size() {
+  python3 -c "
+b = $1
+for u in ['B','KB','MB','GB','TB']:
+    if b < 1024: print(f'{b:.1f} {u}'); break
+    b /= 1024
+else: print(f'{b:.1f} PB')
+" 2>/dev/null
 }
 
-# Trouver le pod MinIO
-POD=$(kubectl get pods -n "$NAMESPACE" -l app=minio -o jsonpath='{.items[0].metadata.name}' 2>/dev/null)
-if [ -z "$POD" ]; then
-  error "Aucun pod MinIO trouve dans le namespace '$NAMESPACE'"
-fi
-
-echo -e "${DIM}Pod MinIO: $POD${NC}"
-
-# Fonction pour executer mc dans le pod
+# Fonction pour executer mc dans un pod
 mc_exec() {
-  kubectl exec -n "$NAMESPACE" "$POD" -c "$MINIO_CONTAINER" -- \
-    sh -c "mc alias set myminio http://localhost:${MINIO_PORT} \$MINIO_ROOT_USER \$MINIO_ROOT_PASSWORD >/dev/null 2>&1 && $1" 2>/dev/null
+  local pod="$1"
+  local cmd="$2"
+  kubectl exec -n "$NAMESPACE" "$pod" -c "$MINIO_CONTAINER" -- \
+    sh -c "mc alias set myminio http://localhost:${MINIO_PORT} \$MINIO_ROOT_USER \$MINIO_ROOT_PASSWORD >/dev/null 2>&1 && $cmd" 2>/dev/null
 }
 
-# =============================================
-# Info serveur
-# =============================================
-header "INSPECTION MINIO"
+inspect_instance() {
+  local INSTANCE="$1"
+  local INSTANCE_TOTAL_FILES=0
+  local INSTANCE_TOTAL_SIZE=0
+  local INSTANCE_BUCKET_COUNT=0
 
-section "Info serveur"
-SERVER_INFO=$(mc_exec "mc admin info myminio --json" 2>/dev/null)
-if [ $? -eq 0 ] && [ -n "$SERVER_INFO" ]; then
-  echo "$SERVER_INFO" | python3 -c "
+  # Trouver le pod
+  POD=$(kubectl get pods -n "$NAMESPACE" -l "app=${INSTANCE}" -o jsonpath='{.items[0].metadata.name}' 2>/dev/null)
+  if [ -z "$POD" ]; then
+    echo -e "  ${RED}Aucun pod trouve pour '${INSTANCE}'${NC}"
+    echo ""
+    return
+  fi
+  echo -e "  ${DIM}Pod: $POD${NC}"
+  echo ""
+
+  # Info serveur
+  section "Info serveur"
+  SERVER_INFO=$(mc_exec "$POD" "mc admin info myminio --json" 2>/dev/null)
+  if [ $? -eq 0 ] && [ -n "$SERVER_INFO" ]; then
+    echo "$SERVER_INFO" | python3 -c "
 import sys, json
 try:
     data = json.load(sys.stdin)
@@ -73,29 +85,23 @@ try:
 except:
     print('  (info detaillee non disponible)')
 " 2>/dev/null || echo -e "  ${DIM}(info serveur non disponible)${NC}"
-else
-  echo -e "  ${DIM}(mc admin info non disponible, affichage des buckets uniquement)${NC}"
-fi
-echo ""
-
-# =============================================
-# Liste des buckets et contenu
-# =============================================
-section "Buckets et contenu"
-echo ""
-
-BUCKETS=$(mc_exec "mc ls myminio --json" 2>/dev/null)
-if [ -z "$BUCKETS" ]; then
-  echo -e "  ${YELLOW}Aucun bucket trouve.${NC}"
+  else
+    echo -e "  ${DIM}(mc admin info non disponible)${NC}"
+  fi
   echo ""
-  exit 0
-fi
 
-TOTAL_FILES=0
-TOTAL_SIZE=0
-BUCKET_COUNT=0
+  # Liste des buckets
+  section "Buckets et contenu"
+  echo ""
 
-BUCKET_NAMES=$(echo "$BUCKETS" | python3 -c "
+  BUCKETS=$(mc_exec "$POD" "mc ls myminio --json" 2>/dev/null)
+  if [ -z "$BUCKETS" ]; then
+    echo -e "  ${YELLOW}Aucun bucket trouve.${NC}"
+    echo ""
+    return
+  fi
+
+  BUCKET_NAMES=$(echo "$BUCKETS" | python3 -c "
 import sys, json
 for line in sys.stdin:
     line = line.strip()
@@ -108,18 +114,18 @@ for line in sys.stdin:
     except: pass
 " 2>/dev/null)
 
-if [ -z "$BUCKET_NAMES" ]; then
-  echo -e "  ${YELLOW}Aucun bucket trouve.${NC}"
-  echo ""
-  exit 0
-fi
+  if [ -z "$BUCKET_NAMES" ]; then
+    echo -e "  ${YELLOW}Aucun bucket trouve.${NC}"
+    echo ""
+    return
+  fi
 
-while IFS= read -r BUCKET; do
-  BUCKET_COUNT=$((BUCKET_COUNT + 1))
+  while IFS= read -r BUCKET; do
+    INSTANCE_BUCKET_COUNT=$((INSTANCE_BUCKET_COUNT + 1))
 
-  # Taille du bucket
-  BUCKET_DU=$(mc_exec "mc du myminio/${BUCKET} --json" 2>/dev/null)
-  BUCKET_SIZE=$(echo "$BUCKET_DU" | python3 -c "
+    # Taille du bucket
+    BUCKET_DU=$(mc_exec "$POD" "mc du myminio/${BUCKET} --json" 2>/dev/null)
+    BUCKET_SIZE=$(echo "$BUCKET_DU" | python3 -c "
 import sys, json
 for line in sys.stdin:
     try:
@@ -128,26 +134,18 @@ for line in sys.stdin:
         break
     except: pass
 " 2>/dev/null)
-  BUCKET_SIZE=${BUCKET_SIZE:-0}
+    BUCKET_SIZE=${BUCKET_SIZE:-0}
+    BUCKET_SIZE_FMT=$(fmt_size "$BUCKET_SIZE")
 
-  BUCKET_SIZE_FMT=$(python3 -c "
-b = $BUCKET_SIZE
-for u in ['B','KB','MB','GB','TB']:
-    if b < 1024: print(f'{b:.1f} {u}'); break
-    b /= 1024
-else: print(f'{b:.1f} PB')
-" 2>/dev/null)
+    echo -e "  ${CYAN}${BOLD}[$BUCKET]${NC}  ${YELLOW}${BUCKET_SIZE_FMT}${NC}"
 
-  echo -e "  ${CYAN}${BOLD}[$BUCKET]${NC}  ${YELLOW}${BUCKET_SIZE_FMT}${NC}"
+    # Lister les fichiers
+    FILES=$(mc_exec "$POD" "mc ls --recursive myminio/${BUCKET} --json" 2>/dev/null)
 
-  # Lister les fichiers
-  FILES=$(mc_exec "mc ls --recursive myminio/${BUCKET} --json" 2>/dev/null)
-
-  if [ -z "$FILES" ]; then
-    echo -e "    ${DIM}(vide)${NC}"
-  else
-    FILE_COUNT=0
-    echo "$FILES" | python3 -c "
+    if [ -z "$FILES" ]; then
+      echo -e "    ${DIM}(vide)${NC}"
+    else
+      echo "$FILES" | python3 -c "
 import sys, json
 
 files = []
@@ -166,24 +164,21 @@ for line in sys.stdin:
 if not files:
     print('    (vide)')
 else:
-    # Trouver la largeur max pour aligner
     max_name = max(len(f[0]) for f in files)
     max_name = min(max_name, 60)
     for name, size, mod in files:
-        # Formater la taille
         b = size
         for u in ['B','KB','MB','GB','TB']:
             if b < 1024: sz = f'{b:.1f} {u}'; break
             b /= 1024
         else: sz = f'{b:.1f} PB'
-        # Formater la date
         date_str = mod[:10] if len(mod) >= 10 else mod
         display_name = name if len(name) <= 60 else '...' + name[-57:]
         print(f'    {display_name:<{max_name}}  {sz:>10}  {date_str}')
     print(f'    -- {len(files)} fichier(s)')
 " 2>/dev/null
 
-    FILE_COUNT_BUCKET=$(echo "$FILES" | python3 -c "
+      FILE_COUNT_BUCKET=$(echo "$FILES" | python3 -c "
 import sys, json
 count = 0
 for line in sys.stdin:
@@ -194,28 +189,45 @@ for line in sys.stdin:
     except: pass
 print(count)
 " 2>/dev/null)
-    FILE_COUNT_BUCKET=${FILE_COUNT_BUCKET:-0}
-    TOTAL_FILES=$((TOTAL_FILES + FILE_COUNT_BUCKET))
-  fi
+      FILE_COUNT_BUCKET=${FILE_COUNT_BUCKET:-0}
+      INSTANCE_TOTAL_FILES=$((INSTANCE_TOTAL_FILES + FILE_COUNT_BUCKET))
+    fi
 
-  TOTAL_SIZE=$((TOTAL_SIZE + BUCKET_SIZE))
+    INSTANCE_TOTAL_SIZE=$((INSTANCE_TOTAL_SIZE + BUCKET_SIZE))
+    echo ""
+  done <<< "$BUCKET_NAMES"
+
+  # Resume de l'instance
+  INSTANCE_SIZE_FMT=$(fmt_size "$INSTANCE_TOTAL_SIZE")
+  echo -e "  ${BOLD}Sous-total:${NC} ${INSTANCE_BUCKET_COUNT} bucket(s), ${INSTANCE_TOTAL_FILES} fichier(s), ${YELLOW}${INSTANCE_SIZE_FMT}${NC}"
   echo ""
 
-done <<< "$BUCKET_NAMES"
+  # Exporter pour le total global
+  GLOBAL_BUCKETS=$((GLOBAL_BUCKETS + INSTANCE_BUCKET_COUNT))
+  GLOBAL_FILES=$((GLOBAL_FILES + INSTANCE_TOTAL_FILES))
+  GLOBAL_SIZE=$((GLOBAL_SIZE + INSTANCE_TOTAL_SIZE))
+}
 
 # =============================================
-# Resume
+# Main
 # =============================================
-TOTAL_SIZE_FMT=$(python3 -c "
-b = $TOTAL_SIZE
-for u in ['B','KB','MB','GB','TB']:
-    if b < 1024: print(f'{b:.1f} {u}'); break
-    b /= 1024
-else: print(f'{b:.1f} PB')
-" 2>/dev/null)
+GLOBAL_BUCKETS=0
+GLOBAL_FILES=0
+GLOBAL_SIZE=0
 
-header "RESUME"
-echo -e "  Buckets      : ${BOLD}${BUCKET_COUNT}${NC}"
-echo -e "  Fichiers     : ${BOLD}${TOTAL_FILES}${NC}"
-echo -e "  Taille totale: ${YELLOW}${BOLD}${TOTAL_SIZE_FMT}${NC}"
+for INSTANCE in "${MINIO_INSTANCES[@]}"; do
+  header "MINIO: ${INSTANCE^^}"
+  inspect_instance "$INSTANCE"
+done
+
+# =============================================
+# Resume global
+# =============================================
+GLOBAL_SIZE_FMT=$(fmt_size "$GLOBAL_SIZE")
+
+header "RESUME GLOBAL"
+echo -e "  Instances    : ${BOLD}${#MINIO_INSTANCES[@]}${NC}"
+echo -e "  Buckets      : ${BOLD}${GLOBAL_BUCKETS}${NC}"
+echo -e "  Fichiers     : ${BOLD}${GLOBAL_FILES}${NC}"
+echo -e "  Taille totale: ${YELLOW}${BOLD}${GLOBAL_SIZE_FMT}${NC}"
 echo ""
