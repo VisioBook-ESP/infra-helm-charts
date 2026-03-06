@@ -70,6 +70,13 @@ spec:
         valueFiles:
           - values_storage.yaml
 
+    - repoURL: https://github.com/VisioBook-ESP/core-project-service
+      path: charts/
+      targetRevision: dev
+      helm:
+        valueFiles:
+          - values.yaml
+
     # MinIO Analysis Instance (sync-wave -1)
     - repoURL: https://github.com/VisioBook-ESP/infra-helm-charts
       path: environnement/dev/charts/minio/
