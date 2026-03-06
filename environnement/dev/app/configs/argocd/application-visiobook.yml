@@ -90,12 +90,12 @@ spec:
             ENV: prod
             LOG_LEVEL: warn
 
-    # - repoURL: https://github.com/VisioBook-ESP/Repo-test-Infra-Front
-    #   path: charts/
-    #   targetRevision: dev
-    #   helm:
-    #     valueFiles:
-    #       - values.yaml
+    - repoURL: https://github.com/VisioBook-ESP/Repo-test-Infra-Front
+      path: charts/
+      targetRevision: dev
+      helm:
+        valueFiles:
+          - values.yaml
           
     # Support Storage Service (sync-wave 0)
     # - repoURL: https://github.com/VisioBook-ESP/support-storage-service
@@ -108,16 +108,16 @@ spec:
     #       existingSecret: "postgres-io-storage-secret"
 
     # AI Analysis Service (sync-wave 0)
-    # - repoURL: https://github.com/VisioBook-ESP/ai-analysis-service
-    #   path: charts/
-    #   targetRevision: dev
-    #   helm:
-    #     valueFiles:
-    #       - values.yaml
-    #     values: |
-    #       existingSecret: "postgres-io-analysis-secret"
+    - repoURL: https://github.com/VisioBook-ESP/ai-analysis-service
+      path: charts/
+      targetRevision: dev
+      helm:
+        valueFiles:
+          - values.yaml
+        values: |
+          existingSecret: "postgres-io-analysis-secret"
 
-    # # Content Ingestion Service (sync-wave 0)
+    # Content Ingestion Service (sync-wave 0)
     - repoURL: https://github.com/VisioBook-ESP/content-ingestion-service
       path: charts/
       targetRevision: dev

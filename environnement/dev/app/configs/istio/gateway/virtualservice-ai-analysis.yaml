@@ -1,0 +1,21 @@
+apiVersion: networking.istio.io/v1beta1
+kind: VirtualService
+metadata:
+  name: ai-analyzis-routes
+  namespace: visiobook-namespace
+spec:
+  hosts:
+  - "*"
+  gateways:
+  - istio-system/visiobook-gateway
+  http:
+  - match:
+    - uri:
+        prefix: "/api/v1/analyze"
+    - uri:
+        prefix: "/api/v1/jobs"
+    route:
+    - destination:
+        host: ai-analysis-service
+        port:
+          number: 80
