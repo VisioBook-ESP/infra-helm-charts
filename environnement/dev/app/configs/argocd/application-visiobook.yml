@@ -130,8 +130,8 @@ spec:
         values: |
           existingSecret: "postgres-io-ingestion-secret"
           existingMinioSecret: "minio-storage-secret"
-          syncWave: 1
           
+
     - repoURL: https://github.com/VisioBook-ESP/core-project-service
       path: charts/
       targetRevision: dev
@@ -140,7 +140,7 @@ spec:
           - values.yaml
         values: |
           existingSecretPgcrud: "postgres-crud-project-secret"
-
+          syncWave: 1
   project: application-visobook
 
   # Ignore operator-managed fields
