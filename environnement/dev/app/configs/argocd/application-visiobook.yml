@@ -70,14 +70,6 @@ spec:
         valueFiles:
           - values_storage.yaml
 
-    # - repoURL: https://github.com/VisioBook-ESP/core-project-service
-    #   path: charts/
-    #   targetRevision: dev
-    #   helm:
-    #     valueFiles:
-    #       - values.yaml
-    #     values: |
-    #       existingSecretPgcrud: "postgres-crud-project-secret"
 
     # MinIO Analysis Instance (sync-wave -1)
     - repoURL: https://github.com/VisioBook-ESP/infra-helm-charts
@@ -139,6 +131,14 @@ spec:
           existingSecret: "postgres-io-ingestion-secret"
           existingMinioSecret: "minio-storage-secret"
 
+    - repoURL: https://github.com/VisioBook-ESP/core-project-service
+      path: charts/
+      targetRevision: dev
+      helm:
+        valueFiles:
+          - values.yaml
+        values: |
+          existingSecretPgcrud: "postgres-crud-project-secret"
 
   project: application-visobook
 
