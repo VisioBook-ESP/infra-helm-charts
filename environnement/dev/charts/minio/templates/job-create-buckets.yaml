@@ -5,10 +5,8 @@ metadata:
   name: {{ include "minio.fullname" . }}-create-buckets
   labels:
     {{- include "minio.labels" . | nindent 4 }}
-  annotations:
-    argocd.argoproj.io/hook: PostSync
-    argocd.argoproj.io/hook-delete-policy: BeforeHookCreation
 spec:
+  ttlSecondsAfterFinished: 300
   backoffLimit: 5
   template:
     metadata:
