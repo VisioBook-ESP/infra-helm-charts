@@ -130,7 +130,8 @@ spec:
         values: |
           existingSecret: "postgres-io-ingestion-secret"
           existingMinioSecret: "minio-storage-secret"
-
+          syncWave: 1
+          
     - repoURL: https://github.com/VisioBook-ESP/core-project-service
       path: charts/
       targetRevision: dev
