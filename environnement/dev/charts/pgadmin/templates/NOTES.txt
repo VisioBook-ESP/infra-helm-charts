@@ -22,6 +22,5 @@
 {{- end }}
 
 2. Login with:
-   Email: {{ .Values.pgadmin.defaultEmail }}
-   Password: (the password you set in values.yaml)
-
+   Email: Check your secret "{{ .Values.existingSecretPgadmin }}" for the default email
+   Password: Check your secret "{{ .Values.existingSecretPgadmin }}" for the default password
