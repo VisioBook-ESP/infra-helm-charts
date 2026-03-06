@@ -45,6 +45,14 @@ spec:
         valueFiles:
           - values-io.yaml
 
+    # PGADMIN
+    - repoURL: https://github.com/VisioBook-ESP/infra-helm-charts
+      path: environnement/dev/charts/pgadmin/
+      targetRevision: 54-mise-en-place-de-pgadmin
+      helm:
+        valueFiles:
+          - values.yaml
+
     # MinIO Storage Instance (sync-wave -1)
     - repoURL: https://github.com/VisioBook-ESP/infra-helm-charts
       path: environnement/dev/charts/minio/
