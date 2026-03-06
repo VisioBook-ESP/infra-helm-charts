@@ -46,12 +46,12 @@ spec:
               containerPort: 80
               protocol: TCP
           env:
-                    {{- range $key, $value := .Values.env }}
-            - name: {{ $key }}
-              value: {{ $value | quote }}
-                    {{- end }}
-                    {{- if .Values.existingSecretPgadmin }}
-            - name: defaultEmail
+            - name: PGADMIN_DEFAULT_EMAIL
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.existingSecretPgadmin }}
+                  key: defaultEmail
+            - name: PGADMIN_DEFAULT_PASSWORD
               valueFrom:
                 secretKeyRef:
                   name: {{ .Values.existingSecretPgadmin }}
