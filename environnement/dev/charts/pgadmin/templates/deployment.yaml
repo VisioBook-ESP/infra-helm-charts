@@ -46,6 +46,7 @@ spec:
               containerPort: 80
               protocol: TCP
           env:
+          {{- if .Values.existingSecretPgadmin }}
             - name: PGADMIN_DEFAULT_EMAIL
               valueFrom:
                 secretKeyRef:
@@ -58,6 +59,7 @@ spec:
                   key: defaultPassword
             - name: PGADMIN_LISTEN_PORT
               value: "80"
+          {{- end }}
           {{- with .Values.livenessProbe }}
           livenessProbe:
             {{- toYaml . | nindent 12 }}
