@@ -59,6 +59,8 @@ spec:
       helm:
         valueFiles:
           - values.yaml
+        values: |
+          existingSecret: "pgadmin-user-secret"
 
     # MinIO Storage Instance (sync-wave -1)
     - repoURL: https://github.com/VisioBook-ESP/infra-helm-charts

@@ -11,8 +11,7 @@ imagePullSecrets: []
 nameOverride: ""
 fullnameOverride: ""
 
-pgadmin:
-  existingSecret: pgadmin-user-secret
+existingSecretPgadmin: ""
 
 serviceAccount:
   create: true
