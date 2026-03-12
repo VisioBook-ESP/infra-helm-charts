@@ -69,6 +69,7 @@ spec:
       helm:
         valueFiles:
           - values.yaml
+          
     - repoURL: https://github.com/VisioBook-ESP/infra-helm-charts
       path: environnement/dev/charts/redis-db/
       targetRevision: main
