@@ -115,7 +115,7 @@ spec:
         valueFiles:
           - values.yaml
           
-    Support Storage Service (sync-wave 0)
+    # Support Storage Service (sync-wave 0)
     - repoURL: https://github.com/VisioBook-ESP/support-storage-service
       path: charts/
       targetRevision: dev
