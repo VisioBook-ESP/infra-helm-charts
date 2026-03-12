@@ -15,6 +15,7 @@ spec:
     metadata:
       annotations:
         sidecar.istio.io/inject: "true"
+        traffic.sidecar.istio.io/excludeInboundPorts: "6379"
         {{- with .Values.podAnnotations }}
         {{- toYaml . | nindent 8 }}
         {{- end }}

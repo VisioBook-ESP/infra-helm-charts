@@ -20,6 +20,7 @@ podAnnotations:
   sidecar.istio.io/inject: "true"
   sidecar.istio.io/proxyCPU: "100m"
   sidecar.istio.io/proxyMemory: "128Mi"
+  traffic.sidecar.istio.io/excludeInboundPorts: "4222"
 
 podLabels:
   version: v1
