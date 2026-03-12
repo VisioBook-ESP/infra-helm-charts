@@ -37,5 +37,12 @@ spec:
         requestPrincipals: ["*"]
     to:
     - operation:
+        paths: ["/api/v1/validate*"]
+        methods: ["GET", "POST"]
+  - from:
+    - source:
+        requestPrincipals: ["*"]
+    to:
+    - operation:
         paths: ["/api/v1/upload*"]
         methods: ["GET", "POST"]
