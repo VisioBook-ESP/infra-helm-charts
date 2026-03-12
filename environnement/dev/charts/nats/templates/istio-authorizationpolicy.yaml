@@ -1,0 +1,40 @@
+{{- /*
+Exemple d'AuthorizationPolicy pour NATS
+Décommenter le bloc ci-dessous et adapter selon les services qui doivent accéder à NATS
+
+apiVersion: security.istio.io/v1beta1
+kind: AuthorizationPolicy
+metadata:
+  name: nats-allow
+  namespace: visiobook-namespace
+spec:
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: nats
+  action: ALLOW
+  rules:
+    # Autoriser ai-analysis-service
+    - from:
+        - source:
+            principals:
+              - "cluster.local/ns/visiobook-namespace/sa/ai-analysis-service"
+      to:
+        - operation:
+            ports: ["4222"]
+    # Autoriser core-user-service
+    - from:
+        - source:
+            principals:
+              - "cluster.local/ns/visiobook-namespace/sa/core-user-service"
+      to:
+        - operation:
+            ports: ["4222"]
+    # Autoriser content-ingestion-service
+    - from:
+        - source:
+            principals:
+              - "cluster.local/ns/visiobook-namespace/sa/content-ingestion-service"
+      to:
+        - operation:
+            ports: ["4222"]
+*/ -}}

@@ -1,0 +1,20 @@
+{{- if .Values.istio.enabled }}
+apiVersion: networking.istio.io/v1beta1
+kind: VirtualService
+metadata:
+  name: {{ include "nats.fullname" . }}
+  namespace: {{ .Release.Namespace }}
+  labels:
+    {{- include "nats.labels" . | nindent 4 }}
+spec:
+  hosts:
+    - {{ include "nats.fullname" . }}.{{ .Release.Namespace }}.svc.cluster.local
+  tcp:
+    - match:
+        - port: 4222
+      route:
+        - destination:
+            host: {{ include "nats.fullname" . }}.{{ .Release.Namespace }}.svc.cluster.local
+            port:
+              number: 4222
+{{- end }}

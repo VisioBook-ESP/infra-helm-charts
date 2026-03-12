@@ -62,6 +62,14 @@ spec:
         values: |
           existingSecretPgadmin: "pgadmin-user-secret"
 
+    # NATS JetStream (sync-wave -1)
+    - repoURL: https://github.com/VisioBook-ESP/infra-helm-charts
+      path: environnement/dev/charts/nats/
+      targetRevision: main
+      helm:
+        valueFiles:
+          - values.yaml
+
     # MinIO Storage Instance (sync-wave -1)
     - repoURL: https://github.com/VisioBook-ESP/infra-helm-charts
       path: environnement/dev/charts/minio/
@@ -121,15 +129,15 @@ spec:
           existingSecret: "postgres-io-analysis-secret"
 
     # Content Ingestion Service (sync-wave 0)
-    - repoURL: https://github.com/VisioBook-ESP/content-ingestion-service
-      path: charts/
-      targetRevision: dev
-      helm:
-        valueFiles:
-          - values.yaml
-        values: |
-          existingSecret: "postgres-io-ingestion-secret"
-          existingMinioSecret: "minio-storage-secret"
+    # - repoURL: https://github.com/VisioBook-ESP/content-ingestion-service
+    #   path: charts/
+    #   targetRevision: dev
+    #   helm:
+    #     valueFiles:
+    #       - values.yaml
+    #     values: |
+    #       existingSecret: "postgres-io-ingestion-secret"
+    #       existingMinioSecret: "minio-storage-secret"
           
 
     - repoURL: https://github.com/VisioBook-ESP/core-project-service
