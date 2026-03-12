@@ -1,0 +1,21 @@
+{{- if .Values.nats.persistence.enabled }}
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: {{ include "nats.fullname" . }}-pvc
+  labels:
+    {{- include "nats.labels" . | nindent 4 }}
+spec:
+  accessModes:
+    - {{ .Values.nats.persistence.accessMode }}
+  {{- if .Values.nats.persistence.storageClass }}
+  {{- if (eq "-" .Values.nats.persistence.storageClass) }}
+  storageClassName: ""
+  {{- else }}
+  storageClassName: {{ .Values.nats.persistence.storageClass }}
+  {{- end }}
+  {{- end }}
+  resources:
+    requests:
+      storage: {{ .Values.nats.persistence.size }}
+{{- end }}

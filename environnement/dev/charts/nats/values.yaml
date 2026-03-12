@@ -1,0 +1,132 @@
+replicaCount: 1
+name: nats
+
+image:
+  repository: nats
+  tag: 2.10-alpine
+  pullPolicy: IfNotPresent
+
+imagePullSecrets: []
+nameOverride: ""
+fullnameOverride: ""
+
+serviceAccount:
+  create: true
+  automount: true
+  annotations: {}
+  name: ""
+
+podAnnotations:
+  sidecar.istio.io/inject: "true"
+  sidecar.istio.io/proxyCPU: "100m"
+  sidecar.istio.io/proxyMemory: "128Mi"
+
+podLabels:
+  version: v1
+  app: nats
+
+podSecurityContext:
+  fsGroup: 1000
+  runAsUser: 1000
+  runAsNonRoot: true
+
+securityContext:
+  allowPrivilegeEscalation: false
+  capabilities:
+    drop:
+      - ALL
+  readOnlyRootFilesystem: false
+
+service:
+  type: ClusterIP
+  clientPort: 4222
+  monitorPort: 8222
+
+resources:
+  limits:
+    cpu: 500m
+    memory: 512Mi
+  requests:
+    cpu: 100m
+    memory: 128Mi
+
+livenessProbe:
+  enabled: true
+  initialDelaySeconds: 10
+  periodSeconds: 10
+  timeoutSeconds: 5
+  failureThreshold: 3
+
+readinessProbe:
+  enabled: true
+  initialDelaySeconds: 5
+  periodSeconds: 10
+  timeoutSeconds: 5
+  failureThreshold: 3
+
+volumes: []
+volumeMounts: []
+
+nodeSelector: {}
+tolerations: []
+affinity: {}
+
+nats:
+  jetstream:
+    enabled: true
+    maxMemStore: "256MB"
+    maxFileStore: "1GB"
+
+  persistence:
+    enabled: true
+    storageClass: "local-path"
+    accessMode: ReadWriteOnce
+    size: 8Gi
+
+# Configuration Istio
+istio:
+  enabled: true
+  injection: true
+
+  connectionPool:
+    maxConnections: 100
+
+  mtls:
+    enabled: true
+    mode: ISTIO_MUTUAL
+
+  peerAuthentication:
+    mode: STRICT
+
+  # Authorization policies (exemples en commentaires)
+  # Décommenter et adapter selon les besoins
+  #
+  # authorizationPolicy:
+  #   enabled: true
+  #   rules:
+  #     # Autoriser ai-analysis-service à se connecter à NATS
+  #     - from:
+  #         - source:
+  #             principals:
+  #               - "cluster.local/ns/visiobook-namespace/sa/ai-analysis-service"
+  #       to:
+  #         - operation:
+  #             ports: ["4222"]
+  #
+  #     # Autoriser core-user-service à se connecter à NATS
+  #     - from:
+  #         - source:
+  #             principals:
+  #               - "cluster.local/ns/visiobook-namespace/sa/core-user-service"
+  #       to:
+  #         - operation:
+  #             ports: ["4222"]
+  #
+  #     # Autoriser content-ingestion-service à se connecter à NATS
+  #     - from:
+  #         - source:
+  #             principals:
+  #               - "cluster.local/ns/visiobook-namespace/sa/content-ingestion-service"
+  #       to:
+  #         - operation:
+  #             ports: ["4222"]
