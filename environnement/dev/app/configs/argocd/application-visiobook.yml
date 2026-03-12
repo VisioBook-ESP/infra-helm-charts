@@ -155,7 +155,7 @@ spec:
           - values.yaml
         values: |
           existingSecretPgcrud: "postgres-crud-project-secret"
-          syncWave: 2
+          syncWave: 0
           
   project: application-visobook
 
