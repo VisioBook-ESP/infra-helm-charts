@@ -71,11 +71,11 @@ spec:
           - values.yaml
     - repoURL: https://github.com/VisioBook-ESP/infra-helm-charts
       path: environnement/dev/charts/redis-db/
-      targetRevision: main
+      targetRevision: 58-natsjeststream-chart
       helm:
         valueFiles:
           - values.yaml
-          
+
     # MinIO Storage Instance (sync-wave -1)
     - repoURL: https://github.com/VisioBook-ESP/infra-helm-charts
       path: environnement/dev/charts/minio/
