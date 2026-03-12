@@ -129,15 +129,15 @@ spec:
           existingSecret: "postgres-io-analysis-secret"
 
     # Content Ingestion Service (sync-wave 0)
-    - repoURL: https://github.com/VisioBook-ESP/content-ingestion-service
-      path: charts/
-      targetRevision: dev
-      helm:
-        valueFiles:
-          - values.yaml
-        values: |
-          existingSecret: "postgres-io-ingestion-secret"
-          existingMinioSecret: "minio-storage-secret"
+    # - repoURL: https://github.com/VisioBook-ESP/content-ingestion-service
+    #   path: charts/
+    #   targetRevision: dev
+    #   helm:
+    #     valueFiles:
+    #       - values.yaml
+    #     values: |
+    #       existingSecret: "postgres-io-ingestion-secret"
+    #       existingMinioSecret: "minio-storage-secret"
           
 
     - repoURL: https://github.com/VisioBook-ESP/core-project-service
