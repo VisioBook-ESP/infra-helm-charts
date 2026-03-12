@@ -79,7 +79,7 @@ nats:
 
   persistence:
     enabled: true
-    storageClass: "local-path"
+    storageClass: "standard"
     accessMode: ReadWriteOnce
     size: 8Gi
 
