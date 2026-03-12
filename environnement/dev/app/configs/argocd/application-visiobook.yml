@@ -69,7 +69,13 @@ spec:
       helm:
         valueFiles:
           - values.yaml
-
+    - repoURL: https://github.com/VisioBook-ESP/infra-helm-charts
+      path: environnement/dev/charts/redis-db/
+      targetRevision: main
+      helm:
+        valueFiles:
+          - values.yaml
+          
     # MinIO Storage Instance (sync-wave -1)
     - repoURL: https://github.com/VisioBook-ESP/infra-helm-charts
       path: environnement/dev/charts/minio/
