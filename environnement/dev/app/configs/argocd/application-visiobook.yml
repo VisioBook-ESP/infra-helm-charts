@@ -65,7 +65,7 @@ spec:
     # NATS JetStream (sync-wave -1)
     - repoURL: https://github.com/VisioBook-ESP/infra-helm-charts
       path: environnement/dev/charts/nats/
-      targetRevision: 58-natsjeststream-chart
+      targetRevision: main
       helm:
         valueFiles:
           - values.yaml
