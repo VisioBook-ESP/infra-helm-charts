@@ -17,9 +17,7 @@ serviceAccount:
   name: ""
 
 podAnnotations:
-  sidecar.istio.io/inject: "true"
-  sidecar.istio.io/proxyCPU: "100m"
-  sidecar.istio.io/proxyMemory: "128Mi"
+  sidecar.istio.io/inject: "false"
 
 podLabels:
   version: v1
@@ -93,10 +91,10 @@ istio:
 
   mtls:
     enabled: true
-    mode: ISTIO_MUTUAL
+    mode: DISABLE
 
   peerAuthentication:
-    mode: STRICT
+    mode: PERMISSIVE
 
   # Authorization policies (exemples en commentaires)
   # Décommenter et adapter selon les besoins

@@ -84,7 +84,7 @@ redis:
 
   config:
     maxmemory: "256mb"
-    maxmemory-policy: "allkeys-lru"
+    maxmemory-policy: "noeviction"
     save: "900 1 300 10 60 10000"
     appendonly: "yes"
     appendfsync: "everysec"
@@ -110,10 +110,10 @@ istio:
 
   mtls:
     enabled: true
-    mode: ISTIO_MUTUAL
+    mode: DISABLE
 
   peerAuthentication:
-    mode: STRICT
+    mode: PERMISSIVE
 
   authorizationPolicy:
     enabled: true
