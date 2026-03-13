@@ -32,7 +32,7 @@ spec:
     # Pgadmin secrets (sync-wave -2)
     - repoURL: https://github.com/VisioBook-ESP/infra-helm-charts
       path: environnement/dev/app/configs/secrets/
-      targetRevision: 54-mise-en-place-de-pgadmin
+      targetRevision: main
       directory:
         recurse: false
 
@@ -65,14 +65,14 @@ spec:
     # NATS JetStream (sync-wave -1)
     - repoURL: https://github.com/VisioBook-ESP/infra-helm-charts
       path: environnement/dev/charts/nats/
-      targetRevision: 58-natsjeststream-chart
+      targetRevision: main
       helm:
         valueFiles:
           - values.yaml
           
     - repoURL: https://github.com/VisioBook-ESP/infra-helm-charts
       path: environnement/dev/charts/redis-db/
-      targetRevision: 58-natsjeststream-chart
+      targetRevision: main
       helm:
         valueFiles:
           - values.yaml
@@ -82,7 +82,7 @@ spec:
     # MinIO Storage Instance (sync-wave -1)
     - repoURL: https://github.com/VisioBook-ESP/infra-helm-charts
       path: environnement/dev/charts/minio/
-      targetRevision: 58-natsjeststream-chart
+      targetRevision: main
       helm:
         valueFiles:
           - values_storage.yaml
@@ -91,7 +91,7 @@ spec:
     # MinIO Analysis Instance (sync-wave -1)
     - repoURL: https://github.com/VisioBook-ESP/infra-helm-charts
       path: environnement/dev/charts/minio/
-      targetRevision: 58-natsjeststream-chart
+      targetRevision: main
       helm:
         valueFiles:
           - values_analysis.yaml
