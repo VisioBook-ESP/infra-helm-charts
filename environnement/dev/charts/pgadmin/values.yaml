@@ -65,16 +65,17 @@ persistence:
   size: 1Gi
 
 serverDefinitions:
-  enabled: false
-  servers: {}
-  #  core-database:
-  #    Name: "Core Database"
-  #    Group: "Visiobook"
-  #    Host: "postgresql-core-database"
-  #    Port: 5432
-  #    Username: "postgres"
-  #    SSLMode: "prefer"
-  #    MaintenanceDB: "postgres"
+  enabled: true
+  servers:
+    core_project:
+      Name: "Core Project"
+      Group: "Servers"
+      Host: "postgres-crud-rw.visiobook-namespace.svc.cluster.local"
+      Port: 5432
+      Username: "core_project_app"
+      SSLMode: "prefer"
+      MaintenanceDB: "core_project"
+
 
 livenessProbe:
   httpGet:
