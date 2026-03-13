@@ -1,1 +1,55 @@
-{{/* Bucket creation is handled by the sidecar container in deployment.yaml */}}
+{{- if .Values.minio.defaultBuckets }}
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: {{ include "minio.fullname" . }}-create-buckets
+  labels:
+    {{- include "minio.labels" . | nindent 4 }}
+  annotations:
+    "helm.sh/hook": post-install,post-upgrade
+    "helm.sh/hook-weight": "1"
+    "helm.sh/hook-delete-policy": before-hook-creation
+spec:
+  backoffLimit: 5
+  template:
+    metadata:
+      annotations:
+        sidecar.istio.io/inject: "false"
+    spec:
+      restartPolicy: OnFailure
+      containers:
+        - name: create-buckets
+          image: minio/mc:RELEASE.2024-11-21T17-21-54Z
+          command:
+            - /bin/sh
+            - -ce
+            - |
+              echo "Waiting for MinIO to be ready..."
+              until mc alias set myminio http://{{ include "minio.fullname" . }}:{{ .Values.service.port }} $MINIO_ROOT_USER $MINIO_ROOT_PASSWORD; do
+                echo "MinIO not ready yet, retrying in 3s..."
+                sleep 3
+              done
+              echo "MinIO is ready. Creating buckets..."
+              {{- range (splitList "," .Values.minio.defaultBuckets) }}
+              mc mb --ignore-existing myminio/{{ . | trim }}
+              {{- end }}
+              echo "All buckets created successfully."
+          env:
+            - name: MINIO_ROOT_USER
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "minio.secretName" . }}
+                  key: root-user
+            - name: MINIO_ROOT_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "minio.secretName" . }}
+                  key: root-password
+          resources:
+            limits:
+              cpu: 10m
+              memory: 32Mi
+            requests:
+              cpu: 5m
+              memory: 16Mi
+{{- end }}

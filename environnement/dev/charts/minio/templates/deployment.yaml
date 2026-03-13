@@ -89,41 +89,6 @@ spec:
             {{- with .Values.volumeMounts }}
             {{- toYaml . | nindent 12 }}
             {{- end }}
-        {{- if .Values.minio.defaultBuckets }}
-        - name: create-buckets
-          image: minio/mc:latest
-          command:
-            - /bin/sh
-            - -c
-            - |
-              echo "Waiting for MinIO to be ready..."
-              until mc alias set myminio http://localhost:{{ .Values.service.port }} $MINIO_ROOT_USER $MINIO_ROOT_PASSWORD 2>/dev/null; do
-                echo "MinIO not ready yet, retrying in 2s..."
-                sleep 2
-              done
-              echo "MinIO is ready. Creating buckets..."
-              mc mb --ignore-existing {{ range (splitList "," .Values.minio.defaultBuckets) }}myminio/{{ . | trim }} {{ end }}
-              echo "All buckets created successfully. Sleeping..."
-              tail -f /dev/null
-          env:
-            - name: MINIO_ROOT_USER
-              valueFrom:
-                secretKeyRef:
-                  name: {{ include "minio.secretName" . }}
-                  key: root-user
-            - name: MINIO_ROOT_PASSWORD
-              valueFrom:
-                secretKeyRef:
-                  name: {{ include "minio.secretName" . }}
-                  key: root-password
-          resources:
-            limits:
-              cpu: 10m
-              memory: 16Mi
-            requests:
-              cpu: 5m
-              memory: 8Mi
-        {{- end }}
       volumes:
         - name: data
           {{- if .Values.minio.persistence.enabled }}
