@@ -55,7 +55,7 @@ spec:
     # PGADMIN
     - repoURL: https://github.com/VisioBook-ESP/infra-helm-charts
       path: environnement/dev/charts/pgadmin/
-      targetRevision: 54-mise-en-place-de-pgadmin
+      targetRevision: main
       helm:
         valueFiles:
           - values.yaml
@@ -65,7 +65,7 @@ spec:
     # NATS JetStream (sync-wave -1)
     - repoURL: https://github.com/VisioBook-ESP/infra-helm-charts
       path: environnement/dev/charts/nats/
-      targetRevision: main
+      targetRevision: 58-natsjeststream-chart
       helm:
         valueFiles:
           - values.yaml
@@ -116,16 +116,6 @@ spec:
     #   helm:
     #     valueFiles:
     #       - values.yaml
-          
-    # Support Storage Service (sync-wave 0)
-    - repoURL: https://github.com/VisioBook-ESP/support-storage-service
-      path: charts/
-      targetRevision: dev
-      helm:
-        valueFiles:
-          - values.yaml
-        values: |
-          existingSecret: "postgres-io-storage-secret"
 
     # AI Analysis Service (sync-wave 0)
     - repoURL: https://github.com/VisioBook-ESP/ai-analysis-service

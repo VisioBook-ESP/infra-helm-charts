@@ -94,10 +94,10 @@ istio:
 
   mtls:
     enabled: true
-    mode: ISTIO_MUTUAL
+    mode: DISABLE
 
   peerAuthentication:
-    mode: STRICT
+    mode: PERMISSIVE
 
   # Authorization policies (exemples en commentaires)
   # Décommenter et adapter selon les besoins
