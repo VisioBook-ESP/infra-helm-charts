@@ -144,8 +144,8 @@ spec:
       helm:
         valueFiles:
           - values.yaml
-        # values: |
-        #   existingSecret: "postgres-io-ingestion-secret"
+        values: |
+          existingSecret: "postgres-crud-payement-secret"
         #   existingMinioSecret: "minio-storage-secret"         
 
     - repoURL: https://github.com/VisioBook-ESP/core-project-service
