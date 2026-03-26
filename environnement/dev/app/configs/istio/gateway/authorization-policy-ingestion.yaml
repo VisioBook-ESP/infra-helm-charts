@@ -52,4 +52,4 @@ spec:
     to:
     - operation:
         paths: ["/api/v1/folders*"]
-        methods: ["POST"]
+        methods: ["POST","GET", "DELETE"]

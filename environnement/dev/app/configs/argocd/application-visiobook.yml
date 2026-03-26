@@ -138,14 +138,14 @@ spec:
           existingSecret: "postgres-io-ingestion-secret"
           existingMinioSecret: "minio-storage-secret"
 
-    # - repoURL: https://github.com/VisioBook-ESP/core-payment-service
-    #   path: charts/
-    #   targetRevision: dev
-    #   helm:
-    #     valueFiles:
-    #       - values.yaml
-        # values: |
-        #   existingSecret: "postgres-io-ingestion-secret"
+    - repoURL: https://github.com/VisioBook-ESP/core-payment-service
+      path: charts/
+      targetRevision: dev
+      helm:
+        valueFiles:
+          - values.yaml
+        values: |
+          existingSecret: "postgres-crud-payement-secret"
         #   existingMinioSecret: "minio-storage-secret"         
 
     - repoURL: https://github.com/VisioBook-ESP/core-project-service
