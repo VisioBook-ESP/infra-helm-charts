@@ -13,7 +13,6 @@ spec:
     jwksUri: "http://core-user-service.visiobook-namespace.svc.cluster.local:80/api/v1/auth/.well-known/jwks.json"
     
     forwardOriginalToken: true
-    outputPayloadToHeader: "x-jwt-payload"
     outputClaimToHeaders:
     - header: "x-user-id"
-      claim: "user_id"
+      claim: "sub"
