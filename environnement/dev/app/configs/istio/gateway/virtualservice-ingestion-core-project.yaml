@@ -20,10 +20,6 @@ spec:
         prefix: "/api/v1/versions"
     - uri:
         prefix: "/api/v1/workflow"
-    headers:
-      request:
-        remove:
-        - x-user-id
     route:
     - destination:
         host: core-project-service

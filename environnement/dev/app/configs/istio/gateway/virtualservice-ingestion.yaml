@@ -22,10 +22,7 @@ spec:
         prefix: "/api/v1/upload"
     - uri:
         prefix: "/api/v1/folders"
-    headers:
-      request:
-        remove:
-        - x-user-id
+
     route:
     - destination:
         host: content-ingestion-service
