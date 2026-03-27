@@ -9,24 +9,21 @@ spec:
   gateways:
   - istio-system/visiobook-gateway
   http:
-  - headers:
-      request:
-        remove:
-        - x-user-id
   - match:
     - uri:
         prefix: "/api/v1/projects"
     - uri:
         prefix: "/api/v1/shared"
     - uri:
-        prefix: "/api/v1/projects"
-    - uri:
         prefix: "/api/v1/content"
     - uri:
         prefix: "/api/v1/versions"
     - uri:
-        prefix: "/api/v1/workdlow"
-
+        prefix: "/api/v1/workflow"
+    headers:
+      request:
+        remove:
+        - x-user-id
     route:
     - destination:
         host: core-project-service

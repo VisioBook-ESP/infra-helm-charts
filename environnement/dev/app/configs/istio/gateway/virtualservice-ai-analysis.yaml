@@ -9,15 +9,15 @@ spec:
   gateways:
   - istio-system/visiobook-gateway
   http:
-  - headers:
-      request:
-        remove:
-        - x-user-id
   - match:
     - uri:
         prefix: "/api/v1/analyze"
     - uri:
         prefix: "/api/v1/jobs"
+    headers:
+      request:
+        remove:
+        - x-user-id
     route:
     - destination:
         host: ai-analysis-service

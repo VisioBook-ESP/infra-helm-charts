@@ -9,13 +9,13 @@ spec:
   gateways:
   - istio-system/visiobook-gateway
   http:
-  - headers:
-      request:
-        remove:
-        - x-user-id
   - match:
     - uri:
         prefix: "/api/v1/auth"
+    headers:
+      request:
+        remove:
+        - x-user-id
     route:
     - destination:
         host: core-user-service
