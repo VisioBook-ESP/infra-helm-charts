@@ -14,4 +14,6 @@ spec:
     
     forwardOriginalToken: true
     outputPayloadToHeader: "x-jwt-payload"
-    
+    outputClaimToHeaders:
+    - header: "x-user-id"
+      claim: "user_id"
