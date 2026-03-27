@@ -22,14 +22,7 @@ spec:
 
   sources:
 
-    # Database secrets (sync-wave -2)
-    - repoURL: https://github.com/VisioBook-ESP/infra-helm-charts
-      path: environnement/dev/app/configs/secrets/
-      targetRevision: main
-      directory:
-        recurse: false
-
-    # Pgadmin secrets (sync-wave -2)
+    # Secrets (sync-wave -2)
     - repoURL: https://github.com/VisioBook-ESP/infra-helm-charts
       path: environnement/dev/app/configs/secrets/
       targetRevision: main
