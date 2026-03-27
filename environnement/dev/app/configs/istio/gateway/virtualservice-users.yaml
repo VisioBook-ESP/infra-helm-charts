@@ -9,6 +9,10 @@ spec:
   gateways:
   - istio-system/visiobook-gateway
   http:
+  - headers:
+      request:
+        remove:
+        - x-user-id
   - match:
     - uri:
         prefix: "/api/v1/users"
