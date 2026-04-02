@@ -24,4 +24,4 @@ spec:
     - destination:
         host: core-project-service
         port:
-          number: 8086
+          number: 3010
