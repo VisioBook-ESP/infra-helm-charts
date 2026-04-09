@@ -37,16 +37,5 @@ spec:
             initialDelaySeconds: 5
             periodSeconds: 30
             failureThreshold: 1
-            timeoutSeconds: 15
-          livenessProbe:
-            exec:
-              command:
-                - curl
-                - -fsS
-                - --max-time
-                - "10"
-                - http://100.120.93.126:8000/health
-            initialDelaySeconds: 30
-            periodSeconds: 60
-            failureThreshold: 3
+            successThreshold: 1
             timeoutSeconds: 15
