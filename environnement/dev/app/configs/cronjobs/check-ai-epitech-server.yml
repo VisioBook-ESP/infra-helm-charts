@@ -21,4 +21,4 @@ spec:
                 - -fsS
                 - --max-time
                 - "10"
-                - http://100.120.93.126:8000/healthj
+                - http://100.120.93.126:8000/health
