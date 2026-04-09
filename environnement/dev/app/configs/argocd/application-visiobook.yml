@@ -150,7 +150,12 @@ spec:
         values: |
           existingSecretPgcrud: "postgres-crud-project-secret"
           syncWave: 0
-          
+
+    - repoURL: https://github.com/VisioBook-ESP/infra-helm-charts
+      path: environnement/dev/app/configs/cronjobs/
+      targetRevision: 81-creer-un-job-qui-verifie-que-lapi-ia-est-up
+      directory:
+        recurse: false          
   project: application-visobook
 
   # Ignore operator-managed fields
