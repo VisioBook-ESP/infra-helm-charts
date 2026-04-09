@@ -17,3 +17,6 @@ postInitSQL:
   - CREATE USER core_project_app WITH PASSWORD 'ProjectPass123!'
   - CREATE DATABASE core_project OWNER core_project_app
   - GRANT ALL PRIVILEGES ON DATABASE core_project TO core_project_app
+  - CREATE USER payement_app WITH PASSWORD 'CrudSecurePass123!'
+  - CREATE DATABASE payement OWNER payement_app
+  - GRANT ALL PRIVILEGES ON DATABASE payement TO payement_app
