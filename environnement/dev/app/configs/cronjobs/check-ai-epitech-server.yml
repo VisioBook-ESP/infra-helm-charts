@@ -21,4 +21,4 @@ spec:
                 - -fsS
                 - --max-time
                 - "10"
-                - https://REPLACE_ME/health
+                - http://100.120.93.126:8000/healthj
