@@ -58,12 +58,8 @@ resources:
     memory: 256Mi
 
 persistence:
-  enabled: true
-  storageClass: ""
-  accessModes:
-    - ReadWriteOnce
-  size: 1Gi
-
+  enabled: false
+  
 serverDefinitions:
   enabled: true
   servers:
