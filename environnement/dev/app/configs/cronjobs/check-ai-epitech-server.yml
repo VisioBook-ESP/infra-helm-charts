@@ -5,6 +5,7 @@ metadata:
   namespace: visiobook-namespace
 spec:
   replicas: 1
+  progressDeadlineSeconds: 60
   selector:
     matchLabels:
       app: healthcheck-external-api
