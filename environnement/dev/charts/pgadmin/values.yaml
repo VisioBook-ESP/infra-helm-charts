@@ -58,11 +58,7 @@ resources:
     memory: 256Mi
 
 persistence:
-  enabled: true
-  storageClass: ""
-  accessModes:
-    - ReadWriteOnce
-  size: 1Gi
+  enabled: false
 
 serverDefinitions:
   enabled: true
@@ -109,21 +105,30 @@ serverDefinitions:
       MaintenanceDB: "storage"
 
 
+startupProbe:
+  httpGet:
+    path: /misc/ping
+    port: http
+  initialDelaySeconds: 10
+  periodSeconds: 5
+  timeoutSeconds: 5
+  failureThreshold: 60
+
 livenessProbe:
   httpGet:
     path: /misc/ping
     port: http
-  initialDelaySeconds: 30
   periodSeconds: 10
   timeoutSeconds: 5
+  failureThreshold: 3
 
 readinessProbe:
   httpGet:
     path: /misc/ping
     port: http
-  initialDelaySeconds: 15
   periodSeconds: 10
   timeoutSeconds: 5
+  failureThreshold: 3
 
 autoscaling:
   enabled: false
