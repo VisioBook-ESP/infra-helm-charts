@@ -1,7 +1,7 @@
 apiVersion: networking.istio.io/v1beta1
 kind: VirtualService
 metadata:
-  name: ingestion-routes
+  name: core-project-routes
   namespace: visiobook-namespace
 spec:
   hosts:
@@ -24,4 +24,4 @@ spec:
     - destination:
         host: core-project-service
         port:
-          number: 3000
+          number: 3010
