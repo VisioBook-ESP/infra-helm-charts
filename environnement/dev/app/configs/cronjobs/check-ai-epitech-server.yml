@@ -1,41 +1,26 @@
-apiVersion: apps/v1
-kind: Deployment
+apiVersion: batch/v1
+kind: CronJob
 metadata:
   name: healthcheck-external-api
   namespace: visiobook-namespace
 spec:
-  replicas: 1
-  progressDeadlineSeconds: 60
-  selector:
-    matchLabels:
-      app: healthcheck-external-api
-  template:
-    metadata:
-      labels:
-        app: healthcheck-external-api
+  schedule: "*/1 * * * *"
+  concurrencyPolicy: Forbid
+  successfulJobsHistoryLimit: 1
+  failedJobsHistoryLimit: 1
+  jobTemplate:
     spec:
-      hostNetwork: true
-      dnsPolicy: ClusterFirstWithHostNet
-      containers:
-        - name: healthcheck
-          image: curlimages/curl:8.10.1
-          command:
-            - /bin/sh
-            - -c
-            - |
-              while true; do
-                sleep 60
-              done
-          readinessProbe:
-            exec:
-              command:
-                - curl
+      backoffLimit: 0
+      template:
+        spec:
+          hostNetwork: true
+          dnsPolicy: ClusterFirstWithHostNet
+          restartPolicy: Never
+          containers:
+            - name: healthcheck
+              image: curlimages/curl:8.10.1
+              args:
                 - -fsS
                 - --max-time
                 - "10"
                 - http://100.120.93.126:8000/health
-            initialDelaySeconds: 5
-            periodSeconds: 30
-            failureThreshold: 1
-            successThreshold: 1
-            timeoutSeconds: 15
