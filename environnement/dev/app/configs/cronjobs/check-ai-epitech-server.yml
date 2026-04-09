@@ -13,6 +13,8 @@ spec:
       backoffLimit: 2
       template:
         spec:
+          hostNetwork: true
+          dnsPolicy: ClusterFirstWithHostNet
           restartPolicy: Never
           containers:
             - name: healthcheck
