@@ -38,6 +38,8 @@ kubectl apply -f ../cert_manager/istio-ingressclass.yaml
 # GATEWAY
 ./apply-gateway.sh
 
+
+kubectl apply -f ../cronjobs/check-ai-epitech-server.yml
 # CNPG
 ## install cnpg operator (download first to catch network errors)
 echo "Downloading CNPG operator manifest..."

@@ -1,0 +1,24 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: healthcheck-external-api
+  namespace: argocd
+spec:
+  schedule: "*/1 * * * *"
+  concurrencyPolicy: Forbid
+  successfulJobsHistoryLimit: 1
+  failedJobsHistoryLimit: 1
+  jobTemplate:
+    spec:
+      backoffLimit: 2
+      template:
+        spec:
+          restartPolicy: Never
+          containers:
+            - name: healthcheck
+              image: curlimages/curl:8.10.1
+              args:
+                - -fsS
+                - --max-time
+                - "10"
+                - https://REPLACE_ME/health
