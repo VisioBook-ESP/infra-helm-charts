@@ -25,6 +25,18 @@ spec:
               while true; do
                 sleep 60
               done
+          readinessProbe:
+            exec:
+              command:
+                - curl
+                - -fsS
+                - --max-time
+                - "10"
+                - http://100.120.93.126:8000/health
+            initialDelaySeconds: 5
+            periodSeconds: 30
+            failureThreshold: 1
+            timeoutSeconds: 15
           livenessProbe:
             exec:
               command:
@@ -33,7 +45,7 @@ spec:
                 - --max-time
                 - "10"
                 - http://100.120.93.126:8000/health
-            initialDelaySeconds: 10
+            initialDelaySeconds: 30
             periodSeconds: 60
             failureThreshold: 3
             timeoutSeconds: 15
