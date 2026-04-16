@@ -35,21 +35,29 @@ Copier la valeur affichée, elle sera utilisée comme secret GitHub.
 
 ---
 
-## 3. Exposer l'API server (port-forward systemd)
+## 3. Exposer l'API server (socat proxy systemd)
+
+> `kubectl port-forward` ne fonctionne pas pour le service `kubernetes` lui-même.
+> On utilise **socat** pour proxy le trafic TCP vers l'API server Minikube (`192.168.49.2:8443`).
+
+Installer socat :
+
+```bash
+sudo apt install -y socat
+```
 
 Créer le service systemd :
 
 ```bash
 sudo tee /etc/systemd/system/kube-api-forward.service <<EOF
 [Unit]
-Description=Port forward Kubernetes API server
+Description=Proxy Kubernetes API server
 After=network.target
 
 [Service]
-ExecStart=/usr/local/bin/kubectl port-forward -n default svc/kubernetes 6443:443 --address=0.0.0.0
+ExecStart=/usr/bin/socat TCP-LISTEN:6443,fork,reuseaddr TCP:192.168.49.2:8443
 Restart=always
 RestartSec=5
-User=debian
 
 [Install]
 WantedBy=multi-user.target

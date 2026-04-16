@@ -164,7 +164,7 @@ spec:
         valueFiles:
           - values.yaml
     
-    - repoURL: https://github.com/VisioBook-ESP/bullmk-dashboard
+    - repoURL: https://github.com/VisioBook-ESP/ai-media-generation-service-dev
       path: charts/
       targetRevision: dev
       helm:
@@ -172,6 +172,7 @@ spec:
           - values.yaml
         values: |
           existingSecretMinio: "minio-analysis-secret"
+          
   project: application-visobook
 
   # Ignore operator-managed fields
