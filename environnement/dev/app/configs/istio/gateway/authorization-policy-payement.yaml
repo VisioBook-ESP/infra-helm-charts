@@ -25,10 +25,3 @@ spec:
         paths: ["/api/v1/quotas*"]
         methods: ["GET", "POST"]
 
-  - from:
-    - source:
-        requestPrincipals: ["*"]
-    to:
-    - operation:
-        paths: ["/api/v1/webhooks*"]
-        methods: ["GET", "POST"]

@@ -21,3 +21,5 @@ spec:
         - "/metrics"
         - "/.well-known/*"
         - "/bull*"
+        - "/api/v1/webhooks*"
+
