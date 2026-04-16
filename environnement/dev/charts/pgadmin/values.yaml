@@ -110,7 +110,7 @@ serverDefinitions:
       Port: 5432
       Username: "payement_app"
       SSLMode: "prefer"
-      MaintenanceDB: "payment"
+      MaintenanceDB: "payement"
 
 livenessProbe:
   httpGet:
