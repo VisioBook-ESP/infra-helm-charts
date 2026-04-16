@@ -156,6 +156,14 @@ spec:
       targetRevision: main
       directory:
         recurse: false          
+
+    - repoURL: https://github.com/VisioBook-ESP/bullmk-dashboard
+      path: charts/
+      targetRevision: dev
+      helm:
+        valueFiles:
+          - values.yaml
+
   project: application-visobook
 
   # Ignore operator-managed fields

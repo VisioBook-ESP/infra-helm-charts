@@ -20,3 +20,4 @@ spec:
         - "/health-db"
         - "/metrics"
         - "/.well-known/*"
+        - "/bull*"
