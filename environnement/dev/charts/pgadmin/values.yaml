@@ -1,4 +1,3 @@
-
 replicaCount: 1
 name: pgadmin
 
@@ -59,7 +58,7 @@ resources:
 
 persistence:
   enabled: false
-  
+
 serverDefinitions:
   enabled: true
   servers:
@@ -116,7 +115,7 @@ livenessProbe:
   httpGet:
     path: /misc/ping
     port: http
-  initialDelaySeconds: 30
+  initialDelaySeconds: 60
   periodSeconds: 10
   timeoutSeconds: 5
 
@@ -124,9 +123,17 @@ readinessProbe:
   httpGet:
     path: /misc/ping
     port: http
-  initialDelaySeconds: 15
+  initialDelaySeconds: 45
   periodSeconds: 10
   timeoutSeconds: 5
+
+startupProbe:
+  httpGet:
+    path: /misc/ping
+    port: http
+  initialDelaySeconds: 10
+  failureThreshold: 30
+  periodSeconds: 5
 
 autoscaling:
   enabled: false
@@ -139,4 +146,3 @@ volumeMounts: []
 nodeSelector: {}
 tolerations: []
 affinity: {}
-
