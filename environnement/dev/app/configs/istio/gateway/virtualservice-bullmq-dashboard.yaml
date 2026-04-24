@@ -12,7 +12,8 @@ spec:
   - match:
     - uri:
         prefix: "/bull"
-
+    - uri:
+        prefix: "/nats"
     route:
     - destination:
         host: bullmq-dashboard
