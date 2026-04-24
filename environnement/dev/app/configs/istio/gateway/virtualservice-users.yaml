@@ -12,6 +12,8 @@ spec:
   - match:
     - uri:
         prefix: "/api/v1/users"
+    - uri:
+        prefix: "/api/v1/users/forgot-password"
 
     route:
     - destination:
