@@ -22,5 +22,5 @@ spec:
         - "/.well-known/*"
         - "/bull*"
         - "/api/v1/webhooks*"
-        - "/users/forgot-password"
+        - "/users/forgot-password*"
 
