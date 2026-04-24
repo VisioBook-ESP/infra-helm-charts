@@ -48,7 +48,7 @@ spec:
     # PGADMIN
     - repoURL: https://github.com/VisioBook-ESP/infra-helm-charts
       path: environnement/dev/charts/pgadmin/
-      targetRevision: main
+      targetRevision: 91-fix-pgadmin
       helm:
         valueFiles:
           - values.yaml

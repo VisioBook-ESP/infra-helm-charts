@@ -63,7 +63,7 @@ persistence:
 serverDefinitions:
   enabled: true
   servers:
-    core_project:
+    "1":
       Name: "Core Project DB"
       Group: "CRUD Cluster"
       Host: "postgres-crud-rw.visiobook-namespace.svc.cluster.local"
@@ -71,7 +71,7 @@ serverDefinitions:
       Username: "core_project_app"
       SSLMode: "prefer"
       MaintenanceDB: "core_project"
-    core_user:
+    "2":
       Name: "Core User DB"
       Group: "CRUD Cluster"
       Host: "postgres-crud-rw.visiobook-namespace.svc.cluster.local"
@@ -79,7 +79,7 @@ serverDefinitions:
       Username: "core_user_app"
       SSLMode: "prefer"
       MaintenanceDB: "core_user"
-    analysis:
+    "3":
       Name: "Analysis DB"
       Group: "IO Cluster"
       Host: "postgres-io-rw.visiobook-namespace.svc.cluster.local"
@@ -87,7 +87,7 @@ serverDefinitions:
       Username: "analysis_user"
       SSLMode: "prefer"
       MaintenanceDB: "analysis"
-    ingestion:
+    "4":
       Name: "Ingestion DB"
       Group: "IO Cluster"
       Host: "postgres-io-rw.visiobook-namespace.svc.cluster.local"
@@ -95,7 +95,7 @@ serverDefinitions:
       Username: "ingestion_user"
       SSLMode: "prefer"
       MaintenanceDB: "ingestion"
-    storage:
+    "5":
       Name: "Storage DB"
       Group: "IO Cluster"
       Host: "postgres-io-rw.visiobook-namespace.svc.cluster.local"
@@ -103,7 +103,7 @@ serverDefinitions:
       Username: "storage_user"
       SSLMode: "prefer"
       MaintenanceDB: "storage"
-    payements:
+    "6":
       Name: "Payment DB"
       Group: "CRUD Cluster"
       Host: "postgres-crud-rw.visiobook-namespace.svc.cluster.local"
