@@ -23,4 +23,5 @@ spec:
         - "/bull*"
         - "/api/v1/webhooks*"
         - "/api/v1/users/forgot-password*"
+        - "/nats*"
 
